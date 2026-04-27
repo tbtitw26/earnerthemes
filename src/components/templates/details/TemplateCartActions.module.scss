@@ -1,0 +1,98 @@
+.actionsBlock {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+/* BASE */
+.primaryButton,
+.secondaryButton,
+.ghostButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  min-height: 42px;
+  padding: 0.7rem 0.95rem;
+
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+
+  transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease,
+          background-color 0.15s ease,
+          border-color 0.15s ease,
+          color 0.15s ease;
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+/* PRIMARY (main action) */
+.primaryButton {
+  border: none;
+  background: var(--primary-color);
+  color: #fff;
+
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.18);
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.22);
+  }
+}
+
+/* GHOST (buy now / secondary CTA) */
+.ghostButton {
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #fff;
+  color: var(--text-primary);
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-1px);
+    border-color: rgba(37, 99, 235, 0.25);
+  }
+}
+
+/* SECONDARY (якщо десь використаєш) */
+.secondaryButton {
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(15, 23, 42, 0.02);
+  color: var(--text-primary);
+
+  &:hover {
+    background: rgba(15, 23, 42, 0.05);
+  }
+}
+
+/* DISABLED */
+.disabledButton {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none !important;
+  display: none;
+
+  &:hover {
+    transform: none;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 640px) {
+  .actionsBlock {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .primaryButton,
+  .ghostButton,
+  .secondaryButton {
+    width: 100%;
+  }
+}

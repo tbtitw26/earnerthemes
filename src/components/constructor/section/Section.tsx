@@ -1,7 +1,15 @@
 "use client";
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import styles from "./Section.module.scss";
+import {
+    cardStagger,
+    contentReveal,
+    headingReveal,
+    inViewProps,
+    sectionReveal,
+    splitReveal,
+} from "@/components/motion/system";
 
 interface SectionProps {
     title?: string;
@@ -25,26 +33,36 @@ const Section: React.FC<SectionProps> = ({
                                              children,
                                              imagePosition = "right",
                                              gap = "3rem",
-                                             align = "center",
-                                             justify = "center",
-                                         }) => {
+                                         align = "center",
+                                         justify = "center",
+                                     }) => {
+    const reduced = useReducedMotion();
     const isImageLeft = imagePosition === "left";
     const hasChildren = Boolean(children);
     const isSingle = hasChildren || !left || !right;
 
     return (
-        <section className={styles.wrapper}>
+        <motion.section
+            className={styles.wrapper}
+            {...inViewProps(sectionReveal(reduced), { amount: 0.18 })}
+        >
             {(title || description) && (
                 <motion.div
                     className={styles.header}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.6 }}
+                    variants={cardStagger(reduced, {
+                        staggerChildren: 0.08,
+                        delayChildren: 0.04,
+                    })}
                 >
-                    {title && <h2 className={styles.title}>{title}</h2>}
+                    {title && (
+                        <motion.h2 className={styles.title} variants={headingReveal(reduced)}>
+                            {title}
+                        </motion.h2>
+                    )}
                     {description && (
-                        <p className={styles.description}>{description}</p>
+                        <motion.p className={styles.description} variants={contentReveal(reduced)}>
+                            {description}
+                        </motion.p>
                     )}
                 </motion.div>
             )}
@@ -57,21 +75,42 @@ const Section: React.FC<SectionProps> = ({
                     alignItems: align,
                     justifyContent: isSingle ? "center" : justify,
                 }}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.8 }}
+                variants={cardStagger(reduced, {
+                    staggerChildren: 0.12,
+                    delayChildren: 0.08,
+                })}
             >
                 {children ? (
-                    children
+                    React.Children.map(children, (child, index) => (
+                        <motion.div
+                            key={React.isValidElement(child) && child.key != null ? String(child.key) : index}
+                            variants={contentReveal(reduced)}
+                        >
+                            {child}
+                        </motion.div>
+                    ))
                 ) : (
                     <>
-                        {left && <motion.div className={styles.left}>{left}</motion.div>}
-                        {right && <motion.div className={styles.right}>{right}</motion.div>}
+                        {left && (
+                            <motion.div
+                                className={styles.left}
+                                variants={splitReveal(reduced, isImageLeft ? "right" : "left")}
+                            >
+                                {left}
+                            </motion.div>
+                        )}
+                        {right && (
+                            <motion.div
+                                className={styles.right}
+                                variants={splitReveal(reduced, isImageLeft ? "left" : "right")}
+                            >
+                                {right}
+                            </motion.div>
+                        )}
                     </>
                 )}
             </motion.div>
-        </section>
+        </motion.section>
     );
 };
 

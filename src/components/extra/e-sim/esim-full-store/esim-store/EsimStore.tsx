@@ -6,19 +6,17 @@ import {ESIM_COUNTRIES} from "./esimData";
 import ButtonUI from "@/components/ui/button/ButtonUI";
 import {useRouter} from "next/navigation";
 import {useUser} from "@/context/UserContext";
+import { useCurrency } from "@/context/CurrencyContext";
 
 export default function EsimStore() {
     const [query, setQuery] = useState("");
     const [region, setRegion] = useState("all");
     const user = useUser()
+    const { sign, currency, convertFromBase } = useCurrency();
 
-    // 💰 pricing
-    const EUR_TO_GBP = 0.86;
-    const TOKENS_PER_GBP = 100;
-    const MARKUP_EUR = 1;
+    const markupBaseAmount = 1;
 
-    const euroToTokens = (eur: number) =>
-        Math.ceil((eur + MARKUP_EUR) * EUR_TO_GBP * TOKENS_PER_GBP);
+    const getDisplayedAmount = (baseAmount: number) => convertFromBase(baseAmount + markupBaseAmount);
 
     const popular = useMemo(
         () => ESIM_COUNTRIES.filter(c => c.popular),
@@ -40,7 +38,7 @@ export default function EsimStore() {
         <section className={styles.page}>
             <header className={styles.header}>
                 <h1>Global eSIM Store</h1>
-                <p>Choose a destination and pay with tokens.</p>
+                <p>Choose a destination and pay from your wallet balance.</p>
             </header>
 
             {/* ⭐ POPULAR */}
@@ -65,15 +63,16 @@ export default function EsimStore() {
                                     <div key={i} className={styles.row}>
                                         <span className={styles.plan}>{plan.label}</span>
                                         <span className={styles.price}>
-                      <strong>{euroToTokens(plan.priceEur)}</strong> tokens
+                      <strong>{sign}{getDisplayedAmount(plan.basePrice).toFixed(2)}</strong> {currency}
                     </span>
                                         <ButtonUI
                                             size="sm"
                                             shape="rounded"
                                             onClick={() => {
+                                                const basePlanPrice = plan.basePrice;
                                                 router.push(
                                                     user
-                                                        ? `/extra/esim-checkout?country=${country.name}&code=${country.code}&plan=${plan.label}&priceEur=${plan.priceEur}`
+                                                        ? `/extra/esim-checkout?country=${country.name}&code=${country.code}&plan=${plan.label}&basePrice=${basePlanPrice}`
                                                         : "/sign-in"
                                                 );
                                             }}
@@ -124,14 +123,15 @@ export default function EsimStore() {
                             <div key={i} className={styles.row}>
                                 <span className={styles.plan}>{plan.label}</span>
                                 <span className={styles.price}>
-                  <strong>{euroToTokens(plan.priceEur)}</strong> tokens
+                  <strong>{sign}{getDisplayedAmount(plan.basePrice).toFixed(2)}</strong> {currency}
                 </span>
                                 <ButtonUI
                                     size="sm"
                                     shape="rounded"
                                     onClick={() => {
+                                        const basePlanPrice = plan.basePrice;
                                         router.push(
-                                            `/extra/esim-checkout?country=${country.name}&code=${country.code}&plan=${plan.label}&priceEur=${plan.priceEur}`
+                                            `/extra/esim-checkout?country=${country.name}&code=${country.code}&plan=${plan.label}&basePrice=${basePlanPrice}`
                                         );
                                     }}
                                 >

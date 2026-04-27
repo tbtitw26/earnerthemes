@@ -7,6 +7,7 @@ import FeatureStep from "@/components/constructor/feature-step/FeatureStep";
 import FeatureStepsWrapper from "@/components/constructor/feature-step/wrapper/FeatureStepsWrapper";
 import FAQ from "@/components/constructor/faq/FAQ";
 import TextWithButton from "@/components/constructor/text-with-button/TextWithButton";
+import CenteredCtaSection from "@/components/constructor/centered-cta/CenteredCtaSection";
 
 export default function GetStartedPage() {
     return (
@@ -15,219 +16,144 @@ export default function GetStartedPage() {
             <HeroSection
                 title={
                     <>
-                        Get a Training Plan — from a <span>Specialist</span>
+                        Start Fast with Premium <span>Website Templates</span>
                     </>
                 }
-                description="Log in, buy tokens, fill out a quick form, and choose a certified specialist to build your program. Need it faster? Use AI as a quick alternative and receive a structured PDF plan."
-                primaryCta={{ text: "Start My Order", link: "/dashboard" }}
-                secondaryCta={{ text: "Meet the Specialists", link: "/extra/chefs" }}
-                image="image5"
-                badge={{
-                    label: "PDF Program",
-                    title: "Specialist-made",
-                }}
+                description="Create your account, top up your balance, choose the right template, complete your purchase, and start using it right away. The process is simple, fast, and built for quick launches."
+                primaryCta={{ text: "Get Started", link: "/register" }}
+                secondaryCta={{ text: "Browse Templates", link: "/templates" }}
+                image="image6"
             />
 
-            {/* VALUES / WHY */}
-            <ValuesIcons
-                tagline="WHY THIS WORKS"
-                title="Built for Real Progress"
-                description="Coach-led programming with a simple, token-based flow."
-                values={[
-                    {
-                        title: "Flexible Tokens",
-                        description: "Buy once. Use anytime. Tokens never expire.",
-                        icon: "wallet",
-                    },
-                    {
-                        title: "Specialist Quality",
-                        description: "Manual program design based on your answers.",
-                        icon: "zap",
-                    },
-                    {
-                        title: "AI When You Need Speed",
-                        description: "A faster option for a quick start.",
-                        icon: "community",
-                    },
-                    {
-                        title: "PDF You Keep",
-                        description: "Download, print, and re-open anytime.",
-                        icon: "shield",
-                    },
-                ]}
-            />
+            <FeatureStepsWrapper
+                label="HOW IT WORKS"
+                title="Go from signup to launch in a few simple steps"
+                description="Everything is designed to help you buy and use the right template without friction."
+                columns={3}
+            >
+                <FeatureStep
+                    step={1}
+                    title="Create Your Account"
+                    description="Register in seconds to access your dashboard, balance, orders, and purchased templates."
+                    icon="login"
+                />
+
+                <FeatureStep
+                    step={2}
+                    title="Top Up Your Balance"
+                    description="Add funds securely to your account balance so you can purchase templates quickly and smoothly."
+                    icon="wallet"
+                />
+
+                <FeatureStep
+                    step={3}
+                    title="Choose & Use Your Template"
+                    description="Pick the template you need, purchase it with your balance, and start using it for your project."
+                    icon="zap"
+                />
+            </FeatureStepsWrapper>
 
             {/* HOW IT WORKS */}
             <HowItWorksSection
                 label="PROCESS"
                 title="How It Works"
-                description="Get your program in four simple steps."
+                description="Get access to the right template in five simple steps."
                 highlights={[
                     {
-                        title: "No subscriptions",
-                        description: "Pay per plan with tokens — full control.",
+                        title: "Fast onboarding",
+                        description: "Create an account and start exploring the marketplace right away.",
                     },
                     {
-                        title: "Specialist-first",
-                        description: "Choose a coach for the highest quality plan.",
+                        title: "Flexible balance system",
+                        description: "Top up once and use your balance whenever you want to buy templates.",
                     },
                     {
-                        title: "PDF stored in your account",
-                        description: "Re-download anytime.",
+                        title: "Instant access after purchase",
+                        description: "Your purchased templates stay available inside your account.",
                     },
                 ]}
                 steps={[
                     {
                         icon: "login",
-                        title: "Create Account",
+                        title: "Register",
                         description:
-                            "Log in and complete a short setup about your goal, level, equipment, and limitations.",
+                            "Create your account to unlock access to the marketplace, your balance, and purchased products.",
                     },
                     {
-                        icon: "coins",
-                        title: "Buy Tokens",
+                        icon: "wallet",
+                        title: "Top Up Balance",
                         description:
-                            "Choose a token pack based on how often you want a new program or updates.",
+                            "Add funds to your account so you can buy templates without repeating checkout every time.",
                     },
                     {
-                        icon: "brain",
-                        title: "Choose Specialist or AI",
+                        icon: "layout",
+                        title: "Choose a Template",
                         description:
-                            "Specialist is the main option for maximum detail. AI is a faster alternative when you need it now.",
+                            "Browse categories, compare products, and select the template that matches your project best.",
                     },
                     {
-                        icon: "calendar",
-                        title: "Receive Your PDF Plan",
+                        icon: "priceTag",
+                        title: "Purchase Securely",
                         description:
-                            "Download a clear weekly split with exercises, sets/reps/rest, and progression.",
+                            "Use your available balance to complete the purchase quickly and securely.",
+                    },
+                    {
+                        icon: "settings",
+                        title: "Use Your Template",
+                        description:
+                            "Access the purchased template in your account and start building or customizing your website.",
                     },
                 ]}
                 note={
                     <>
-                        Specialist programs take longer because they’re created manually.
-                        AI programs are generated faster for a quick start.
+                        After purchase, templates remain available in your account,
+                        so you can return to them anytime and continue working on your project.
                     </>
                 }
             />
 
-            {/* AI vs COACH */}
-            <Grid columns={2} gap="2rem">
-                <InfoBlock
-                    variant="dark"
-                    title="Specialist Program"
-                    badge="PRIMARY"
-                    icon="community"
-                    description="More detail. Better decisions. Better outcomes."
-                    bullets={[
-                        "Manual program design from your form",
-                        "Adjustments for injuries & limitations",
-                        "Extra coaching notes and rationale",
-                    ]}
-                />
-
-                <InfoBlock
-                    variant="light"
-                    title="AI Program"
-                    icon="brain"
-                    description="Fast option for a structured start."
-                    bullets={[
-                        "Plan generated quickly",
-                        "Built around your schedule & equipment",
-                        "Basic progression logic included",
-                    ]}
-                />
-            </Grid>
-
-            {/* DEEPER EXPLANATION */}
-            <FeatureStepsWrapper>
-                <FeatureStep
-                    step={1}
-                    title="We Start With Your Details"
-                    description="The program is built around what actually matters for you."
-                    bullets={[
-                        "Goal: fat loss, muscle gain, strength, endurance",
-                        "Schedule: 2–6 training days/week",
-                        "Equipment: gym, home, or minimal setup",
-                    ]}
-                    image="image10"
-                    badge="Personalization"
-                    buttonText="Start Setup"
-                    buttonLink="/dashboard"
-                    imagePosition="left"
-                />
-
-                <FeatureStep
-                    step={2}
-                    title="A Clear Weekly Structure"
-                    description="No randomness — a real split with progression."
-                    bullets={[
-                        "Weekly split based on your training frequency",
-                        "Exercise selection matched to your equipment",
-                        "Sets/reps/rest + intensity guidance",
-                    ]}
-                    image="image8"
-                    badge="Structure"
-                    imagePosition="right"
-                />
-
-                <FeatureStep
-                    step={3}
-                    title="Delivered as a Clean PDF"
-                    description="Easy to follow on your phone and ready to print."
-                    bullets={[
-                        "Exercises, sets, reps, rest times",
-                        "Warm-up + main work + accessories",
-                        "Progression rules week-to-week",
-                    ]}
-                    image="image9"
-                    badge="PDF Output"
-                    imagePosition="left"
-                />
-            </FeatureStepsWrapper>
+            <CenteredCtaSection
+                title="Ready to get your next template?"
+                description="Create an account, top up your balance, and start buying premium templates for your next website project."
+                primaryCta={{text: "Create Account", link: "/register"}}
+                secondaryCta={{text: "Browse Templates", link: "/templates"}}
+            />
 
             {/* FAQ */}
             <FAQ
                 title="Frequently Asked Questions"
-                description="Quick answers before you get your program."
+                description="Quick answers before you start using the marketplace."
                 items={[
                     {
-                        question: "What are tokens used for?",
+                        question: "Why do I need an account?",
                         answer:
-                            "Tokens are used to order a specialist-made program (primary service) or generate an AI program (faster option). No subscriptions — you pay only when you need a plan.",
+                            "An account gives you access to your balance, purchased templates, and order history in one place.",
                     },
                     {
-                        question: "Do tokens expire?",
-                        answer: "No. Tokens never expire and can be used anytime.",
+                        question: "What is my balance used for?",
+                        answer:
+                            "Your balance is used to purchase templates on the marketplace quickly, without repeating full checkout for each order.",
                     },
                     {
-                        question: "How fast will I receive my program?",
-                        answer:
-                            "AI programs are generated quickly. Specialist programs take longer because they’re built manually with more detail and higher quality.",
+                        question: "Does my balance expire?",
+                        answer: "No. Your balance remains in your account until you decide to use it.",
                     },
                     {
-                        question: "Can you adapt the plan for injuries or limitations?",
+                        question: "When do I get access to the template?",
                         answer:
-                            "Yes. Add your limitations in the setup form. Specialists can tailor the program manually, and AI can also account for basic constraints.",
+                            "Right after a successful purchase, the template becomes available in your account for use.",
                     },
                     {
-                        question: "Can I switch between Specialist and AI later?",
+                        question: "Can I buy more than one template?",
                         answer:
-                            "Yes. You can use tokens for either option anytime — switch depending on what you need.",
+                            "Yes. You can use your balance to purchase as many templates as you want, whenever you need them.",
                     },
                     {
-                        question: "Is the PDF downloadable and printable?",
+                        question: "Where can I find my purchased templates?",
                         answer:
-                            "Absolutely. Your plan is provided as a PDF you can download, print, and access from your account anytime.",
+                            "All purchased templates are stored in your account, so you can access and use them anytime.",
                     },
                 ]}
-            />
-
-            {/* FINAL CTA */}
-            <TextWithButton
-                title="Ready to Get Your Program?"
-                description="Create your account, choose a specialist (recommended) or AI, and receive your PDF plan."
-                buttonText="Get Started"
-                buttonLink="/dashboard"
             />
         </>
     );

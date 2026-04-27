@@ -1,16 +1,17 @@
 .hero {
   width: 100%;
-  padding: 100px 24px;
-  background: var(--quaternary-color);
+  padding: 50px 20px 0;
+  background: var(--background-light);
+  overflow: hidden;
 }
 
 .inner {
-  max-width: 1280px;
+  max-width: 1520px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-columns: 1.15fr 0.85fr;
   align-items: center;
-  gap: 5rem;
+  gap: 3rem;
 }
 
 /* ================= LEFT ================= */
@@ -18,56 +19,137 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: 1.75rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--tertiary-color);
+  border: 1px solid var(--border-color);
+  width: fit-content;
+}
+
+.badgeLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary-color);
+}
+
+.badgeTitle {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
 .title {
-  font-size: clamp(2.8rem, 4vw, 3.6rem);
-  font-weight: 900;
-  line-height: 1.15;
+  font-size: clamp(3rem, 5.2vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
   color: var(--text-primary);
+  width: 100%;
 
   span {
-    color: var(--primary-color);
+    color: var(--text-accent);
+    font-weight: 400;
+  }
+
+  strong, b {
+    font-weight: 700;
   }
 }
 
+.titleBold {
+  font-weight: 700;
+}
+
 .description {
-  max-width: 520px;
-  font-size: 1.05rem;
+  max-width: 460px;
+  font-size: 0.98rem;
   line-height: 1.7;
-  color: var(--text-secondary);
+  color: var(--text-muted);
+  margin-top: 0.25rem;
 }
 
 .actions {
   display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
+  gap: 0.875rem;
+  margin-top: 0.75rem;
   flex-wrap: wrap;
+  align-items: center;
 }
 
-.playButton {
-  position: absolute;
-  right: 30px;
-  bottom: 30px;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: var(--font-family);
   border: none;
-  font-size: 24px;
+  border-radius: 8px;
+  background: var(--button-primary);
+  color: var(--text-inverse);
   cursor: pointer;
-  background: var(--primary-color);
-  color: white;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease;
-  z-index: 3; /* 🔥 важливо */
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  text-decoration: none;
+  line-height: 1;
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--button-hover);
+    box-shadow: 0 4px 16px var(--shadow-color);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
+
+.secondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: var(--font-family);
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--background-light);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  text-decoration: none;
+  line-height: 1;
+  white-space: nowrap;
+
+  &:hover {
+    border-color: var(--text-muted);
+    background: var(--quaternary-color);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+/* ================= SOCIAL PROOF ================= */
 
 .socialProof {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-top: 24px;
+  gap: 14px;
+  margin-top: 8px;
 }
 
 .avatars {
@@ -75,14 +157,13 @@
   align-items: center;
 
   img {
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid white;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-
-    margin-left: -12px;
+    border: 2px solid var(--background-light);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    margin-left: -10px;
     transition: transform 0.2s ease;
   }
 
@@ -91,14 +172,14 @@
   }
 
   img:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     z-index: 5;
   }
 }
 
 .proofText {
-  font-size: 15px;
-  color: var(--text-secondary);
+  font-size: 0.82rem;
+  color: var(--text-muted);
 
   strong {
     color: var(--text-primary);
@@ -106,8 +187,106 @@
   }
 }
 
+/* ================= RIGHT — MEDIA CARD ================= */
 
-/* ================= FEATURES ================= */
+.mediaWrapper {
+  perspective: 1000px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.mediaCard {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 3.2;
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--background-dark);
+  box-shadow:
+    0 40px 80px -20px rgba(15, 23, 42, 0.25),
+    0 16px 40px -12px rgba(15, 23, 42, 0.12);
+  border: none;
+  transform: rotateY(-6deg) rotateX(2deg);
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.5s ease;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+.mediaCard:hover {
+  box-shadow:
+    0 48px 100px -24px rgba(15, 23, 42, 0.3),
+    0 20px 48px -12px rgba(15, 23, 42, 0.15);
+}
+
+.media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Play button */
+
+.playButton {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  background: var(--button-primary);
+  color: var(--text-inverse);
+  box-shadow: 0 8px 24px var(--shadow-color);
+  transition: transform 0.2s ease, background 0.2s ease;
+  z-index: 3;
+}
+
+.playButton:hover {
+  transform: scale(1.08);
+  background: var(--button-hover);
+}
+
+/* Overlay badge on image */
+
+.overlay {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  right: 16px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-inverse);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.badgeContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.overlayLabel {
+  font-size: 0.65rem;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.overlayTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* ================= FEATURES (unused but kept) ================= */
 
 .features {
   margin-top: 1.8rem;
@@ -131,88 +310,46 @@
   background: var(--primary-color);
 }
 
-/* ================= MEDIA CARD ================= */
+/* ================= TABLET ================= */
 
-.mediaCard {
-  position: relative;
-  width: 100%;
-  height: 460px;
-  border-radius: 32px;
-  overflow: hidden;
-  background: #000;
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.25);
-  border: 4px solid var(--primary-color);
-}
+@media (max-width: 1024px) {
+  .hero {
+    padding: 80px 32px 100px;
+  }
 
-.media {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+  .inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+  }
 
+  .title {
+    font-size: clamp(2.4rem, 4vw, 3.2rem);
+  }
 
-/* Play button */
-
-.playButton {
-  position: absolute;
-  right: 30px;
-  bottom: 30px;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  background: var(--primary-color);
-  color: white;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease;
-}
-
-.playButton:hover {
-  transform: scale(1.1);
-}
-
-/* Overlay */
-
-.overlay {
-  position: absolute;
-  left: 20px;
-  bottom: 20px;
-  right: 20px;
-  padding: 16px 20px;
-  border-radius: 20px;
-  backdrop-filter: blur(14px);
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
-}
-
-.badgeContent {
-  display: flex;
-  flex-direction: column;
-}
-
-.badgeLabel {
-  font-size: 0.75rem;
-  opacity: 0.8;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.badgeTitle {
-  font-size: 1.1rem;
-  font-weight: 600;
+  .mediaCard {
+    transform: rotateY(-3deg) rotateX(1deg);
+  }
 }
 
 /* ================= MOBILE ================= */
 
 @media (max-width: 768px) {
+  .hero {
+    padding: 60px 20px 80px;
+  }
+
   .inner {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 2.5rem;
     text-align: center;
+  }
+
+  .badge {
+    margin: 0 auto;
+  }
+
+  .title {
+    max-width: 100%;
   }
 
   .description {
@@ -223,11 +360,17 @@
     justify-content: center;
   }
 
-  .features {
+  .socialProof {
     justify-content: center;
+    flex-wrap: wrap;
   }
 
   .mediaCard {
-    height: 320px;
+    transform: none;
+    aspect-ratio: 4 / 3;
+  }
+
+  .mediaWrapper {
+    perspective: none;
   }
 }

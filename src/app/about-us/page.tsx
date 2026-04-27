@@ -9,194 +9,164 @@ import Cta from "@/components/constructor/cta/Cta";
 import MissionBanner from "@/components/constructor/mission-banner/MissionBanner";
 import FAQ from "@/components/constructor/faq/FAQ";
 import {experts} from "@/data/experts";
+import HeroSection from "@/components/constructor/hero/Hero";
+import InfoBlock from "@/components/constructor/Info-block/InfoBlock";
+import Grid from "@/components/constructor/grid/Grid";
+import Timeline from "@/components/constructor/timeline/Timeline";
+import StoryGridSection from "@/components/sections/story-grid-section/StoryGridSection";
+import CenteredCtaSection from "@/components/constructor/centered-cta/CenteredCtaSection";
 
 export default function AboutPage() {
     return (
         <>
-            <PromoSection
-                eyebrow="About Us"
-                title="Coach-Built Training for the"
-                highlight="Real World"
-                description="We connect athletes with certified specialists who design personalized training programs. AI is available as a faster option, but expert coaching is what we’re built around."
-                image="image3"
-                imageText="Real coaches. Real programs."
+            <HeroSection
+                title={
+                    <>
+                        A Marketplace for <span>Premium Templates</span>
+                    </>
+                }
+                description="We build a curated ecosystem of high-quality website templates for WordPress, Shopify, eCommerce, and modern web projects. Our goal is simple — help you launch faster with designs that already work."
+                primaryCta={{text: "Browse Templates", link: "/templates"}}
+                secondaryCta={{text: "Explore Categories", link: "/categories"}}
+                image="image5"
             />
 
-            <MissionBanner
-                image="image4"
-                cards={[
-                    {
-                        icon: "zap",
-                        title: "The Mission",
-                        description:
-                            "Make high-quality, specialist-made training programs accessible to anyone, anywhere."
-                    },
-                    {
-                        icon: "bulb",
-                        title: "The Vision",
-                        description:
-                            "A world where every athlete can train with a clear plan, built by experts and supported by smart tools."
-                    }
-                ] as const}
-            />
+            <Grid columns={2} gap="2rem">
+                <InfoBlock
+                    badge="category"
+                    variant="light"
+                    color="blue"
+                    title="WordPress Templates"
+                    icon="wordpress"
+                    description="Flexible, SEO-optimized WordPress themes for blogs, agencies, portfolios, and business websites."
+                    buttonText="Browse WordPress"
+                    buttonLink="/templates?category=wordpress"
+                />
+                <InfoBlock
+                    badge="category"
+                    variant="light"
+                    color="green"
+                    title="Shopify Templates"
+                    icon="shopify"
+                    description="High-converting Shopify themes built for modern online stores and seamless shopping experiences."
+                    buttonText="Browse Shopify"
+                    buttonLink="/templates?category=shopify"
+                />
+            </Grid>
 
-            <ValuesIcons
-                tagline="Our Core Values"
-                title="What We Stand For"
-                description="We prioritize real coaching, clear systems, and measurable progress."
-                theme={"dark"}
-                values={[
-                    {
-                        icon: "path",
-                        title: "Quality First",
-                        description: "Specialists build your program with detail, logic, and purpose.",
-                    },
-                    {
-                        icon: "globe",
-                        title: "Access Anywhere",
-                        description: "Order your plan online and train from any gym or home setup.",
-                    },
-                    {
-                        icon: "shield",
-                        title: "Trust & Privacy",
-                        description: "Your data is protected and your answers stay confidential.",
-                    },
-                    {
-                        icon: "brain",
-                        title: "Smart Support",
-                        description: "AI helps you start faster, while specialists deliver the best result.",
-                    },
-                ]}
-                backgroundColor="surface-muted"
-            />
-
-            {/* 4️⃣ HOW WE WORK */}
-            <HowItWorksSection
-                label="Our Process"
-                title="How Your Program Is Created"
-                description="A simple flow designed to deliver a plan you can follow with confidence."
+            <Timeline
+                title="How We Build Marketplace-Ready Templates"
+                description="Every template in our ecosystem follows a strict quality process to ensure performance, scalability, and usability."
                 steps={[
                     {
-                        title: "Tell Us Your Goal",
+                        title: "Clean & Scalable Structure",
                         description:
-                            "Fill out a short form about your experience, schedule, equipment, and preferences.",
+                            "All templates start with a solid semantic structure and modern architecture, ensuring flexibility and long-term usability.",
                     },
                     {
-                        title: "Choose Who Builds It",
+                        title: "Performance Optimization",
                         description:
-                            "Pick a specialist (recommended) for maximum quality, or AI when you need it faster.",
+                            "We prioritize speed, responsiveness, and SEO to make sure every template performs well across all devices.",
                     },
                     {
-                        title: "Program Design",
+                        title: "Platform Integration",
                         description:
-                            "Your plan is structured into weeks with exercises, sets, reps, intensity, and progression.",
-                    },
-                    {
-                        title: "Receive Your PDF",
-                        description:
-                            "Download your personalized training program and start immediately.",
+                            "Templates are built to integrate smoothly with platforms like WordPress and Shopify without breaking customizations.",
                     },
                 ]}
-                note="Specialist-made programs are our primary service. AI is available as a faster alternative."
             />
 
-            {/* 5️⃣ TEAM */}
-            <TeamGrid
-                title="Meet Our Specialists"
-                description="Certified coaches who build programs with real training logic."
-                viewAllText="View All Trainers"
-                members={experts.slice(0, 4).map((expert) => ({
-                    name: expert.fullName,
-                    role: expert.subtitle,
-                    image: expert.avatar,
-                }))}
+            <StoryGridSection
+                cards={[
+                    {
+                        type: "featureLarge",
+                        title: "Pre-Built Layout Systems",
+                        text: "Choose from multiple ready-to-use layouts designed for different industries, from startups to eCommerce brands.",
+                        images: ["image3", "image4"],
+                    },
+                    {
+                        type: "featureDark",
+                        title: "Built for Speed",
+                        text: "Optimized code and lightweight structure ensure fast loading times and smooth user experience.",
+                        ctaLabel: "See performance",
+                        ctaHref: "/performance",
+                    },
+                    {
+                        type: "featureLight",
+                        title: "Clean & Maintainable Code",
+                        text: "We focus on clean architecture without unnecessary bloat, making templates easy to customize and scale.",
+                    },
+                    {
+                        type: "ctaWide",
+                        title: "Support & Continuous Updates",
+                        text: "Templates are regularly updated and improved to stay compatible with modern web standards and platforms.",
+                        ctaLabel: "Learn more",
+                        ctaHref: "/support",
+                        images: ["team1", "team2", "team3"],
+                    },
+                ]}
             />
 
-            {/* 6️⃣ TESTIMONIALS */}
             <TestimonialsSlider
-                title="People Trust Our Specialists"
-                description="Coach-made programs are the #1 choice on the platform."
+                title="Trusted by Designers, Founders, and Agencies"
+                description="Real feedback from people using templates to launch faster and build better products."
                 testimonials={[
                     {
-                        name: "Mark T.",
+                        name: "James Carter",
                         image: "review1",
                         rating: 5,
-                        text: "The specialist plan was super detailed and realistic. It fit my schedule and fixed my weak points.",
+                        text: "Picked a landing page template and launched the same day. The structure was clean and required almost no changes.",
                     },
                     {
-                        name: "Anna R.",
+                        name: "Sophia Bennett",
+                        image: "review5",
+                        rating: 4.9,
+                        text: "I used a Shopify template from here and it instantly made my store look more professional. Conversion rate improved within a week.",
+                    },
+                    {
+                        name: "Liam Anderson",
+                        image: "review2",
+                        rating: 5,
+                        text: "As a freelancer, this saves me hours on every project. I just customize the template instead of building everything from scratch.",
+                    },
+                    {
+                        name: "Emily Turner",
+                        image: "review6",
+                        rating: 4.8,
+                        text: "The quality is way better than free themes. Everything feels polished and ready for real business use.",
+                    },
+                    {
+                        name: "Noah Williams",
                         image: "review3",
                         rating: 5,
-                        text: "My coach adjusted exercise selection for my knees and technique. Training finally feels safe and effective.",
+                        text: "Found a perfect WordPress template for a client project. Delivered faster and still made a great profit.",
                     },
                     {
-                        name: "David L.",
-                        image: "review2",
-                        rating: 4.7,
-                        text: "No subscription is perfect. I bought tokens and ordered a specialist plan when I actually needed it.",
-                    },
-                    {
-                        name: "Chris M.",
-                        image: "review5",
-                        rating: 5,
-                        text: "I like that specialists are the main option. The program I got looked like real coaching, not a template.",
-                    },
-                    {
-                        name: "Elena S.",
-                        image: "review4",
-                        rating: 4.8,
-                        text: "Clear weekly structure and progression. I stopped guessing and started improving consistently.",
-                    },
-                    {
-                        name: "Tom K.",
-                        image: "review9",
-                        rating: 4.9,
-                        text: "The PDF is easy to follow and print. I’ve made steady progress for the first time in years.",
-                    },
-                    {
-                        name: "Sophie W.",
+                        name: "Olivia Martinez",
                         image: "review7",
-                        rating: 4.6,
-                        text: "AI is useful when I’m in a rush, but the specialist plan is on another level for detail.",
+                        rating: 4.7,
+                        text: "Super easy to browse and compare templates. I didn’t waste time scrolling through low-quality designs.",
                     },
                     {
-                        name: "Daniel P.",
+                        name: "Ethan Brown",
+                        image: "review4",
+                        rating: 4.9,
+                        text: "The templates are actually built for real use — clean code, good UX, and easy to customize.",
+                    },
+                    {
+                        name: "Ava Johnson",
                         image: "review8",
-                        rating: 4.8,
-                        text: "Simple flow: form → specialist → PDF. Clean and professional.",
+                        rating: 5,
+                        text: "I launched my portfolio site in a couple of hours. Before that, I was stuck for weeks trying to design everything myself.",
                     },
                 ]}
             />
 
-            <Cta
-                title="Get Your Coach-Made Program"
-                description="Create an account, buy tokens, and order a specialist plan today. Use AI anytime for a faster start."
-                buttonText="Get Started"
-                link="/get-started"
-            />
-
-            <FAQ
-                items={[
-                    {
-                        question: "What’s the difference between Specialist and AI programs?",
-                        answer:
-                            "Specialist programs are manually created by certified coaches and are our primary service. AI programs are faster and simpler, designed as a secondary option when you need a quick start.",
-                    },
-                    {
-                        question: "Do tokens expire?",
-                        answer: "No, tokens never expire.",
-                    },
-                    {
-                        question: "How fast do I receive my program?",
-                        answer:
-                            "AI programs are generated quickly. Specialist programs take longer because they’re built manually with higher quality and detail.",
-                    },
-                    {
-                        question: "Can I switch between Specialist and AI?",
-                        answer:
-                            "Yes. You can use tokens for either option anytime, depending on your needs.",
-                    },
-                ]}
+            <CenteredCtaSection
+                title="Start building with the right template"
+                description="Browse premium website templates and launch your next project faster with designs that are ready to go."
+                primaryCta={{text: "Browse Templates", link: "/templates"}}
+                secondaryCta={{text: "Explore Categories", link: "/categories"}}
             />
         </>
     );

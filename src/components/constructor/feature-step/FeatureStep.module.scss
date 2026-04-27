@@ -1,182 +1,171 @@
-/* Card — мінімалістична “преміальна” рамка */
 .card {
   position: relative;
-  border-radius: 20px;
-  border: 1px solid var(--border-color);
+
+  min-height: 290px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 26px 24px 22px;
+
   background: linear-gradient(
                   180deg,
-                  rgba(255,255,255,0.70),
-                  rgba(255,255,255,0.55)
+                  rgba(248, 249, 251, 0.9),
+                  rgba(244, 246, 248, 0.85)
   );
 
-  /* дуже легка глибина без "жирних" тіней */
-  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-  overflow: hidden;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 16px;
+
+  backdrop-filter: blur(6px);
+
+  transition:
+          transform 0.25s ease,
+          border-color 0.25s ease,
+          box-shadow 0.25s ease,
+          background 0.25s ease;
 }
 
-/* subtle “wash” щоб було цікаво але мінімально */
+/* subtle light */
 .card::before {
   content: "";
   position: absolute;
   inset: 0;
+
   background:
-          radial-gradient(900px 200px at 10% 0%, rgba(0,0,0,0.04), transparent 60%),
-          radial-gradient(700px 240px at 95% 30%, rgba(0,0,0,0.035), transparent 55%);
+          radial-gradient(
+                          600px 180px at 0% 0%,
+                          rgba(37, 99, 235, 0.04),
+                          transparent 60%
+          ),
+          radial-gradient(
+                          500px 200px at 100% 40%,
+                          rgba(0, 0, 0, 0.03),
+                          transparent 60%
+          );
+
   pointer-events: none;
 }
 
-/* Layout */
-.contentRow {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1.05fr;
-  gap: 2.25rem;
-  align-items: center;
-  padding: 1.25rem;
+/* 🔥 hover */
+.card:hover {
+  transform: translateY(-6px);
+
+  background: #ffffff;
+
+  border-color: rgba(15, 23, 42, 0.1);
+
+  box-shadow:
+          0 30px 60px rgba(15, 23, 42, 0.08),
+          0 10px 30px rgba(15, 23, 42, 0.05);
 }
 
-/* Якщо картинка справа — просто міняємо порядок, без RTL */
-.right .media { order: 2; }
-.right .content { order: 1; }
+/* ===== CONTENT ===== */
 
-/* Media */
-.media {
-  position: relative;
-  aspect-ratio: 16 / 10;
-  border-radius: 16px;
-  overflow: hidden;
-
-  /* замість тіні — тонка рамка */
-  border: 1px solid rgba(0,0,0,0.08);
-  background: rgba(0,0,0,0.03);
-}
-
-/* легкий overlay “film” */
-.media::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-          linear-gradient(180deg, rgba(0,0,0,0.00), rgba(0,0,0,0.08));
-  pointer-events: none;
-}
-
-.image {
-  object-fit: cover;
-  transform: scale(1.02);
-}
-
-/* Badge — чистий, без чорної плашки */
-.badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 2;
-
-  font-size: 0.72rem;
-  letter-spacing: 0.02em;
-  padding: 6px 10px;
-  border-radius: 999px;
-
-  color: rgba(0,0,0,0.75);
-  background: rgba(255,255,255,0.75);
-  border: 1px solid rgba(0,0,0,0.08);
-  backdrop-filter: blur(8px);
-}
-
-/* Content */
-.content {
+.cardContent {
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
-  padding: 0.25rem 0.25rem 0.25rem 0;
+  align-items: flex-start;
 }
 
-/* Step pill — фірмовий мінімалізм */
-.stepPill {
-  width: fit-content;
+/* 🔥 STEP */
+.stepTag {
+  display: inline-block;
+  margin-bottom: 20px;
+
+  font-size: 11px;
+  line-height: 1;
+
+  font-weight: 800;
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+
+  color: #5b7cff;
+}
+
+/* 🔥 TITLE (більший і жирніший) */
+.title {
+  margin: 0 0 14px;
+
+  font-size: clamp(1.6rem, 1.9vw, 2.2rem);
+  line-height: 1.1;
+
+  font-weight: 800;
+
+  letter-spacing: -0.02em;
+
+  color: #1f2937;
+}
+
+/* 🔥 DESCRIPTION */
+.description {
+  margin: 0;
+
+  max-width: 360px;
+
+  font-size: 14.5px;
+  line-height: 1.7;
+
+  color: #6b7280;
+}
+
+/* ===== ICON ===== */
+
+.iconWrap {
+  margin-top: 42px;
+  display: flex;
+  align-items: flex-end;
+}
+
+/* 🔥 БІЛЬША ІКОНКА */
+.icon {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
 
-  border-radius: 999px;
-  padding: 0.35rem 0.6rem;
+  color: #cfcfcf;
+  opacity: 0.95;
 
-  background: rgba(0,0,0,0.04);
-  border: 1px solid rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, color 0.25s ease;
 }
 
-.stepLabel {
-  font-size: 0.75rem;
-  color: rgba(0,0,0,0.55);
+/* hover трохи підсвітка */
+.card:hover .icon {
+  color: #9ca3af;
+  transform: scale(1.08);
 }
 
-.stepNumber {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: rgba(0,0,0,0.82);
+.icon svg {
+  width: 34px;   /* ⬅ було 24 */
+  height: 34px;
+  stroke-width: 1.6;
 }
 
-/* Typography */
-.title {
-  font-size: 1.75rem;
-  line-height: 1.15;
-  font-weight: 800;
-  margin: 0;
+.icon span {
+  font-size: 32px;
+  line-height: 1;
 }
 
-.description {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  line-height: 1.65;
-  margin: 0;
-}
+/* ===== MOBILE ===== */
 
-.textContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-}
-
-/* Bullets — замість ✓ зробимо мінімальні “dots” */
-.list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 0.55rem;
-}
-
-.list li {
-  position: relative;
-  padding-left: 18px;
-  color: rgba(0,0,0,0.74);
-  line-height: 1.55;
-}
-
-.list li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.62em;
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: rgba(0,0,0,0.35);
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .contentRow {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-    padding: 1rem;
+@media (max-width: 680px) {
+  .card {
+    min-height: 240px;
+    padding: 22px 20px 18px;
   }
 
-  .right .media { order: 1; }
-  .right .content { order: 2; }
-
   .title {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+  }
+
+  .description {
+    max-width: 100%;
+    font-size: 14px;
+  }
+
+  .icon svg {
+    width: 30px;
+    height: 30px;
   }
 }

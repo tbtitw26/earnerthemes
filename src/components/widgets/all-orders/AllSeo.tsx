@@ -6,9 +6,11 @@ import { FaRegClock, FaCoins, FaClipboardList } from "react-icons/fa";
 import ButtonUI from "@/components/ui/button/ButtonUI";
 import Link from "next/link";
 import {useSeoRequests} from "@/context/extra-context/SeoContext";
+import { useCurrency } from "@/context/CurrencyContext";
 
 const AllSeoRequests: React.FC = () => {
     const { seoRequests, loading, refreshSeoRequests } = useSeoRequests();
+    const { sign, currency, convertFromBase } = useCurrency();
 
     const formatDate = (dateStr: string) => {
         const date = new Date(dateStr);
@@ -86,7 +88,7 @@ const AllSeoRequests: React.FC = () => {
                     {formatTime(req.createdAt)}
                 </span>
                                 <span className={styles.tokens}>
-                  <FaCoins /> -{req.tokensUsed} tokens
+                  <FaCoins /> -{sign}{convertFromBase(req.amountUsed).toFixed(2)} {currency}
                 </span>
                             </div>
 

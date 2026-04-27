@@ -1,99 +1,120 @@
 .card {
   position: relative;
-  background: #ffffff;
-  border-radius: 24px;
-  padding: 48px 32px 32px;
+  background: #f8f8f8;
+  border-radius: 0;
+  padding: 34px 30px 30px;
   display: flex;
   flex-direction: column;
   height: 100%;
-  border: 1px solid #e2e8f0;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  color: #0f172a;
+  border: 1px solid #d9d9d9;
+  transition:
+          border-color 0.22s ease,
+          box-shadow 0.22s ease,
+          transform 0.22s ease,
+          background 0.22s ease;
+  color: #111827;
+  box-shadow: none;
 
   &:hover {
-    border-color: #cbd5e1;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
+    background: #fbfbfb;
+    border-color: #cfd4dc;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+    transform: translateY(-2px);
   }
 }
 
 .header {
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 .title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+  margin-bottom: 18px;
 }
 
 .priceContainer {
   display: flex;
   align-items: baseline;
-  gap: 6px;
-  margin-bottom: 4px;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 
 .priceValue {
-  font-size: 48px;
+  font-size: clamp(3rem, 4vw, 3.75rem);
   font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.04em;
-  line-height: 1;
+  color: #111827;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
 }
 
 .oneTime {
-  font-size: 14px;
-  color: #94a3b8;
+  font-size: 13px;
+  color: #9ca3af;
   font-weight: 500;
 }
 
 .tokenHighlight {
-  font-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: #10b981; // Зелений як на референсі
-  margin-top: 12px;
+  color: #1f2937;
+  margin-top: 8px;
 }
 
 /* ===== Badge ===== */
+
 .badgeWrapper {
   position: absolute;
-  top: -12px;
+  top: -1px;
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
+  pointer-events: none;
 }
 
 .badgeTop {
-  padding: 6px 14px;
+  transform: translateY(-50%);
+  padding: 8px 16px;
+  min-width: 92px;
+  text-align: center;
   font-size: 11px;
   font-weight: 800;
-  border-radius: 8px;
+  border-radius: 0;
   background: #2563eb;
   color: #ffffff;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+  line-height: 1;
 }
 
-/* ===== Content & Description ===== */
+/* ===== Content ===== */
+
 .content {
   flex-grow: 1;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
 .description {
   font-size: 15px;
-  color: #64748b;
-  line-height: 1.6;
+  color: #9aa0a8;
+  line-height: 1.7;
+  max-width: 34ch;
 }
 
 /* ===== Custom Section ===== */
+
 .customSection {
   .divider {
     height: 1px;
-    background: #f1f5f9;
-    margin-bottom: 24px;
+    background: #e7eaee;
+    margin-bottom: 22px;
   }
 }
 
@@ -101,22 +122,24 @@
   display: block;
   font-size: 11px;
   font-weight: 800;
-  color: #94a3b8;
+  color: #9ca3af;
   margin-bottom: 8px;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .tokenInput {
-  background-color: #f8fafc !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 12px !important;
+  background-color: #ffffff !important;
+  border: 1px solid #d9dce2 !important;
+  border-radius: 0 !important;
   font-weight: 700 !important;
   font-size: 16px !important;
-  padding: 8px 12px !important;
-  margin-bottom: 20px;
+  padding: 10px 14px !important;
+  margin-bottom: 18px;
 
   &:focus-within {
     border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
   }
 }
 
@@ -124,46 +147,105 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 16px;
-  border-top: 1px solid #f1f5f9;
+  padding-top: 18px;
+  border-top: 1px solid #e7eaee;
   font-size: 14px;
-  color: #64748b;
+  color: #6b7280;
   font-weight: 600;
 }
 
 .totalValue {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 800;
-  color: #0f172a;
+  color: #111827;
+  letter-spacing: -0.03em;
 }
 
-/* ===== CTA Button ===== */
+/* ===== CTA ===== */
+
+.cta {
+  margin-top: auto;
+}
+
 .actionButton {
-  background-color: #f1f5f9 !important;
-  color: #0f172a !important;
+  background-color: transparent !important;
+  color: #2563eb !important;
   font-weight: 700 !important;
-  border-radius: 12px !important;
-  transition: all 0.2s ease !important;
+  border-radius: 0 !important;
+  border: 1.5px solid #2563eb !important;
+  min-height: 48px;
+  transition:
+          background-color 0.2s ease,
+          color 0.2s ease,
+          border-color 0.2s ease !important;
 
   &:hover {
-    background-color: #e2e8f0 !important;
+    background-color: rgba(37, 99, 235, 0.04) !important;
+    color: #1d4ed8 !important;
+    border-color: #1d4ed8 !important;
   }
 }
 
 /* ===== Variants ===== */
+
+.starter,
+.premium,
+.custom {
+  border: 1px solid #d9d9d9;
+}
+
 .pro {
-  border: 2px solid #2563eb; // Синя рамка для популярного плану
+  border: 2px solid #2563eb;
+  background: #fafafa;
+
+  &:hover {
+    border-color: #2563eb;
+    box-shadow: 0 12px 32px rgba(37, 99, 235, 0.08);
+  }
+
+  .title {
+    color: #2563eb;
+  }
 
   .actionButton {
     background-color: #2563eb !important;
     color: #ffffff !important;
+    border: 1.5px solid #2563eb !important;
 
     &:hover {
       background-color: #1d4ed8 !important;
+      border-color: #1d4ed8 !important;
+      color: #ffffff !important;
     }
   }
 }
 
 .custom {
-  background: #ffffff;
+  background: #f8f8f8;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 768px) {
+  .card {
+    padding: 28px 22px 24px;
+  }
+
+  .priceValue {
+    font-size: 2.75rem;
+  }
+
+  .tokenHighlight {
+    font-size: 1rem;
+  }
+
+  .description {
+    max-width: 100%;
+    font-size: 14px;
+  }
+
+  .badgeTop {
+    padding: 7px 14px;
+    font-size: 10px;
+  }
 }

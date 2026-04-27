@@ -1,5 +1,6 @@
 import mongoose, { Schema, Model } from "mongoose";
 import { IUserSchema } from "@/backend/types/user.types";
+import { legacyTokensToBalance, roundMoney } from "@/utils/money";
 
 const UserSchema: Schema<IUserSchema> = new Schema(
     {
@@ -31,7 +32,8 @@ const UserSchema: Schema<IUserSchema> = new Schema(
             },
 
             role: { type: String, enum: ["user", "admin"], default: "user" },
-            tokens: { type: Number, default: 10 },
+            balance: { type: Number, default: 0, min: 0 },
+            tokens: { type: Number, required: false },
     },
     { timestamps: true }
 );
@@ -55,6 +57,17 @@ UserSchema.pre("validate", function syncRegistrationFields(next) {
         this.invalidate("dateOfBirth", "Date of birth is required");
     }
     if (!this.address.postCode) this.invalidate("address.postCode", "Post code is required");
+
+    const legacyTokens = typeof this.tokens === "number" ? this.tokens : 0;
+    if (typeof this.balance !== "number" || Number.isNaN(this.balance)) {
+        this.balance = legacyTokensToBalance(legacyTokens);
+    } else {
+        this.balance = roundMoney(this.balance);
+    }
+
+    if (typeof this.tokens === "number") {
+        this.tokens = undefined;
+    }
 
     next();
 });

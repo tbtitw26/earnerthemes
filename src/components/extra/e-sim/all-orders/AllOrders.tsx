@@ -6,9 +6,11 @@ import { FaClock, FaCoins, FaSimCard } from "react-icons/fa";
 import ButtonUI from "@/components/ui/button/ButtonUI";
 import Link from "next/link";
 import { useEsimOrders } from "@/context/extra-context/EsimOrdersContext";
+import { useCurrency } from "@/context/CurrencyContext";
 
 const AllEsimOrders: React.FC = () => {
     const { orders, loading, refreshOrders } = useEsimOrders();
+    const { sign, currency, convertFromBase } = useCurrency();
 
     const formatDate = (dateStr: string) =>
         new Date(dateStr).toLocaleDateString("en-US", {
@@ -99,7 +101,7 @@ const AllEsimOrders: React.FC = () => {
                                 </span>
 
                                 <span className={styles.tokens}>
-                                    <FaCoins /> -{order.tokensUsed}
+                                    <FaCoins /> -{sign}{convertFromBase(order.amountUsed).toFixed(2)} {currency}
                                 </span>
                             </div>
                         </div>

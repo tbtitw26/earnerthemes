@@ -25,4 +25,5 @@ export const ENV = {
     SMTP_PASS: env("SMTP_PASS", ""),
     EMAIL_FROM: env("EMAIL_FROM", ""),
     RESEND_API: env("RESEND_API", ""),
+    PAYMENT_TEST_MODE: env("PAYMENT_TEST_MODE", "false") === "true",
 };

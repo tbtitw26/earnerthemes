@@ -88,16 +88,6 @@ const faqSchema: PageSchema = {
                 },
             ],
         },
-
-        {
-            type: "custom",
-            component: "TextWithButton",
-            title: "Still Have Questions?",
-            description:
-                "Our support team is happy to help you choose between a specialist-made program or an AI plan.",
-            buttonText: "Contact Support",
-            buttonLink: "/contact-us",
-        },
     ],
 };
 

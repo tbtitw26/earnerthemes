@@ -7,7 +7,7 @@ export interface UniversalOrderDocument extends Document {
     category: string; // e.g. "training", "cv", "marketing"
     fields: Record<string, any>;
     extras: string[];
-    totalTokens: number;
+    totalAmount: number;
     planType: "default" | "reviewed";
     language?: string;
 
@@ -27,7 +27,7 @@ const universalOrderSchema = new Schema<UniversalOrderDocument>(
 
         fields: { type: Schema.Types.Mixed, default: {} },
         extras: [{ type: String }],
-        totalTokens: { type: Number, required: true },
+        totalAmount: { type: Number, required: true },
         planType: { type: String, enum: ["default", "reviewed"], default: "default" },
 
         // 🌍 необов’язкове поле

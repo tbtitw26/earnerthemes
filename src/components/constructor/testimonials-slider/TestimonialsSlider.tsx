@@ -5,8 +5,18 @@ import styles from "./TestimonialsSlider.module.scss";
 import Image from "next/image";
 import { media } from "@/resources/media";
 import type { StaticImageData } from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { PiStarFill } from "react-icons/pi";
+import { HiSparkles } from "react-icons/hi2";
+import {
+    cardReveal,
+    cardStagger,
+    contentReveal,
+    headingReveal,
+    inViewProps,
+    sectionReveal,
+    softScaleReveal,
+} from "@/components/motion/system";
 
 interface Testimonial {
     name: string;
@@ -55,19 +65,55 @@ export default function TestimonialsSlider({
                                                description,
                                                testimonials,
                                            }: Props) {
+    const reduced = useReducedMotion();
     const [expanded, setExpanded] = useState(false);
+    const averageRating = testimonials.length
+        ? (
+              testimonials.reduce((sum, item) => sum + (item.rating ?? 5), 0) /
+              testimonials.length
+          ).toFixed(1)
+        : "5.0";
 
     return (
-        <section className={styles.section}>
+        <motion.section
+            className={styles.section}
+            {...inViewProps(sectionReveal(reduced), { amount: 0.14 })}
+        >
             <div className={styles.container}>
-                <div className={styles.header}>
-                    {label && <span className={styles.label}>{label}</span>}
-                    <h2 className={styles.title}>{title}</h2>
-                    {description && <p className={styles.description}>{description}</p>}
-                </div>
+                <motion.div
+                    className={styles.header}
+                    variants={cardStagger(reduced, {
+                        staggerChildren: 0.08,
+                        delayChildren: 0.03,
+                    })}
+                >
+                    <div className={styles.headerCopy}>
+                        {label && <motion.span className={styles.label} variants={contentReveal(reduced)}>{label}</motion.span>}
+                        <motion.h2 className={styles.title} variants={headingReveal(reduced)}>{title}</motion.h2>
+                        {description && (
+                            <motion.p className={styles.description} variants={contentReveal(reduced)}>
+                                {description}
+                            </motion.p>
+                        )}
+                    </div>
+
+                    <motion.div className={styles.overviewCard} variants={softScaleReveal(reduced)}>
+                        <span className={styles.overviewEyebrow}>
+                            <HiSparkles className={styles.overviewIcon} />
+                            Real feedback
+                        </span>
+                        <div className={styles.overviewValue}>{averageRating}/5</div>
+                        <p className={styles.overviewText}>
+                            Average rating from {testimonials.length} recent client stories.
+                        </p>
+                    </motion.div>
+                </motion.div>
 
                 <div className={styles.gridWrapper}>
-                    <div className={`${styles.grid} ${!expanded ? styles.collapsed : ""}`}>
+                    <motion.div
+                        className={`${styles.grid} ${!expanded ? styles.collapsed : ""}`}
+                        variants={cardStagger(reduced)}
+                    >
                         {testimonials.map((item, i) => {
                             const img = media[item.image] as StaticImageData;
                             const rating = item.rating ?? 5;
@@ -76,16 +122,15 @@ export default function TestimonialsSlider({
                                 <motion.div
                                     key={i}
                                     className={styles.card}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: i * 0.05 }}
-                                    viewport={{ once: true }}
+                                    variants={cardReveal(reduced)}
                                 >
+                                    <span className={styles.quoteMark}>“</span>
+
                                     <div className={styles.cardHeader}>
-                                        <StarRating rating={rating} />
-                                        <span className={styles.verified}>
-                                            Verified Student
-                                        </span>
+                                        <div className={styles.ratingBlock}>
+                                            <StarRating rating={rating} />
+                                            <span className={styles.ratingValue}>{rating.toFixed(1)}</span>
+                                        </div>
                                     </div>
 
                                     <p className={styles.quote}>“{item.text}”</p>
@@ -103,28 +148,25 @@ export default function TestimonialsSlider({
                                             <span className={styles.userName}>
                                                 {item.name}
                                             </span>
-                                            <span className={styles.userStatus}>
-                                                Completed 5+ Courses
-                                            </span>
                                         </div>
                                     </div>
                                 </motion.div>
                             );
                         })}
-                    </div>
+                    </motion.div>
 
                     {!expanded && <div className={styles.fadeOverlay} />}
                 </div>
 
-                <div className={styles.buttonWrap}>
+                <motion.div className={styles.buttonWrap} variants={contentReveal(reduced)}>
                     <button
                         className={styles.showMoreBtn}
                         onClick={() => setExpanded(!expanded)}
                     >
-                        {expanded ? "Show less" : "Show more"}
+                        {expanded ? "Show fewer stories" : "Show more stories"}
                     </button>
-                </div>
+                </motion.div>
             </div>
-        </section>
+        </motion.section>
     );
 }

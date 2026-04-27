@@ -1,0 +1,116 @@
+.page {
+  width: 100%;
+  padding: 36px 0 88px;
+  background:
+    radial-gradient(circle at top, rgba(46, 104, 255, 0.06), transparent 28%),
+    linear-gradient(180deg, #fbfaf8 0%, #ffffff 30%, #f7f8fb 100%);
+}
+
+.formShell {
+  width: 100%;
+}
+
+.serviceShell {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.serviceHero {
+  margin-bottom: 24px;
+  padding: 34px 36px;
+  border: 1px solid #e7eaef;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at top left, rgba(46, 104, 255, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, #f7f8fb 100%);
+  box-shadow:
+    0 28px 60px rgba(15, 23, 42, 0.06),
+    0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #2e68ff;
+
+  &::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: #2e68ff;
+  }
+}
+
+.serviceTitle {
+  margin: 0 0 10px;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.04;
+  letter-spacing: -0.05em;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.serviceDescription {
+  max-width: 760px;
+  margin: 0;
+  line-height: 1.75;
+  color: #64748b;
+}
+
+.loginNote {
+  max-width: 760px;
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.9);
+  color: #475569;
+
+  strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #0f172a;
+  }
+}
+
+.serviceCard {
+  border: 1px solid #e7eaef;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 28px 60px rgba(15, 23, 42, 0.06),
+    0 8px 24px rgba(15, 23, 42, 0.04);
+  padding: 18px;
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: 24px 0 60px;
+  }
+
+  .serviceShell {
+    padding: 0 16px;
+  }
+
+  .serviceHero,
+  .serviceCard {
+    border-radius: 22px;
+  }
+
+  .serviceHero {
+    padding: 22px;
+  }
+
+  .serviceCard {
+    padding: 14px;
+  }
+}

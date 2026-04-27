@@ -3,22 +3,17 @@
 import React, {useEffect, useMemo, useState} from "react";
 import styles from "./Checkout.module.scss";
 import {useCurrency} from "@/context/CurrencyContext";
-import {useCheckoutStore} from "@/utils/store";
+import {CheckoutPlan, useCheckoutStore} from "@/utils/store";
+import { isSupportedCurrency, MIN_TOP_UP_AMOUNT } from "@/utils/money";
 
-const TOKENS_PER_EUR = 100; // 100 tokens = 1 EUR (base)
-
-type Plan = {
-    title: string;
-    price: number; // EUR (base)
-    tokens: number;
-    variant?: string;
-    currency?: string;
+type StoredPlan = CheckoutPlan & {
+    price?: number;
 };
 
 const Checkout = () => {
     const {plan, setPlan, clearPlan} = useCheckoutStore();
 
-    const [activePlan, setActivePlan] = useState<Plan | null>(plan ?? null);
+    const [activePlan, setActivePlan] = useState<CheckoutPlan | null>(plan ?? null);
     const [agreed, setAgreed] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -29,64 +24,51 @@ const Checkout = () => {
         if (!plan) {
             const stored = localStorage.getItem("selectedPlan");
             if (stored) {
-                const parsed = JSON.parse(stored) as Plan;
-                setPlan(parsed);
-                setActivePlan(parsed);
+                const parsed = JSON.parse(stored) as Partial<StoredPlan>;
+                const normalizedPlan: CheckoutPlan = {
+                    ...parsed,
+                    basePrice: typeof parsed.basePrice === "number" ? parsed.basePrice : parsed.price ?? 0,
+                    currency: isSupportedCurrency(parsed.currency) ? parsed.currency : "GBP",
+                    variant: typeof parsed.variant === "string" ? parsed.variant : "starter",
+                    title: typeof parsed.title === "string" ? parsed.title : "Wallet Top-Up",
+                    amount: typeof parsed.amount === "number" ? parsed.amount : 0,
+                };
+                setPlan(normalizedPlan);
+                setActivePlan(normalizedPlan);
             } else {
                 setActivePlan(null);
             }
         } else {
-            setActivePlan(plan as Plan);
+            setActivePlan(plan);
         }
     }, [plan, setPlan]);
 
     /**
      * UI price:
-     * - activePlan.price is EUR (base)
+     * - activePlan.basePrice is GBP (base)
      * - convert to selected currency for display
      */
-    const basePriceInEUR = useMemo(() => activePlan?.price ?? 0, [activePlan]);
+    const basePriceAmount = useMemo(() => activePlan?.basePrice ?? 0, [activePlan]);
 
     const subtotal = useMemo(() => {
-        return convertFromBase(basePriceInEUR);
-    }, [basePriceInEUR, convertFromBase]);
+        return convertFromBase(basePriceAmount);
+    }, [basePriceAmount, convertFromBase]);
 
     const vat = useMemo(() => subtotal * 0.2, [subtotal]);
     const total = useMemo(() => subtotal + vat, [subtotal, vat]);
 
-    /**
-     * Backend amount:
-     * Your API /api/user/buy-tokens expects:
-     *   { currency: "EUR"|"GBP", amount: number }
-     * and converts amount -> GBP -> tokens.
-     *
-     * IMPORTANT:
-     * We calculate amount from TOKENS (not from VAT),
-     * so VAT does NOT increase token amount.
-     */
-    const amountForBackend = useMemo(() => {
-        if (!activePlan) return 0;
-
-        // tokens -> EUR amount (base)
-        const amountEur = activePlan.tokens / TOKENS_PER_EUR;
-
-        // EUR -> selected currency amount (what we send to backend)
-        return convertFromBase(amountEur);
-    }, [activePlan, convertFromBase]);
+    const displayAmountForPayment = useMemo(
+        () => convertFromBase(basePriceAmount),
+        [basePriceAmount, convertFromBase]
+    );
 
     const handlePay = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!activePlan) return;
         if (!agreed || loading) return;
 
-        // backend currently supports only EUR/GBP
-        if (currency !== "EUR" && currency !== "GBP") {
-            alert("Unsupported currency. Please select EUR or GBP.");
-            return;
-        }
-
         // guard
-        if (!amountForBackend || amountForBackend <= 0) {
+        if (!displayAmountForPayment || displayAmountForPayment <= 0) {
             alert("Invalid amount");
             return;
         }
@@ -94,16 +76,16 @@ const Checkout = () => {
         try {
             setLoading(true);
 
-            const res = await fetch("/api/user/buy-tokens", {
+            const res = await fetch("/api/user/top-up-balance", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
-                    currency,                 // ✅ required by backend
-                    amount: amountForBackend, // ✅ required by backend
+                    currency,
+                    amount: displayAmountForPayment,
                 }),
             });
 
-            const data = await res.json().catch(() => ({} as any));
+            const data = (await res.json().catch(() => ({}))) as { message?: string };
 
             if (!res.ok) {
                 throw new Error(data?.message ?? "Payment failed");
@@ -112,8 +94,8 @@ const Checkout = () => {
             localStorage.removeItem("selectedPlan");
             clearPlan();
             window.location.href = "/profile";
-        } catch (err: any) {
-            alert(err?.message ?? "Payment failed");
+        } catch (err: unknown) {
+            alert(err instanceof Error ? err.message : "Payment failed");
         } finally {
             setLoading(false);
         }
@@ -124,7 +106,7 @@ const Checkout = () => {
         return (
             <div className={styles.checkoutEmpty}>
                 <p>
-                    No plan selected. Please go back to <a href="/pricing">Pricing</a>.
+                    No top-up selected. Please go back to <a href="/pricing">Pricing</a>.
                 </p>
             </div>
         );
@@ -133,18 +115,18 @@ const Checkout = () => {
     return (
         <div className={styles.checkout}>
             <div className={styles.header}>
-                <h1>Checkout</h1>
-                <p>Secure Payment</p>
+                <h1>Wallet Top-Up</h1>
+                <p>Secure checkout</p>
             </div>
 
             <div className={styles.main}>
                 <div className={styles.summary}>
-                    <h2>Order Summary</h2>
+                    <h2>Top-Up Summary</h2>
 
                     <div className={styles.itemRow}>
                         <div className={styles.itemInfo}>
                             <h3>{activePlan.title}</h3>
-                            <p>{activePlan.tokens.toLocaleString()} tokens</p>
+                            <p>Add funds to your wallet balance</p>
                         </div>
                         <span>
               {sign}
@@ -199,11 +181,15 @@ const Checkout = () => {
                                     onChange={(e) => setAgreed(e.target.checked)}
                                 />{" "}
                                 I agree to the{" "}
-                                <a href="/terms" target="_blank" rel="noreferrer">
+                                <a href="/terms-and-conditions" target="_blank" rel="noreferrer">
                                     terms & conditions
                                 </a>
                             </label>
                         </div>
+
+                        <p className={styles.helper}>
+                            Minimum top-up amount is {sign}{convertFromBase(MIN_TOP_UP_AMOUNT).toFixed(2)}.
+                        </p>
 
                         <button
                             type="submit"
@@ -214,7 +200,7 @@ const Checkout = () => {
                         </button>
 
                         {/* optional debug */}
-                        {/* <pre>{JSON.stringify({ currency, amountForBackend }, null, 2)}</pre> */}
+                        {/* <pre>{JSON.stringify({ currency, displayAmountForPayment }, null, 2)}</pre> */}
                     </form>
                 </div>
             </div>

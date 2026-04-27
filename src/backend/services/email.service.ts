@@ -1,5 +1,6 @@
 import { sendEmail } from "@/backend/utils/sendEmail";
 import { ENV } from "@/backend/config/env";
+import { formatMoney } from "@/utils/money";
 
 import {
     COMPANY_NAME,
@@ -240,6 +241,44 @@ ${companyName} Team
         `;
 
         return await sendEmail(data.email, data.subject, text, html);
+    },
+
+    async sendTemplatePurchaseConfirmationEmail(data: {
+        email: string;
+        firstName?: string;
+        purchases: Array<{
+            templateTitle: string;
+            platform?: string;
+            category?: string;
+        }>;
+        amountPaid: number;
+        purchaseSource: "direct" | "cart";
+        transactionDate: Date | string;
+    }) {
+        const isMultiple = data.purchases.length > 1;
+        const subject = isMultiple
+            ? "Template purchase confirmation"
+            : "Template purchase confirmed";
+
+        const summaryLines = [
+            `Purchase type: ${data.purchaseSource === "cart" ? "Cart checkout" : "Direct purchase"}`,
+            ...data.purchases.map((purchase, index) => {
+                const meta = [purchase.platform, purchase.category].filter(Boolean).join(" · ");
+                return `${isMultiple ? `Template ${index + 1}` : "Template"}: ${purchase.templateTitle}${meta ? ` (${meta})` : ""}`;
+            }),
+            "Access: Your purchased templates will be available from your account/dashboard area.",
+        ];
+
+        return await this.sendOrderConfirmationEmail({
+            email: data.email,
+            firstName: data.firstName,
+            subject,
+            summaryTitle: isMultiple ? "Purchased templates" : "Purchased template",
+            summaryLines,
+            amountLabel: "Amount paid",
+            amountValue: formatMoney(data.amountPaid),
+            transactionDate: data.transactionDate,
+        });
     },
 };
 

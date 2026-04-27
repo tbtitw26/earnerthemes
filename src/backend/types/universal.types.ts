@@ -7,7 +7,7 @@ export interface UniversalOrderType {
     category: string;
     fields: Record<string, any>;
     extras: string[];
-    totalTokens: number;
+    totalAmount: number;
     planType: "default" | "reviewed";
     language?: string;
     response: string;
@@ -21,7 +21,7 @@ export interface CreateUniversalOrderRequest {
     category: string;
     fields: Record<string, any>;
     extras: string[];
-    totalTokens: number;
+    totalAmount: number;
     planType: "default" | "reviewed";
     language?: string;
     email: string;

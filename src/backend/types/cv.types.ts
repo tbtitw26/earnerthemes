@@ -46,7 +46,7 @@ export interface CreateCVOrderRequest {
     reviewType: "default" | "manager";
     extras: string[];
     email: string;
-    totalTokens?: number;
+    totalAmount?: number;
 }
 
 

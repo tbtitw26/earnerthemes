@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import styles from "./PricingCard.module.scss";
 import ButtonUI from "@/components/ui/button/ButtonUI";
 import Input from "@mui/joy/Input";
@@ -11,32 +11,32 @@ import { useCurrency } from "@/context/CurrencyContext";
 import { useRouter } from "next/navigation";
 import { useCheckoutStore } from "@/utils/store";
 import { PiPencilSimpleLineBold } from "react-icons/pi";
-
-const TOKENS_PER_UNIT = 100;
+import { MIN_TOP_UP_AMOUNT, parseMoneyAmount } from "@/utils/money";
+import { cardStagger, contentReveal, softScaleReveal } from "@/components/motion/system";
 
 interface PricingCardProps {
     variant?: "starter" | "pro" | "premium" | "custom";
     title: string;
-    price: string;
-    tokens: number;
+    amount: number;
     description: string;
     features?: string[];
     buttonText: string;
     badgeTop?: string;
     index?: number;
+    buttonLink?: string;
+    badgeBottom?: string;
 }
 
 const PricingCard: React.FC<PricingCardProps> = ({
                                                      variant = "starter",
                                                      title,
-                                                     price,
-                                                     tokens,
+                                                     amount,
                                                      description,
-                                                     features = [],
                                                      buttonText,
                                                      badgeTop,
                                                      index = 0,
                                                  }) => {
+    const reduced = useReducedMotion();
     const { showAlert } = useAlert();
     const user = useUser();
     const { sign, convertFromBase, currency } = useCurrency();
@@ -44,22 +44,18 @@ const PricingCard: React.FC<PricingCardProps> = ({
     const { setPlan } = useCheckoutStore();
 
     const isCustom = variant === "custom";
-    const [customTokenAmount, setCustomTokenAmount] = useState<string>("");
+    const [customAmount, setCustomAmount] = useState<string>("");
 
-    const effectiveTokens = useMemo(() => {
-        const val = parseInt(customTokenAmount);
-        return isNaN(val) ? 0 : val;
-    }, [customTokenAmount]);
+    const effectiveAmount = useMemo(() => {
+        const parsed = parseMoneyAmount(customAmount);
+        return parsed ?? 0;
+    }, [customAmount]);
 
-    const basePriceEUR = useMemo(() => {
-        if (isCustom) return effectiveTokens / TOKENS_PER_UNIT;
-        const num = parseFloat(price.replace(/[^0-9.]/g, ""));
-        return isNaN(num) ? 0 : num;
-    }, [price, isCustom, effectiveTokens]);
+    const baseTopUpAmount = useMemo(() => (isCustom ? effectiveAmount : amount), [amount, effectiveAmount, isCustom]);
 
-    const convertedPrice = useMemo(() => {
-        return convertFromBase(basePriceEUR);
-    }, [basePriceEUR, convertFromBase]);
+    const displayPrice = useMemo(() => {
+        return convertFromBase(baseTopUpAmount);
+    }, [baseTopUpAmount, convertFromBase]);
 
     const handleBuy = () => {
         if (!user) {
@@ -68,16 +64,16 @@ const PricingCard: React.FC<PricingCardProps> = ({
             return;
         }
 
-        const finalTokens = isCustom ? effectiveTokens : tokens;
-        if (isCustom && finalTokens < 100) {
-            showAlert("Minimum tokens", "Please enter at least 100 tokens", "warning");
+        const finalAmount = isCustom ? effectiveAmount : amount;
+        if (isCustom && finalAmount < MIN_TOP_UP_AMOUNT) {
+            showAlert("Minimum top-up", `Please enter at least ${sign}${convertFromBase(MIN_TOP_UP_AMOUNT).toFixed(2)}.`, "warning");
             return;
         }
 
         const plan = {
             title,
-            price: basePriceEUR,
-            tokens: finalTokens,
+            basePrice: baseTopUpAmount,
+            amount: finalAmount,
             variant,
             currency,
         };
@@ -89,73 +85,81 @@ const PricingCard: React.FC<PricingCardProps> = ({
     return (
         <motion.div
             className={`${styles.card} ${styles[variant]}`}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.45, delay: index * 0.08 }}
+            variants={cardStagger(reduced, {
+                staggerChildren: 0.07,
+                delayChildren: index * 0.03,
+            })}
         >
             {badgeTop && (
-                <div className={styles.badgeWrapper}>
+                <motion.div className={styles.badgeWrapper} variants={contentReveal(reduced)}>
                     <span className={styles.badgeTop}>{badgeTop}</span>
-                </div>
+                </motion.div>
             )}
 
-            <div className={styles.header}>
-                <h3 className={styles.title}>{title}</h3>
-                <div className={styles.priceContainer}>
+            <motion.div className={styles.header} variants={cardStagger(reduced, { staggerChildren: 0.05, delayChildren: 0 })}>
+                <motion.h3 className={styles.title} variants={contentReveal(reduced)}>
+                    {title}
+                </motion.h3>
+                <motion.div className={styles.priceContainer} variants={softScaleReveal(reduced)}>
                     <span className={styles.priceValue}>
                         {sign}
-                        {convertedPrice.toFixed(
-                            isCustom && effectiveTokens === 0 ? 2 : isCustom ? 2 : 0
-                        )}
+                        {displayPrice.toFixed(2)}
                     </span>
                     <span className={styles.oneTime}>one-time</span>
-                </div>
-                <div className={styles.tokenHighlight}>
+                </motion.div>
+                <motion.div className={styles.tokenHighlight} variants={contentReveal(reduced)}>
                     {isCustom
-                        ? `${effectiveTokens.toLocaleString()} Tokens`
-                        : `${tokens.toLocaleString()} Tokens`}
-                </div>
-            </div>
+                        ? `${sign}${displayPrice.toFixed(2)} custom top-up`
+                        : `${sign}${displayPrice.toFixed(2)} balance top-up`}
+                </motion.div>
+            </motion.div>
 
-            <div className={styles.content}>
+            <motion.div className={styles.content} variants={contentReveal(reduced)}>
                 {isCustom ? (
-                    <div className={styles.customSection}>
+                    <motion.div className={styles.customSection} variants={cardStagger(reduced, { staggerChildren: 0.05, delayChildren: 0 })}>
                         <div className={styles.divider} />
-                        <label className={styles.inputLabel}>TOKENS</label>
-                        <Input
-                            type="number"
-                            variant="plain"
-                            placeholder="100"
-                            value={customTokenAmount}
-                            onChange={(e) => setCustomTokenAmount(e.target.value)}
-                            endDecorator={<PiPencilSimpleLineBold size={18} />}
-                            className={styles.tokenInput}
-                            slotProps={{
-                                input: {
-                                    min: 0,
-                                    step: 10,
-                                },
-                            }}
-                        />
-                        <div className={styles.totalRow}>
+                        <motion.label className={styles.inputLabel} variants={contentReveal(reduced)}>
+                            AMOUNT
+                        </motion.label>
+                        <motion.div variants={contentReveal(reduced)}>
+                            <Input
+                                type="text"
+                                variant="plain"
+                                placeholder="10.00"
+                                value={customAmount}
+                                onChange={(e) => setCustomAmount(e.target.value)}
+                                endDecorator={<PiPencilSimpleLineBold size={18} />}
+                                className={styles.tokenInput}
+                                slotProps={{
+                                    input: {
+                                        inputMode: "decimal",
+                                    },
+                                }}
+                            />
+                        </motion.div>
+                        <motion.div className={styles.totalRow} variants={contentReveal(reduced)}>
                             <span>Total Price</span>
                             <span className={styles.totalValue}>
                                 {sign}
-                                {convertedPrice.toFixed(2)}
+                                {displayPrice.toFixed(2)}
                             </span>
-                        </div>
-                    </div>
+                        </motion.div>
+                        <motion.p className={styles.description} variants={contentReveal(reduced)}>
+                            Enter any amount from {sign}{convertFromBase(MIN_TOP_UP_AMOUNT).toFixed(2)} and continue to checkout.
+                        </motion.p>
+                    </motion.div>
                 ) : (
-                    <p className={styles.description}>{description}</p>
+                    <motion.p className={styles.description} variants={contentReveal(reduced)}>
+                        {description}
+                    </motion.p>
                 )}
-            </div>
+            </motion.div>
 
-            <div className={styles.cta}>
+            <motion.div className={styles.cta} variants={softScaleReveal(reduced)}>
                 <ButtonUI fullWidth variant="soft" onClick={handleBuy}>
                     {isCustom ? "Calculate Price" : user ? buttonText : "Sign in to buy"}
                 </ButtonUI>
-            </div>
+            </motion.div>
         </motion.div>
     );
 };

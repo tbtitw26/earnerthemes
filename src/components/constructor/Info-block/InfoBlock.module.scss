@@ -3,132 +3,145 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  border-radius: 32px;
+  border-radius: 16px;
   overflow: hidden;
   height: 100%;
-  transition: transform 0.3s ease;
 }
 
+/* ================= VARIANTS ================= */
+
 .light {
-  background-color: var(--surface-color);
+  background-color: var(--quaternary-color);
   border: 1px solid var(--border-color);
 
   .title { color: var(--text-primary); }
-  .description { color: var(--text-secondary); }
-  .backgroundIcon { color: var(--text-muted); }
+  .description { color: var(--background-dark); }
+  .decorativeIcon { color: var(--text-muted); }
 
   .checkWrapper {
     background-color: #DCFCE7;
     color: var(--success-color);
   }
 
-  .actionButton {
-    background-color: transparent;
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
-    &:hover { background-color: var(--tertiary-color); }
+  .bullets li {
+    color: var(--text-secondary);
   }
 }
 
 .dark {
   background-color: var(--background-dark);
   border: 1px solid #1E293B;
-  
-  .bullets {
-    li {
-      color: var(--text-inverse); // 👈 БІЛИЙ текст
-    }
-  }
 
   .title { color: var(--text-inverse); }
   .description { color: var(--text-muted); }
-  .backgroundIcon { color: var(--text-secondary)}
+  .decorativeIcon { color: rgba(255, 255, 255, 0.04); }
 
   .checkWrapper {
     background-color: rgba(37, 99, 235, 0.2);
     color: var(--primary-color);
   }
 
-  .actionButton {
-    background-color: var(--button-primary);
-    border: 2px solid var(--button-primary);
-    color: var(--text-inverse);
-    &:hover { background-color: var(--button-hover); }
+  .bullets li {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .eyebrow {
+    color: var(--info-accent, var(--primary-color));
+    opacity: 0.9;
+  }
+
+  .ctaLink {
+    color: var(--info-accent, var(--primary-color));
+    &:hover {
+      color: var(--info-hover, var(--secondary-color));
+    }
   }
 }
 
+/* ================= CONTENT ================= */
+
 .content {
-  padding: 40px;
+  padding: 56px 64px 60px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   position: relative;
+  z-index: 1;
+  min-height: 360px;
 }
 
-.backgroundIcon {
+/* ================= DECORATIVE ICON ================= */
+
+.decorativeIcon {
   position: absolute;
-  top: 40px;
-  right: 40px;
-  font-size: 80px;
-  line-height: 0;
+  bottom: -50px;
+  right: -50px;
+  font-size: 280px;
+  line-height: 1;
   pointer-events: none;
   z-index: 0;
+  opacity: 0.10;
+
+  svg {
+    display: block;
+    width: 1em;
+    height: 1em;
+  }
 }
 
-.header {
-  margin-bottom: 32px;
-  position: relative;
-  z-index: 1;
+/* ================= EYEBROW ================= */
+
+.eyebrow {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--info-accent, var(--primary-color));
+  margin-bottom: 22px;
 }
 
-.titleRow {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
-}
+/* ================= TITLE ================= */
 
 .title {
-  font-size: 2rem;
+  font-size: 2.75rem;
   font-weight: 800;
-  margin: 0;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin: 0 0 22px 0;
+  max-width: 480px;
 }
 
-.badge {
-  background-color: var(--primary-color);
-  color: white;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 6px;
-  text-transform: uppercase;
-}
+/* ================= DESCRIPTION ================= */
 
 .description {
-  font-size: 1rem;
-  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  margin: 0;
+  max-width: 420px;
 }
 
+/* ================= BULLETS ================= */
+
 .bullets {
-  margin: 0 0 40px 0;
+  margin: 24px 0 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  z-index: 1;
+  gap: 12px;
 
   li {
     list-style: none;
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 1rem;
+    gap: 10px;
+    font-size: 0.95rem;
+    line-height: 1.5;
   }
 }
 
 .checkWrapper {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -136,20 +149,85 @@
   flex-shrink: 0;
 }
 
-.actionButton {
+/* ================= CTA LINK ================= */
+
+.ctaLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   margin-top: auto;
-  padding: 16px;
-  border-radius: 12px;
+  font-size: 1.1rem;
   font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
+  color: var(--info-accent, var(--link-color));
+  text-decoration: none;
+  background: none;
+  border: none;
+  transition: color 0.2s ease;
+  width: fit-content;
+
+  svg {
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    color: var(--info-hover, var(--link-hover));
+
+    svg {
+      transform: translateX(4px);
+    }
+  }
 }
 
-.hasImage {
-  .imageWrapper {
-    position: relative;
-    width: 100%;
-    height: 240px;
+/* ================= IMAGE VARIANT ================= */
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 220px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1024px) {
+  .content {
+    padding: 44px 48px 48px;
+    min-height: 380px;
   }
-  .content { padding: 24px; }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .decorativeIcon {
+    font-size: 170px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 36px 28px 40px;
+    min-height: auto;
+  }
+
+  .title {
+    font-size: 1.7rem;
+    max-width: 100%;
+  }
+
+  .description {
+    max-width: 100%;
+    font-size: 1rem;
+  }
+
+  .decorativeIcon {
+    font-size: 120px;
+    opacity: 0.06;
+    bottom: -12px;
+    right: -8px;
+  }
+
+  .ctaLink {
+    padding-top: 28px;
+  }
 }

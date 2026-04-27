@@ -6,6 +6,7 @@ import OpenAI from "openai";
 import { ENV } from "../config/env";
 import mongoose from "mongoose";
 import { emailService } from "./email.service";
+import { legacyTokensToBalance, roundMoney, formatMoney } from "@/utils/money";
 
 const openai = new OpenAI({ apiKey: ENV.OPENAI_API_KEY });
 
@@ -251,7 +252,9 @@ export const universalService = {
         if (!body || typeof body !== "object") throw new Error("Invalid request body");
         if (!body.category) throw new Error("Missing category");
         if (!body.fields || typeof body.fields !== "object") throw new Error("Missing fields");
-        if (!body.totalTokens || isNaN(body.totalTokens)) throw new Error("Invalid totalTokens value");
+        if ((body.totalAmount == null || isNaN(body.totalAmount)) && (body.totalTokens == null || isNaN(body.totalTokens))) {
+            throw new Error("Invalid totalAmount value");
+        }
 
         if (body.planType === "instant") body.planType = "default";
         if (!["default", "reviewed"].includes(body.planType))
@@ -260,16 +263,19 @@ export const universalService = {
         const user = await User.findById(userId);
         if (!user) throw new Error("User not found");
 
-        const languageCost = body.language && body.language !== "English" ? 5 : 0;
-        const totalCost = Number(body.totalTokens) + languageCost;
+        const languageCost = body.language && body.language !== "English" ? legacyTokensToBalance(5) : 0;
+        const totalCost = roundMoney(
+            (body.totalAmount != null ? Number(body.totalAmount) : legacyTokensToBalance(Number(body.totalTokens))) +
+            languageCost
+        );
 
-        if (user.tokens < totalCost)
-            throw new Error(`Insufficient tokens (have ${user.tokens}, need ${totalCost})`);
+        if (user.balance < totalCost)
+            throw new Error(`Insufficient balance (have ${user.balance}, need ${totalCost})`);
 
         // charge
-        user.tokens -= totalCost;
+        user.balance = roundMoney(user.balance - totalCost);
         await user.save();
-        await transactionService.record(user._id, email, totalCost, "spend", user.tokens);
+        await transactionService.record(user._id, email, totalCost, "spend", user.balance);
 
         // main generation
         const mainPrompt = buildPrompt(body);
@@ -315,7 +321,7 @@ export const universalService = {
             fields: body.fields,
             planType: body.planType,
             extras: body.extras || [],
-            totalTokens: Number(body.totalTokens) + (languageCost || 0),
+            totalAmount: totalCost,
             language: body.language || "English",
             response: mainText,
             extrasData,
@@ -339,8 +345,8 @@ export const universalService = {
                     `Language: ${body.language || "English"}`,
                     `Status: ${body.planType === "reviewed" ? "Pending review" : "Ready"}`,
                 ],
-                amountLabel: "Tokens used",
-                amountValue: String(totalCost),
+                amountLabel: "Amount used",
+                amountValue: formatMoney(totalCost),
                 transactionDate: plainOrder.createdAt || new Date(),
             });
         } catch (error) {

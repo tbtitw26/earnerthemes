@@ -23,9 +23,9 @@ import image19 from "@/assets/images/image19.jpg";
 import image20 from "@/assets/images/image20.jpg";
 import image21 from "@/assets/images/image21.jpg";
 
-import review1 from "@/assets/images/review1.png";
-import review2 from "@/assets/images/review2.png";
-import review3 from "@/assets/images/review3.png";
+import review1 from "@/assets/images/review1.jpg";
+import review2 from "@/assets/images/review2.jpg";
+import review3 from "@/assets/images/review3.jpg";
 import review4 from "@/assets/images/review4.jpg";
 import review5 from "@/assets/images/review5.jpg";
 import review6 from "@/assets/images/review6.jpg";

@@ -20,7 +20,7 @@ export interface IUser {
         zip?: string;
     };
 
-    tokens: number;
+    balance: number;
     role: UserRole;
 
     createdAt: string;

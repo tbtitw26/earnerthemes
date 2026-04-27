@@ -6,7 +6,7 @@ export interface EsimOrderDocument extends Document {
     country: string;
     countryCode: string;
     plan: string;
-    tokensUsed: number;
+    amountUsed: number;
     status: "paid" | "delivered";
     createdAt: Date;
     updatedAt: Date;
@@ -21,7 +21,7 @@ const EsimOrderSchema = new Schema<EsimOrderDocument>(
         countryCode: { type: String, required: true },
         plan: { type: String, required: true },
 
-        tokensUsed: { type: Number, required: true },
+        amountUsed: { type: Number, required: true },
 
         status: {
             type: String,

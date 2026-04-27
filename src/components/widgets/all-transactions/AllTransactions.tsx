@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "./AllTransactions.module.scss";
+import { useCurrency } from "@/context/CurrencyContext";
 
 interface Transaction {
     _id: string;
@@ -14,6 +15,7 @@ interface Transaction {
 export default function TransactionHistory() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [loading, setLoading] = useState(true);
+    const { currency, sign, convertFromBase } = useCurrency();
 
     useEffect(() => {
         (async () => {
@@ -55,20 +57,18 @@ export default function TransactionHistory() {
             <header className={styles.header}>
                 <div>
                     <h3>Transaction History</h3>
-                    <p>All balance changes</p>
+                    <p>Recent billing and purchase activity tied to your account balance.</p>
                 </div>
             </header>
 
-            <div className={styles.table}>
-                {/* TABLE HEAD */}
+            <div className={styles.tableWrap}>
                 <div className={styles.head}>
                     <span>Date</span>
-                    <span>Type</span>
+                    <span>Activity</span>
                     <span>Amount</span>
                     <span>Balance After</span>
                 </div>
 
-                {/* TABLE ROWS */}
                 {transactions.map((t) => (
                     <div className={styles.row} key={t._id}>
                         <span className={styles.date}>
@@ -82,7 +82,7 @@ export default function TransactionHistory() {
                                     : styles.typeSpend
                             }
                         >
-                            {t.type === "add" ? "Top-up" : "Spend"}
+                            {t.type === "add" ? "Funds Added" : "Purchase"}
                         </span>
 
                         <span
@@ -93,11 +93,11 @@ export default function TransactionHistory() {
                             }
                         >
                             {t.type === "add" ? "+" : "-"}
-                            {t.amount}
+                            {sign}{convertFromBase(t.amount).toFixed(2)}
                         </span>
 
                         <span className={styles.balance}>
-                            {t.balanceAfter}
+                            {sign}{convertFromBase(t.balanceAfter).toFixed(2)} {currency}
                         </span>
                     </div>
                 ))}

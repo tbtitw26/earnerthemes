@@ -9,23 +9,19 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 import {ESIM_COUNTRIES, EsimCountry} from "../esim-full-store/esim-store/esimData";
+import { useCurrency } from "@/context/CurrencyContext";
 
 interface Props {
     title: string;
     description?: string;
 }
 
-/* 💰 SAME PRICING AS BIG STORE */
-const EUR_TO_GBP = 0.86;
-const TOKENS_PER_GBP = 100;
-const MARKUP_EUR = 1;
-
-const euroToTokens = (eur: number) =>
-    Math.ceil((eur + MARKUP_EUR) * EUR_TO_GBP * TOKENS_PER_GBP);
+const MARKUP_BASE_AMOUNT = 1;
 
 const EsimStorefront: React.FC<Props> = ({ title, description }) => {
     const router = useRouter();
     const user = useUser();
+    const { sign, currency, convertFromBase } = useCurrency();
 
     const tabs = [
         {
@@ -57,7 +53,7 @@ const EsimStorefront: React.FC<Props> = ({ title, description }) => {
         }
 
         router.push(
-            `/extra/esim-checkout?country=${country.name}&code=${country.code}&plan=${plan.label}&priceEur=${plan.priceEur}`
+            `/extra/esim-checkout?country=${country.name}&code=${country.code}&plan=${plan.label}&basePrice=${plan.basePrice}`
         );
     };
 
@@ -110,7 +106,7 @@ const EsimStorefront: React.FC<Props> = ({ title, description }) => {
                                 <span className={styles.plan}>{plan.label}</span>
 
                                 <span className={styles.price}>
-                                    <strong>{euroToTokens(plan.priceEur)}</strong> tokens
+                                    <strong>{sign}{convertFromBase(plan.basePrice + MARKUP_BASE_AMOUNT).toFixed(2)}</strong> {currency}
                                 </span>
 
                                 <ButtonUI

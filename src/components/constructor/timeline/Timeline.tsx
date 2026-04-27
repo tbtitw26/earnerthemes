@@ -1,8 +1,8 @@
 "use client";
+
 import React from "react";
 import { motion } from "framer-motion";
 import styles from "./Timeline.module.scss";
-import Text from "@/components/constructor/text/Text";
 
 interface Step {
     title: string;
@@ -17,7 +17,7 @@ interface TimelineProps {
 }
 
 const itemVariants = {
-    hidden: { opacity: 0, y: 32 },
+    hidden: { opacity: 0, y: 24 },
     visible: { opacity: 1, y: 0 },
 };
 
@@ -30,31 +30,35 @@ const Timeline: React.FC<TimelineProps> = ({
     return (
         <section className={styles.timelineSection}>
             <div className={styles.container}>
-                <div className={styles.head}>
-                    {title && <h2 className={styles.sectionTitle}>{title}</h2>}
-                    {description && (
-                        <p className={styles.sectionDesc}>{description}</p>
-                    )}
-                </div>
+                {(title || description) && (
+                    <div
+                        className={`${styles.head} ${
+                            align === "center" ? styles.headCenter : ""
+                        }`}
+                    >
+                        {title && <h2 className={styles.sectionTitle}>{title}</h2>}
+                        {description && <p className={styles.sectionDesc}>{description}</p>}
+                    </div>
+                )}
 
-                <div className={styles.timeline}>
+                <div className={styles.timelineList}>
                     {steps.map((step, index) => (
                         <motion.div
-                            key={index}
+                            key={`${step.title}-${index}`}
                             className={styles.timelineItem}
                             variants={itemVariants}
                             initial="hidden"
                             whileInView="visible"
-                            viewport={{ once: true, amount: 0.3 }}
-                            transition={{ duration: 0.45, delay: index * 0.1 }}
+                            viewport={{ once: true, amount: 0.2 }}
+                            transition={{ duration: 0.45, delay: index * 0.08 }}
                         >
-                            <div className={styles.marker}>
-                                <span>{index + 1}</span>
+                            <div className={styles.number}>
+                                {String(index + 1).padStart(2, "0")}
                             </div>
 
-                            <div className={styles.card}>
-                                <h4>{step.title}</h4>
-                                <p>{step.description}</p>
+                            <div className={styles.content}>
+                                <h3 className={styles.itemTitle}>{step.title}</h3>
+                                <p className={styles.itemDescription}>{step.description}</p>
                             </div>
                         </motion.div>
                     ))}

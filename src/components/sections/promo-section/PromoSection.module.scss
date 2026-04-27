@@ -20,7 +20,7 @@
 
 .title {
   font-size: clamp(2rem, 4vw, 3.5rem);
-  font-weight: 800;
+  font-weight: 500;
   line-height: 1.2;
   margin-bottom: 24px;
   color: #0f172a;
@@ -32,7 +32,6 @@
 
 .description {
   max-width: 700px;
-  margin: 0 auto 60px auto;
   font-size: 1.1rem;
   color: #64748b;
   line-height: 1.6;

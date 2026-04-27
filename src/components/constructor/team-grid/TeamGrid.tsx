@@ -1,12 +1,21 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import styles from "./TeamGrid.module.scss";
 import { media } from "@/resources/media";
 import ButtonUI from "@/components/ui/button/ButtonUI";
+import {
+    cardReveal,
+    cardStagger,
+    contentReveal,
+    headingReveal,
+    inViewProps,
+    sectionReveal,
+    softScaleReveal,
+} from "@/components/motion/system";
 
 interface TeamMember {
     name: string;
@@ -29,31 +38,44 @@ const TeamGrid: React.FC<TeamGridProps> = ({
                                                viewAllText = "View all chefs",
                                                viewAllLink = "/extra/chefs",
                                            }) => {
+    const reduced = useReducedMotion();
+
     return (
-        <section className={styles.section}>
+        <motion.section
+            className={styles.section}
+            {...inViewProps(sectionReveal(reduced), { amount: 0.14 })}
+        >
             <div className={styles.container}>
-                <div className={styles.header}>
+                <motion.div
+                    className={styles.header}
+                    variants={cardStagger(reduced, {
+                        staggerChildren: 0.08,
+                        delayChildren: 0.03,
+                    })}
+                >
                     <div className={styles.titleStack}>
-                        {title && <h2 className={styles.mainTitle}>{title}</h2>}
-                        {description && <p className={styles.subTitle}>{description}</p>}
+                        {title && <motion.h2 className={styles.mainTitle} variants={headingReveal(reduced)}>{title}</motion.h2>}
+                        {description && <motion.p className={styles.subTitle} variants={contentReveal(reduced)}>{description}</motion.p>}
                     </div>
 
                     {viewAllLink && (
-                        <Link href={viewAllLink} passHref legacyBehavior>
-                            <ButtonUI
-                                variant="solid"
-                                color="primary"
-                                shape="default"
-                                size="md"
-                                hoverEffect="scale"
-                            >
-                                {viewAllText}
-                            </ButtonUI>
-                        </Link>
+                        <motion.div variants={softScaleReveal(reduced)}>
+                            <Link href={viewAllLink} passHref legacyBehavior>
+                                <ButtonUI
+                                    variant="solid"
+                                    color="primary"
+                                    shape="default"
+                                    size="md"
+                                    hoverEffect="scale"
+                                >
+                                    {viewAllText}
+                                </ButtonUI>
+                            </Link>
+                        </motion.div>
                     )}
-                </div>
+                </motion.div>
 
-                <div className={styles.gallery}>
+                <motion.div className={styles.gallery} variants={cardStagger(reduced)}>
                     {members.map((m, i) => {
                         const img = media[m.image] as StaticImageData;
 
@@ -61,10 +83,7 @@ const TeamGrid: React.FC<TeamGridProps> = ({
                             <motion.div
                                 key={`${m.name}-${i}`}
                                 className={styles.memberCard}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.5, delay: i * 0.1 }}
-                                viewport={{ once: true }}
+                                variants={cardReveal(reduced)}
                                 whileHover={{ y: -10 }}
                             >
                                 <div className={styles.imageWrapper}>
@@ -85,9 +104,9 @@ const TeamGrid: React.FC<TeamGridProps> = ({
                             </motion.div>
                         );
                     })}
-                </div>
+                </motion.div>
             </div>
-        </section>
+        </motion.section>
     );
 };
 

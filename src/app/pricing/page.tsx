@@ -14,55 +14,50 @@ export default function PricingPage() {
     return (
         <>
             <PromoSection
-                eyebrow="Pricing"
-                title="Flexible Token Pricing for"
-                highlight="Specialist Training"
-                description="Buy tokens once and use them for specialist-made programs (primary service) or AI-generated plans (faster option). No subscriptions. No hidden fees."
+                title="Top Up Your"
+                highlight="Balance"
+                description="Add funds to your wallet, choose any amount from £10.00, and use your balance across specialist services, AI workflows, and future orders."
             />
 
             <Grid
-                title="Token Packages"
-                description="No subscriptions. Tokens let you choose specialist work or AI anytime."
+                title="Balance Top-Up"
+                description="Use a suggested amount or enter your own custom top-up. Minimum £10.00."
                 columns={4}
                 gap="2rem"
             >
                 <PricingCard
                     variant="starter"
                     title="Starter"
-                    price="€5"
-                    tokens={500}
-                    badgeTop="Start"
-                    description="Ideal to test the platform, generate an AI plan, or cover part of a specialist order."
-                    buttonText="Buy Tokens"
+                    amount={10}
+                    badgeTop="Minimum"
+                    description="A simple starter top-up for your first order or a quick wallet refill."
+                    buttonText="Top Up Balance"
                 />
 
                 <PricingCard
                     variant="pro"
-                    title="Athlete"
-                    price="€19"
-                    tokens={1900}
+                    title="Growth"
+                    amount={25}
                     badgeTop="Popular"
-                    description="Great for regular updates and specialist-made programs when your goals change."
-                    buttonText="Get Started"
+                    description="A flexible wallet top-up for ongoing service requests and repeat use."
+                    buttonText="Add Funds"
                 />
 
                 <PricingCard
                     variant="premium"
                     title="Pro"
-                    price="€49"
-                    tokens={4900}
+                    amount={50}
                     badgeTop="Best Value"
-                    description="Best choice for serious progress with detailed specialist programming and periodic revisions."
-                    buttonText="Choose Plan"
+                    description="A larger wallet refill for customers who expect multiple purchases or larger service spend."
+                    buttonText="Top Up Now"
                 />
 
                 <PricingCard
                     variant="custom"
                     title="Custom"
-                    price="dynamic"
-                    tokens={0}
                     badgeTop="Flexible"
-                    description="Choose the exact amount of tokens you need for your next plan or upgrade."
+                    amount={0}
+                    description="Choose the exact amount you want to add to your wallet."
                     buttonText="Continue"
                 />
             </Grid>
@@ -70,23 +65,23 @@ export default function PricingPage() {
             <FAQ
                 items={[
                     {
-                        question: "What are tokens used for?",
+                        question: "What is my wallet balance used for?",
                         answer:
-                            "Tokens are used to order a specialist-made training program (our primary service) or generate an AI plan (faster alternative). You only pay when you need a plan.",
+                            "Your wallet balance is used for service purchases across the platform. You only pay when you place an order.",
                     },
                     {
-                        question: "Do tokens expire?",
-                        answer: "No, tokens never expire.",
+                        question: "Is there a minimum top-up?",
+                        answer: "Yes. The minimum balance top-up is £10.00.",
                     },
                     {
-                        question: "How fast do I receive my plan?",
+                        question: "Can I enter a custom amount?",
                         answer:
-                            "AI programs are generated quickly. Specialist programs take longer because they are manually created for higher quality and personalization.",
+                            "Yes. You can top up with any custom amount as long as it is at least £10.00.",
                     },
                     {
-                        question: "Can I switch between Specialist and AI?",
+                        question: "When is my balance available?",
                         answer:
-                            "Yes, you can use your tokens for either option anytime depending on your needs.",
+                            "Successful top-ups are credited to your wallet immediately after checkout.",
                     },
                 ]}
             />

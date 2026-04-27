@@ -6,7 +6,7 @@ export interface SeoRequestDocument extends Document {
     service: string;
     message?: string;
     extras?: string[];
-    tokensUsed: number;
+    amountUsed: number;
     status: "pending" | "completed";
     createdAt: Date;
     updatedAt: Date;
@@ -19,7 +19,7 @@ const SeoRequestSchema = new Schema<SeoRequestDocument>(
         service: { type: String, required: true },
         message: { type: String },
         extras: [{ type: String }],
-        tokensUsed: { type: Number, default: 5 },
+        amountUsed: { type: Number, default: 5 },
         status: {
             type: String,
             enum: ["pending", "completed"],

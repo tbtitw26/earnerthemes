@@ -1,16 +1,69 @@
 .section {
   width: 100%;
   padding: 0 30px;
+  background: var(--background-light);
 }
 
 .inner {
-  max-width: 1320px;
+  max-width: 1520px;
   margin: 0 auto;
-  padding: 0 1.25rem;
 }
 
-/* Нова подача: акуратний "stack" з ритмом */
 .steps {
   display: grid;
-  gap: 1.25rem;
+  grid-template-columns: repeat(var(--feature-steps-columns, 3), minmax(0, 1fr));
+  gap: 18px;
+}
+
+.heading {
+  max-width: 820px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.label {
+  display: inline-block;
+  margin-bottom: 16px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary-color);
+}
+
+.title {
+  margin: 0 0 14px;
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+}
+
+.description {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 1100px) {
+  .section {
+    padding: 0 24px;
+  }
+
+  .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .section {
+    padding: 0 16px;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
 }

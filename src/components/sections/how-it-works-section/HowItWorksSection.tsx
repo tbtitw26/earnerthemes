@@ -4,7 +4,16 @@ import React from "react";
 import styles from "./HowItWorksSection.module.scss";
 import { ICONS } from "@/resources/icons";
 import type { IconKey } from "@/resources/icons";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import {
+    cardReveal,
+    cardStagger,
+    contentReveal,
+    headingReveal,
+    inViewProps,
+    sectionReveal,
+    splitReveal,
+} from "@/components/motion/system";
 
 interface Step {
     icon?: IconKey;
@@ -34,41 +43,61 @@ export default function HowItWorksSection({
                                               highlights,
                                               note,
                                           }: HowItWorksSectionProps) {
+    const reduced = useReducedMotion();
+
     return (
-        <section className={styles.section}>
+        <motion.section
+            className={styles.section}
+            {...inViewProps(sectionReveal(reduced), { amount: 0.18 })}
+        >
             <div className={styles.inner}>
-                <div className={styles.left}>
-                    {label && <span className={styles.label}>{label}</span>}
-                    {title && <h2 className={styles.title}>{title}</h2>}
-                    {description && <div className={styles.description}>{description}</div>}
+                <motion.div
+                    className={styles.left}
+                    variants={cardStagger(reduced, {
+                        staggerChildren: 0.08,
+                        delayChildren: 0.04,
+                    })}
+                >
+                    {label && <motion.span className={styles.label} variants={contentReveal(reduced)}>{label}</motion.span>}
+                    {title && <motion.h2 className={styles.title} variants={headingReveal(reduced)}>{title}</motion.h2>}
+                    {description && <motion.div className={styles.description} variants={contentReveal(reduced)}>{description}</motion.div>}
 
                     {highlights?.length && (
-                        <div className={styles.highlightsContainer}>
+                        <motion.div
+                            className={styles.highlightsContainer}
+                            variants={cardStagger(reduced, {
+                                staggerChildren: 0.06,
+                                delayChildren: 0.02,
+                            })}
+                        >
                             {highlights.map((item, i) => (
-                                <div key={i} className={styles.highlightItem}>
+                                <motion.div key={i} className={styles.highlightItem} variants={contentReveal(reduced)}>
                                     <div className={styles.checkIcon}>✓</div>
                                     <div className={styles.highlightText}>
                                         <strong>{item.title}</strong>
                                         {item.description && <p>{item.description}</p>}
                                     </div>
-                                </div>
+                                </motion.div>
                             ))}
-                        </div>
+                        </motion.div>
                     )}
-                </div>
+                </motion.div>
 
-                <div className={styles.right}>
-                    <div className={styles.processCard}>
+                <motion.div className={styles.right} variants={splitReveal(reduced, "right")}>
+                    <motion.div
+                        className={styles.processCard}
+                        variants={cardStagger(reduced, {
+                            staggerChildren: 0.1,
+                            delayChildren: 0.08,
+                        })}
+                    >
                         {steps?.map((step, i) => {
                             const Icon = step.icon ? ICONS[step.icon] : null;
                             return (
                                 <motion.div
                                     key={i}
                                     className={styles.stepRow}
-                                    initial={{ opacity: 0, x: 20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: i * 0.1 }}
-                                    viewport={{ once: true }}
+                                    variants={cardReveal(reduced)}
                                 >
                                     <div className={styles.iconColumn}>
                                         <div className={styles.iconCircle}>
@@ -86,14 +115,14 @@ export default function HowItWorksSection({
                         })}
 
                         {note && (
-                            <div className={styles.modernNote}>
+                            <motion.div className={styles.modernNote} variants={contentReveal(reduced)}>
                                 <div className={styles.noteIndicator} />
                                 <p>{note}</p>
-                            </div>
+                            </motion.div>
                         )}
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
             </div>
-        </section>
+        </motion.section>
     );
 }

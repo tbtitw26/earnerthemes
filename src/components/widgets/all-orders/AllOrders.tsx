@@ -3,14 +3,14 @@
 import React from "react";
 import { useAllOrders } from "@/context/AllOrdersContext";
 import styles from "./AllOrders.module.scss";
-import ButtonUI from "@/components/ui/button/ButtonUI";
 import Link from "next/link";
-import { downloadUniversalPDF } from "@/pdf-creator/PdfCreator";
-import { UniversalOrderUI } from "@/types/universal-order";
+import { useCurrency } from "@/context/CurrencyContext";
+import Image from "next/image";
+import { getValidTemplateImageUrl } from "@/utils/templateImage";
 
 const AllOrders: React.FC = () => {
-    const { aiOrders, loading, refreshOrders } = useAllOrders();
-    const orders = aiOrders as unknown as UniversalOrderUI[];
+    const { templatePurchases, loading, refreshOrders } = useAllOrders();
+    const { sign, currency, convertFromBase } = useCurrency();
 
     const formatDate = (dateStr: string) =>
         new Date(dateStr).toLocaleDateString("en-US", {
@@ -19,40 +19,27 @@ const AllOrders: React.FC = () => {
             year: "numeric",
         });
 
-    const formatId = (id: string) => id.slice(-6);
-
-    const handleDownload = async (order: UniversalOrderUI) => {
-        try {
-            if (order.extrasData && Object.keys(order.extrasData).length > 0) {
-                await downloadUniversalPDF(order as any);
-                return;
-            }
-
-            const res = await fetch(`/api/universal/get-order?id=${order._id}`);
-            const data = await res.json();
-
-            if (data?.order) {
-                await downloadUniversalPDF(data.order);
-            }
-        } catch (e) {
-            console.error("❌ Download error", e);
-        }
-    };
-
     if (loading) {
-        return <p className={styles.loading}>Loading orders…</p>;
+        return <p className={styles.loading}>Loading templates…</p>;
     }
 
-    if (orders.length === 0) {
+    if (templatePurchases.length === 0) {
         return (
-            <div className={styles.empty}>
-                <p>No orders yet.</p>
-                <Link href="/dashboard">
-                    <ButtonUI size="md" color="primary">
-                        Create your first order
-                    </ButtonUI>
-                </Link>
-            </div>
+            <section className={styles.section}>
+                <header className={styles.header}>
+                    <div>
+                        <h3>Your Templates</h3>
+                        <p>Purchased templates will appear here once they are added to your account.</p>
+                    </div>
+                </header>
+
+                <div className={styles.emptyState}>
+                    <p>No purchased templates yet.</p>
+                    <Link href="/templates" className={styles.primaryLink}>
+                        Browse templates
+                    </Link>
+                </div>
+            </section>
         );
     }
 
@@ -60,55 +47,71 @@ const AllOrders: React.FC = () => {
         <section className={styles.section}>
             <header className={styles.header}>
                 <div>
-                    <h3>Your Orders</h3>
-                    <p>Generated content and downloads</p>
+                    <h3>Your Templates</h3>
+                    <p>Manage the purchased templates currently available in your account library.</p>
                 </div>
 
-                <ButtonUI size="sm" onClick={refreshOrders}>
+                <button type="button" className={styles.refreshButton} onClick={refreshOrders}>
                     Refresh
-                </ButtonUI>
+                </button>
             </header>
 
-            <div className={styles.table}>
-                {/* TABLE HEAD */}
-                <div className={styles.head}>
-                    <span>ID</span>
-                    <span>Email</span>
-                    <span>Date</span>
-                    <span>Tokens</span>
-                    <span className={styles.actionsHead}>Actions</span>
-                </div>
+            <div className={styles.templateGrid}>
+                {templatePurchases.map((purchase) => {
+                    const imageUrl = getValidTemplateImageUrl(purchase.previewImage);
 
-                {/* TABLE ROWS */}
-                {orders.map((order) => (
-                    <div className={styles.row} key={order._id}>
-                        <span className={styles.id}>
-                            #{formatId(order._id)}
-                        </span>
+                    return (
+                        <article key={purchase._id.toString()} className={styles.templateCard}>
+                            <div className={styles.templateMedia}>
+                                {imageUrl ? (
+                                    <Image
+                                        src={imageUrl}
+                                        alt={purchase.templateTitle}
+                                        fill
+                                        sizes="(max-width: 900px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                                        className={styles.templateImage}
+                                    />
+                                ) : (
+                                    <div className={styles.templateFallback}>
+                                        <span>{purchase.platform || "Template"}</span>
+                                    </div>
+                                )}
+                            </div>
 
-                        <span className={styles.email}>
-                            {order.email}
-                        </span>
+                            <div className={styles.templateBody}>
+                                <div className={styles.templateMeta}>
+                                    <span>{purchase.platform || "Template"}</span>
+                                    <span>{purchase.purchaseSource === "cart" ? "Cart checkout" : "Direct purchase"}</span>
+                                </div>
 
-                        <span className={styles.date}>
-                            {formatDate(order.createdAt)}
-                        </span>
+                                <h4>{purchase.templateTitle}</h4>
 
-                        <span className={styles.tokens}>
-                            -{order.totalTokens}
-                        </span>
+                                <div className={styles.templateInfo}>
+                                    <span>Acquired {formatDate(String(purchase.purchasedAt || purchase.createdAt))}</span>
+                                    <span>
+                                        Paid {sign}{convertFromBase(purchase.amountUsed).toFixed(2)} {currency}
+                                    </span>
+                                </div>
 
-                        <div className={styles.actions}>
-                            <button
-                                type="button"
-                                className={styles.download}
-                                onClick={() => handleDownload(order)}
-                            >
-                                Download
-                            </button>
-                        </div>
-                    </div>
-                ))}
+                                <div className={styles.templateActions}>
+                                    <Link href={`/templates/${purchase.templateSlug || purchase.templateId}`} className={styles.cardAction}>
+                                        Manage
+                                    </Link>
+                                    {purchase.livePreviewUrl ? (
+                                        <Link
+                                            href={purchase.livePreviewUrl}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className={styles.cardSecondaryAction}
+                                        >
+                                            View
+                                        </Link>
+                                    ) : null}
+                                </div>
+                            </div>
+                        </article>
+                    );
+                })}
             </div>
         </section>
     );

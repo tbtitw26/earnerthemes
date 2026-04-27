@@ -22,7 +22,8 @@ export interface IUserSchema extends Document {
         zip?: string;
     };
 
-    tokens: number;
+    balance: number;
+    tokens?: number;
     role: "user" | "admin";
 
     createdAt: Date;
@@ -49,7 +50,7 @@ export interface UserType {
         zip?: string;
     };
 
-    tokens: number;
+    balance: number;
     role: "user" | "admin";
 
     createdAt: Date;

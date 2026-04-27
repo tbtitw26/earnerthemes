@@ -1,69 +1,52 @@
 .dashboard {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 24px;
 }
 
 .header {
   display: flex;
-  align-items: flex-end;
   justify-content: space-between;
-  gap: 14px;
-  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.copy {
+  max-width: 700px;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.05);
+  color: rgba(51, 65, 85, 0.95);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .title {
-  margin: 0;
-  font-size: 1.05rem;
+  margin: 10px 0 0;
+  color: rgba(15, 23, 42, 0.98);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
   font-weight: 800;
-  letter-spacing: -0.02em;
-  color: rgba(15, 23, 42, 0.92);
+  line-height: 1.04;
+  letter-spacing: -0.05em;
 }
 
 .subtitle {
-  margin: 4px 0 0;
-  font-size: 0.95rem;
+  margin: 10px 0 0;
   color: rgba(100, 116, 139, 1);
+  font-size: 0.98rem;
+  line-height: 1.7;
 }
 
-.tabs {
-  display: inline-flex;
-  gap: 6px;
-  padding: 6px;
-  border-radius: 999px;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  background: rgba(255, 255, 255, 0.7);
-}
-
-.tab {
-  border: none;
-  background: transparent;
-  color: rgba(71, 85, 105, 1);
-  padding: 10px 14px;
-  border-radius: 999px;
-  font-size: 0.92rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 140ms ease, color 140ms ease;
-}
-
-.tab:hover {
-  background: rgba(15, 23, 42, 0.06);
-}
-
-.tabActive {
-  border: none;
-  padding: 10px 14px;
-  border-radius: 999px;
-  font-size: 0.92rem;
-  font-weight: 800;
-  cursor: pointer;
-
-  background: rgba(42, 86, 143, 0.14);
-  border: 1px solid rgba(42, 89, 143, 0.18);
-  color: rgba(31, 78, 111, 0.98);
-}
-
-.content {
-  padding-top: 6px;
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
 }

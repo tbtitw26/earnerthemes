@@ -10,6 +10,7 @@ import Grid from "../grid/Grid";
 import Slider from "../slider/Slider";
 import FAQ from "../faq/FAQ";
 import PricingCard from "../pricing-card/PricingCard";
+import { legacyTokensToBalance } from "@/utils/money";
 import HighlightStrip from "../highlight-strip/HighlightStrip";
 import Marquee from "../marquee/Marquee";
 import Timeline from "../timeline/Timeline";
@@ -216,18 +217,24 @@ function RenderCard(b: CardBlock) {
 }
 
 function RenderPricingCard(b: PricingBlock) {
+    const amount =
+        typeof b.amount === "number"
+            ? b.amount
+            : typeof b.tokens === "number"
+                ? legacyTokensToBalance(b.tokens)
+                : 0;
+
     return (
         <PricingCard
             variant={b.variant}
             title={b.title}
-            price={b.price}
-            tokens={b.tokens}
+            amount={amount}
             description={b.description}
             features={b.features}
             buttonText={b.buttonText}
             buttonLink={b.buttonLink}
             badgeTop={b.badgeTop}
-            badgeBottom={b.badgeBottom} е
+            badgeBottom={b.badgeBottom}
         />
     );
 }

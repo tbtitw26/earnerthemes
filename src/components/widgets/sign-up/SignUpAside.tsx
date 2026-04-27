@@ -32,8 +32,8 @@ const SignUpAside: React.FC = () => {
                 <li>
                     <span className={styles.icon}>✳</span>
                     <div>
-                        <strong>Token System</strong>
-                        <p>1€ = 100 tokens. No subscriptions. Pay only when you order a plan.</p>
+                        <strong>Wallet Balance</strong>
+                        <p>Top up your balance any time from £10.00. No subscriptions. Pay only when you order a plan.</p>
                     </div>
                 </li>
 

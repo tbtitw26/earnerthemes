@@ -6,6 +6,7 @@ import { CVOrderType } from "../types/cv.types";
 import mongoose from "mongoose";
 import { transactionService } from "../services/transaction.service";
 import { emailService } from "../services/email.service";
+import { legacyTokensToBalance, roundMoney, formatMoney } from "@/utils/money";
 
 const openai = new OpenAI({ apiKey: ENV.OPENAI_API_KEY });
 
@@ -123,18 +124,16 @@ export const cvService = {
             customColor: 5,
         };
 
-        const baseCost = BASE_COST[body.reviewType] ?? 30;
+        const baseCost = legacyTokensToBalance(BASE_COST[body.reviewType] ?? 30);
         const extrasCost = (body.extras || []).reduce(
-            (sum: number, key: string) => sum + (EXTRA_COST[key] || 0),
+            (sum: number, key: string) => sum + legacyTokensToBalance(EXTRA_COST[key] || 0),
             0
         );
-        const totalCost = baseCost + extrasCost;
+        const totalCost = roundMoney(baseCost + extrasCost);
 
-        // 🧾 Перевірка балансу
-        if (user.tokens < totalCost) throw new Error("InsufficientTokens");
+        if (user.balance < totalCost) throw new Error("InsufficientBalance");
 
-        // 💳 Списуємо токени та записуємо транзакцію
-        user.tokens -= totalCost;
+        user.balance = roundMoney(user.balance - totalCost);
         await user.save();
 
         await transactionService.record(
@@ -142,12 +141,12 @@ export const cvService = {
             user.email,
             totalCost,
             "spend",
-            user.tokens
+            user.balance
         );
 
-        log("createOrder", `💸 Tokens spent & transaction recorded`, {
+        log("createOrder", `💸 Balance spent & transaction recorded`, {
             totalCost,
-            balanceAfter: user.tokens,
+            balanceAfter: user.balance,
         });
 
         // 🧠 Генерація CV
@@ -223,8 +222,8 @@ export const cvService = {
                     `Extras: ${(body.extras || []).length ? body.extras.join(", ") : "None"}`,
                     `Status: ${isManager ? "Pending review" : "Ready"}`,
                 ],
-                amountLabel: "Tokens used",
-                amountValue: String(totalCost),
+                amountLabel: "Amount used",
+                amountValue: formatMoney(totalCost),
                 transactionDate: order.createdAt || new Date(),
             });
         } catch (error) {

@@ -10,7 +10,7 @@ export interface EsimOrder {
     country: string;
     countryCode: string;
     plan: string;
-    tokensUsed: number;
+    amountUsed: number;
     status: "paid" | "delivered";
     createdAt: string;
 }

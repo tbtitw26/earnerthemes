@@ -15,6 +15,7 @@ import { media } from "@/resources/media";
 import { IconKey } from "@/resources/icons";
 import { renderIcon } from "@/utils/renderIcon";
 import { FITNESS_EXTRAS } from "@/components/widgets/manual-generator/extra/fitnes-extra";
+import { useCurrency } from "@/context/CurrencyContext";
 
 type PlanPath = "ai" | "coach";
 type Experience = "beginner" | "intermediate" | "advanced";
@@ -29,7 +30,7 @@ const PATHS: Array<{
     title: string;
     desc: string;
     badge: string;
-    tokens: number;
+    amount: number;
     icon: IconKey;
 }> = [
     {
@@ -37,7 +38,7 @@ const PATHS: Array<{
         title: "AI Training Plan",
         desc: "Instantly creates a plan for your goal, schedule, and equipment. You can update it anytime.",
         badge: "FAST & AFFORDABLE",
-        tokens: 1500,
+        amount: 15,
         icon: "speed",
     },
     {
@@ -45,7 +46,7 @@ const PATHS: Array<{
         title: "Coach-Led Plan",
         desc: "A coach builds your plan and adds human feedback/explanations. Premium format.",
         badge: "PREMIUM COACHING",
-        tokens: 6000,
+        amount: 60,
         icon: "brain",
     },
 ];
@@ -157,6 +158,7 @@ function durationToPercent(d: Duration) {
 export default function ManualGenerator() {
     const { showAlert } = useAlert();
     const user = useUser();
+    const { sign, currency, convertFromBase } = useCurrency();
 
     const [coachOpen, setCoachOpen] = useState(false);
 
@@ -182,25 +184,22 @@ export default function ManualGenerator() {
     // Base includes minimal program for fitness (2 weeks), everything above is extra
     const FREE_WEEKS = 2;
 
-    function calcDurationTokens(path: PlanPath, duration: Duration) {
+    function calcDurationAmount(path: PlanPath, duration: Duration) {
         const weeks = durationToWeeks(duration);
         const extraWeeks = Math.max(0, weeks - FREE_WEEKS);
 
-        // keep same approach as culinary: premium path costs more per extra week
-        if (path === "coach") return extraWeeks * 1000;
-        return extraWeeks * 500;
+        if (path === "coach") return extraWeeks * 10;
+        return extraWeeks * 5;
     }
 
-    function calcTotalTokens(values: Values) {
-        const pathTokens = PATHS.find((p) => p.id === values.path)?.tokens ?? 0;
-
-        const durationTokens = calcDurationTokens(values.path, values.duration);
-
-        const extrasTokens = FITNESS_EXTRAS
+    function calcTotalAmount(values: Values) {
+        const pathAmount = PATHS.find((p) => p.id === values.path)?.amount ?? 0;
+        const durationAmount = calcDurationAmount(values.path, values.duration);
+        const extrasAmount = FITNESS_EXTRAS
             .filter((e) => values.extras.includes(e.id))
-            .reduce((sum, e) => sum + e.tokens, 0);
+            .reduce((sum, e) => sum + e.amount, 0);
 
-        return pathTokens + durationTokens + extrasTokens;
+        return pathAmount + durationAmount + extrasAmount;
     }
 
     const experienceLabel = (x: Experience) => (x === "beginner" ? "Beginner" : x === "intermediate" ? "Intermediate" : "Advanced");
@@ -221,7 +220,7 @@ export default function ManualGenerator() {
                         planType: values.path === "coach" ? "reviewed" : "default",
                         language: "English",
                         extras: values.extras,
-                        totalTokens: calcTotalTokens(values),
+                        totalAmount: calcTotalAmount(values),
                         email: user?.email,
 
                         fields: {
@@ -263,7 +262,7 @@ export default function ManualGenerator() {
             }}
         >
             {({ values, setFieldValue, errors, touched, isSubmitting, submitForm }) => {
-                const estimatedTokens = useMemo(() => calcTotalTokens(values), [values.path, values.duration, values.extras]);
+                const estimatedAmount = calcTotalAmount(values);
 
                 const selectedExtras = FITNESS_EXTRAS.filter((e) => values.extras.includes(e.id));
                 const durationWeeks = durationToWeeks(values.duration);
@@ -343,7 +342,7 @@ export default function ManualGenerator() {
                                                         <div className={styles.heroCardBottom}>
                                                             <div className={styles.heroCardPrice}>
                                                                 <span className={styles.dot} />
-                                                                <span className={styles.heroCardTokens}>{p.tokens} tokens</span>
+                                                                <span className={styles.heroCardTokens}>{sign}{convertFromBase(p.amount).toFixed(2)} {currency}</span>
                                                             </div>
 
                                                             <div className={styles.selectMark} aria-hidden>
@@ -594,7 +593,7 @@ export default function ManualGenerator() {
                                             <div className={styles.blockKicker}>STEP 4</div>
                                             <div>
                                                 <div className={styles.blockTitle}>Add-ons (extra cost)</div>
-                                                <div className={styles.blockSub}>Optional paid add-ons for your PDF/plan (tokens are added to the total).</div>
+                                                <div className={styles.blockSub}>Optional paid add-ons for your PDF/plan (amounts are added to the total).</div>
                                             </div>
                                         </div>
 
@@ -625,7 +624,7 @@ export default function ManualGenerator() {
                                                         <div className={styles.extraBottomNew}>
                                                             <div className={styles.extraPrice}>
                                                                 <span className={styles.dot} />
-                                                                <span>+{extra.tokens} tokens</span>
+                                                                <span>+{sign}{convertFromBase(extra.amount).toFixed(2)} {currency}</span>
                                                             </div>
                                                             <div className={styles.goalCheck}>
                                                                 <span className={active ? styles.selectOn : styles.selectOff} />
@@ -653,8 +652,8 @@ export default function ManualGenerator() {
                                                 <div className={styles.summaryLabel}>Estimated cost</div>
                                                 <div className={styles.summaryCost}>
                                                     <span className={styles.dotBig} />
-                                                    <span className={styles.summaryCostNum}>{estimatedTokens}</span>
-                                                    <span className={styles.summaryCostUnit}>tokens</span>
+                                                    <span className={styles.summaryCostNum}>{sign}{convertFromBase(estimatedAmount).toFixed(2)}</span>
+                                                    <span className={styles.summaryCostUnit}>{currency}</span>
                                                 </div>
                                             </div>
 
@@ -681,7 +680,7 @@ export default function ManualGenerator() {
                                             <ul className={styles.summaryBullets}>
                                                 {selectedExtras.map((e) => (
                                                     <li key={e.id}>
-                                                        {e.title} <span className={styles.muted}>+{e.tokens}</span>
+                                                        {e.title} <span className={styles.muted}>+{sign}{convertFromBase(e.amount).toFixed(2)}</span>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -696,8 +695,8 @@ export default function ManualGenerator() {
                             <div className={styles.mobileFooter}>
                                 <div className={styles.mobileCost}>
                                     <span className={styles.dotBig} />
-                                    <span className={styles.mobileCostNum}>{estimatedTokens}</span>
-                                    <span className={styles.mobileCostUnit}>tokens</span>
+                                    <span className={styles.mobileCostNum}>{sign}{convertFromBase(estimatedAmount).toFixed(2)}</span>
+                                    <span className={styles.mobileCostUnit}>{currency}</span>
                                 </div>
 
                                 <button

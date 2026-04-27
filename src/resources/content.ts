@@ -21,13 +21,13 @@ export const headerContent = {
         href: "/"
     },
     links: [
+        {label: "Marketplace", href: "/templates"},
         {label: `About Us`, href: "/about-us"},
         {label: "Get Started", href: "/get-started"},
-        {label: "Our Trainers", href: "/extra/chefs"},
         {label: "Plans", href: "/pricing"},
-        {label: "Contact", href: "/contact-us"},
-        {label: "Career", href: "/join-team"},
         {label: "Faq", href: "/faq"},
+        {label: "Support", href: "/contact-us"},
+
     ]
 };
 
@@ -37,13 +37,12 @@ export const footerContent = {
         {
             title: "Navigate",
             links: [
+                {label: "Marketplace", href: "/templates"},
                 {label: `About Us`, href: "/about-us"},
                 {label: "Get Started", href: "/get-started"},
-                {label: "Our Trainers", href: "/extra/chefs"},
                 {label: "Plans", href: "/pricing"},
-                {label: "Contact", href: "/contact-us"},
-                {label: "Join to Us", href: "/join-team"},
                 {label: "Faq", href: "/faq"},
+                {label: "Support", href: "/contact-us"},
             ]
         },
         {

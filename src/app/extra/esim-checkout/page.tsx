@@ -5,14 +5,14 @@ type CheckoutPageProps = {
         country?: string;
         code?: string;
         plan?: string;
-        priceEur?: string;
+        basePrice?: string;
     };
 };
 
 export default function CheckoutPage({ searchParams }: CheckoutPageProps) {
-    const { country, code, plan, priceEur } = searchParams;
+    const { country, code, plan, basePrice } = searchParams;
 
-    if (!country || !code || !plan || !priceEur) {
+    if (!country || !code || !plan || !basePrice) {
         return <div style={{ padding: 80 }}>Invalid checkout data</div>;
     }
 
@@ -21,7 +21,7 @@ export default function CheckoutPage({ searchParams }: CheckoutPageProps) {
             country={country}
             code={code}
             plan={plan}
-            priceEur={Number(priceEur)}
+            basePrice={Number(basePrice)}
         />
     );
 }

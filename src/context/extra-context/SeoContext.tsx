@@ -9,7 +9,7 @@ export interface SeoRequest {
     email: string;
     service: string;
     message?: string;
-    tokensUsed: number;
+    amountUsed: number;
     status: string;
     createdAt: string;
 }

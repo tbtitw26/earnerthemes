@@ -6,22 +6,24 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useUser } from "@/context/UserContext";
 import { FaCheckCircle } from "react-icons/fa";
+import { useCurrency } from "@/context/CurrencyContext";
 
 type Props = {
     country: string;
     code: string;
     plan: string;
-    priceEur: number;
+    basePrice: number;
 };
 
 export default function EsimCheckout({
                                          country,
                                          code,
                                          plan,
-                                         priceEur,
+                                         basePrice,
                                      }: Props) {
     const router = useRouter();
     const user = useUser();
+    const { currency, sign, convertFromBase } = useCurrency();
 
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
@@ -30,13 +32,9 @@ export default function EsimCheckout({
     const [error, setError] = useState<string | null>(null);
 
     // pricing
-    const EUR_TO_GBP = 0.86;
-    const TOKENS_PER_GBP = 100;
-    const MARKUP_EUR = 1;
+    const markupBaseAmount = 1;
 
-    const tokens = Math.ceil(
-        (priceEur + MARKUP_EUR) * EUR_TO_GBP * TOKENS_PER_GBP
-    );
+    const amount = Number((basePrice + markupBaseAmount).toFixed(2));
 
     // 👉 автозаповнення для логіненого юзера
     useEffect(() => {
@@ -61,21 +59,21 @@ export default function EsimCheckout({
                     country,
                     code,
                     plan,
-                    tokens,
+                    amount,
                     email,
                     phone,
                 }),
             });
 
-            const data = await res.json();
+            const data = (await res.json()) as { message?: string };
 
             if (!res.ok) {
                 throw new Error(data.message || "Payment failed");
             }
 
             setSuccess(true);
-        } catch (e: any) {
-            setError(e.message);
+        } catch (e: unknown) {
+            setError(e instanceof Error ? e.message : "Payment failed");
         } finally {
             setLoading(false);
         }
@@ -189,7 +187,7 @@ export default function EsimCheckout({
 
                         <div className={styles.total}>
                             <span>Total</span>
-                            <strong>{tokens} tokens</strong>
+                            <strong>{sign}{convertFromBase(amount).toFixed(2)} {currency}</strong>
                         </div>
 
                         {error && <p className={styles.error}>{error}</p>}
@@ -201,7 +199,7 @@ export default function EsimCheckout({
                             disabled={loading}
                             onClick={handlePay}
                         >
-                            {loading ? "Processing..." : `Pay ${tokens} tokens`}
+                            {loading ? "Processing..." : `Pay ${sign}${convertFromBase(amount).toFixed(2)} ${currency}`}
                         </ButtonUI>
 
                         <button

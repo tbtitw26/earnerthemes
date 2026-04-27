@@ -114,8 +114,9 @@ export type PricingBlock = {
     type: "pricing";
     variant?: "basic" | "highlight" | "premium";
     title: string;
-    price: string;
-    tokens: number;
+    amount?: number;
+    price?: string;
+    tokens?: number;
     description: string;
     features: string[];
     buttonText: string;

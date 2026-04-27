@@ -19,7 +19,7 @@ export async function POST(req: Request) {
                 userEmail: formData.get("userEmail"),
                 service: formData.get("service"),
                 message: formData.get("message"),
-                tokens: Number(formData.get("tokens")),
+                amount: Number(formData.get("amount")),
                 extras: [],
                 extraValues: {},
             };
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
             );
         }
 
-        const { userId, userEmail, service, message, tokens, extras } = body;
+        const { userId, userEmail, service, message, amount, extras } = body;
 
         if (!userId || !userEmail || !service) {
             return NextResponse.json(
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
         const data = await seoRequestController.createRequest(userId, userEmail, {
             service,
             message,
-            tokens,
+            amount,
             extras,
         });
 

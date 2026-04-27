@@ -2,15 +2,15 @@
 
 import React, { useMemo } from "react";
 import { useCurrency } from "@/context/CurrencyContext";
+import { SUPPORTED_CURRENCIES } from "@/utils/money";
 import styles from "./CurrencySwitch.module.scss";
 
-const CURRENCIES = ["EUR", "GBP", "USD"] as const;
+const CURRENCIES = SUPPORTED_CURRENCIES;
 
 const CurrencySwitch: React.FC = () => {
     const { currency, setCurrency } = useCurrency();
 
-    // Обчислюємо позицію активного фону (33.33% на кожен елемент)
-    const activeIndex = useMemo(() => CURRENCIES.indexOf(currency as any), [currency]);
+    const activeIndex = useMemo(() => CURRENCIES.indexOf(currency), [currency]);
 
     return (
         <div className={styles.container}>

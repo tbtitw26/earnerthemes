@@ -1,12 +1,11 @@
 import { connectDB } from "../config/db";
 import { authService } from "../services/auth.service";
-import { User } from "../models/user.model";
-import { AuthResponse, AuthError, LogoutResponse } from "@/backend/types/auth.types";
-import { UserType } from "@/backend/types/user.types";
-import { signAccessToken } from "../utils/jwt";
+import { LogoutResponse } from "@/backend/types/auth.types";
+import { IUserSchema, UserType } from "@/backend/types/user.types";
+import { legacyTokensToBalance } from "@/utils/money";
 
 export const authController = {
-    async register(body: any) {
+    async register(body: Record<string, unknown>) {
         await connectDB();
         const { user, accessToken, refreshToken } =
             await authService.register(body);
@@ -29,7 +28,7 @@ export const authController = {
                     zip: user.address?.postCode || user.address?.zip,
                 },
                 role: user.role,
-                tokens: user.tokens,
+                balance: typeof user.balance === "number" ? user.balance : legacyTokensToBalance(user.tokens || 0),
                 createdAt: user.createdAt,
                 updatedAt: user.updatedAt,
             },
@@ -69,7 +68,7 @@ export const authController = {
     },
 };
 
-function toUser(u: any): UserType {
+function toUser(u: IUserSchema): UserType {
     return {
         _id: u._id.toString(),
 
@@ -91,7 +90,7 @@ function toUser(u: any): UserType {
         },
 
         role: u.role,
-        tokens: u.tokens,
+        balance: typeof u.balance === "number" ? u.balance : legacyTokensToBalance(u.tokens || 0),
 
         createdAt: u.createdAt,
         updatedAt: u.updatedAt,

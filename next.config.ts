@@ -31,6 +31,14 @@ const nextConfig: NextConfig = {
                 protocol: "https",
                 hostname: "media.shipster.se",
             },
+            {
+                protocol: "https",
+                hostname: "**.envatousercontent.com",
+            },
+            {
+                protocol: "https",
+                hostname: "s3.envato.com",
+            },
         ],
     },
 

@@ -8,7 +8,7 @@ export interface UniversalOrderUI {
     fields: Record<string, any>;
     extras: string[];
 
-    totalTokens: number;
+    totalAmount: number;
     planType: "default" | "reviewed";
     language?: string;
 

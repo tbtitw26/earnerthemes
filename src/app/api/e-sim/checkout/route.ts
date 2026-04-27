@@ -4,24 +4,26 @@ import { userController } from "@/backend/controllers/user.controller";
 import { EsimOrder } from "@/backend/models/esimOrder.model";
 import { connectDB } from "@/backend/config/db";
 import { emailService } from "@/backend/services/email.service";
+import { formatMoney, roundMoney } from "@/utils/money";
 
 export async function POST(req: NextRequest) {
     try {
         const payload = await requireAuth(req);
         const body = await req.json();
 
-        const { country, code, plan, tokens } = body;
+        const { country, code, plan, amount } = body;
 
-        if (!country || !code || !plan || !tokens) {
+        if (!country || !code || !plan || !amount) {
             return NextResponse.json({ message: "Invalid data" }, { status: 400 });
         }
 
         await connectDB();
 
-        // 💸 списуємо токени
-        const user = await userController.spendTokens(
+        const chargeAmount = roundMoney(Number(amount));
+
+        const user = await userController.spendBalance(
             payload.sub,
-            tokens,
+            chargeAmount,
             `eSIM ${country} – ${plan}`
         );
 
@@ -32,7 +34,7 @@ export async function POST(req: NextRequest) {
             country,
             countryCode: code,
             plan,
-            tokensUsed: tokens,
+            amountUsed: chargeAmount,
         });
 
         try {
@@ -47,8 +49,8 @@ export async function POST(req: NextRequest) {
                     `Plan: ${plan}`,
                     `Status: ${order.status}`,
                 ],
-                amountLabel: "Tokens used",
-                amountValue: String(tokens),
+                amountLabel: "Amount used",
+                amountValue: formatMoney(chargeAmount),
                 transactionDate: order.createdAt || new Date(),
             });
         } catch (error) {

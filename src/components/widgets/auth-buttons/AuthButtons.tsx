@@ -3,22 +3,29 @@ import {useUser} from "@/context/UserContext";
 import ButtonUI from "@/components/ui/button/ButtonUI";
 import Link from "next/link";
 import styles from "./AuthButtons.module.scss";
-import {FaUser} from "react-icons/fa";
-import {GrMoney} from "react-icons/gr";
+import {FaShoppingCart, FaUser} from "react-icons/fa";
+import { useCurrency } from "@/context/CurrencyContext";
+import { useTemplateCartStore } from "@/utils/store";
 
 const AuthButtons: React.FC = () => {
     const user = useUser();
+    const { sign, currency, convertFromBase } = useCurrency();
+    const cartCount = useTemplateCartStore((state) => state.items.length);
 
     if (user) {
         return (
-            <div className={styles.userCompact}>
-                <Link href="/profile" className={styles.tokensPill} aria-label="Профіль і баланс">
-                    <GrMoney className={styles.iconMoney} />
-                    <span className={styles.tokensValue}>{user?.tokens ?? 0}</span>
+            <div className={styles.userCompactFlat}>
+                <Link href="/cart" className={styles.iconButton} aria-label="Cart">
+                    <FaShoppingCart />
+                    {cartCount > 0 ? <span className={styles.cartBadge}>{cartCount}</span> : null}
                 </Link>
 
-                <Link href="/profile" className={styles.userIconButton} aria-label="Профіль">
-                    <FaUser className={styles.userIcon} />
+                <Link href="/profile" className={styles.iconButton} aria-label="Profile">
+                    <FaUser />
+                </Link>
+
+                <Link href="/profile" className={styles.balanceButton}>
+                    {sign}{convertFromBase(user.balance ?? 0).toFixed(2)} {currency}
                 </Link>
             </div>
         );

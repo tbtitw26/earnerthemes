@@ -4,6 +4,7 @@ import { User } from "../models/user.model";
 import { transactionService } from "../services/transaction.service";
 import { sendEmail } from "../utils/sendEmail";
 import { COMPANY_EMAIL } from "@/resources/constants";
+import { legacyTokensToBalance, roundMoney } from "@/utils/money";
 
 export const seoRequestService = {
     /** Create new SEO request */
@@ -13,19 +14,21 @@ export const seoRequestService = {
         if (!body?.service) throw new Error("Missing 'service'");
         const service = body.service;
         const message = body.message || "";
-        const tokensUsed = Number(body.tokens || 5);
+        const amountUsed = typeof body.amount === "number"
+            ? roundMoney(body.amount)
+            : legacyTokensToBalance(Number(body.tokens || 5));
         const extras = body.extras || [];
 
         const user = await User.findById(userId);
         if (!user) throw new Error("User not found");
 
-        if (user.tokens < tokensUsed)
-            throw new Error(`Insufficient tokens (have ${user.tokens}, need ${tokensUsed})`);
+        if (user.balance < amountUsed)
+            throw new Error(`Insufficient balance (have ${user.balance}, need ${amountUsed})`);
 
-        user.tokens -= tokensUsed;
+        user.balance = roundMoney(user.balance - amountUsed);
         await user.save();
 
-        await transactionService.record(user._id, email, tokensUsed, "spend", user.tokens);
+        await transactionService.record(user._id, email, amountUsed, "spend", user.balance);
 
         const request = await SeoRequest.create({
             userId: user._id,
@@ -33,7 +36,7 @@ export const seoRequestService = {
             service,
             message,
             extras,
-            tokensUsed,
+            amountUsed,
         });
 
         const text = `
@@ -41,7 +44,7 @@ New SEO Request Submitted:
 ----------------------------
 User: ${email}
 Service: ${service}
-Tokens Used: ${tokensUsed}
+Amount Used: ${amountUsed}
 Extras: ${extras?.length ? extras.join(", ") : "none"}
 Message: ${message || "(none)"}
         `;

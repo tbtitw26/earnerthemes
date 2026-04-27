@@ -2,21 +2,22 @@
 
 import React from "react";
 import styles from "./FeatureStep.module.scss";
-import Image from "next/image";
-import ButtonUI from "@/components/ui/button/ButtonUI";
+import { motion } from "framer-motion";
+import { renderIcon } from "@/utils/renderIcon";
+import type { IconKey } from "@/resources/icons";
 import { media } from "@/resources/media";
-import { IoIosArrowRoundForward } from "react-icons/io";
 
 interface FeatureStepProps {
     step: number;
     title: string;
     description?: string;
     bullets?: string[];
-    image: keyof typeof media;
+    image?: keyof typeof media;
     badge?: string;
     buttonText?: string;
     buttonLink?: string;
     imagePosition?: "left" | "right";
+    icon?: IconKey | string | React.ReactNode;
 }
 
 const FeatureStep: React.FC<FeatureStepProps> = ({
@@ -24,63 +25,37 @@ const FeatureStep: React.FC<FeatureStepProps> = ({
                                                      title,
                                                      description,
                                                      bullets,
-                                                     image,
-                                                     badge,
-                                                     buttonText,
-                                                     buttonLink,
-                                                     imagePosition = "left",
+                                                     icon,
                                                  }) => {
+    const fallbackDescription =
+        description || (bullets?.length ? bullets.join(" ") : "");
+
     return (
-        <article className={styles.card}>
-            <div
-                className={`${styles.contentRow} ${
-                    imagePosition === "right" ? styles.right : ""
-                }`}
-            >
-                <div className={styles.media}>
-                    {badge && <span className={styles.badge}>{badge}</span>}
-                    <Image
-                        src={media[image]}
-                        alt={title}
-                        fill
-                        className={styles.image}
-                    />
-                </div>
+        <motion.article
+            className={styles.card}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.2 }}
+        >
+            <div className={styles.cardContent}>
+                <span className={styles.stepTag}>
+                    STEP {String(step).padStart(2, "0")}
+                </span>
 
-                <div className={styles.content}>
-                    <div className={styles.stepPill}>
-                        <span className={styles.stepLabel}>Step</span>
-                        <span className={styles.stepNumber}>{String(step).padStart(2, "0")}</span>
-                    </div>
+                <h3 className={styles.title}>{title}</h3>
 
-                    <div className={styles.textContainer}>
-                        <h3 className={styles.title}>{title}</h3>
-                        {description && <p className={styles.description}>{description}</p>}
-
-                        {bullets && (
-                            <ul className={styles.list}>
-                                {bullets.map((b, i) => (
-                                    <li key={i}>{b}</li>
-                                ))}
-                            </ul>
-                        )}
-
-                        {buttonText && buttonLink && (
-                            <ButtonUI
-                                variant="plain"
-                                shape="default"
-                                hoverEffect="none"
-                                hoverColor="none"
-                                endIcon={<IoIosArrowRoundForward style={{ fontSize: 28 }} />}
-                                onClick={() => (window.location.href = buttonLink)}
-                            >
-                                {buttonText}
-                            </ButtonUI>
-                        )}
-                    </div>
-                </div>
+                {fallbackDescription && (
+                    <p className={styles.description}>{fallbackDescription}</p>
+                )}
             </div>
-        </article>
+
+            <div className={styles.iconWrap}>
+                <span className={styles.icon}>
+                    {renderIcon(icon)}
+                </span>
+            </div>
+        </motion.article>
     );
 };
 

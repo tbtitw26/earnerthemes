@@ -1,55 +1,44 @@
 .container {
   display: inline-flex;
-  padding: 4px;
-  background: rgba(255, 255, 255, 0.05); // Напівпрозорий фон
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 100px; // Повна округлість
-  position: relative;
 }
 
 .segmentedControl {
-  display: flex;
   position: relative;
-  width: 180px; // Фіксована ширина для стабільності анімації
-  height: 36px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 186px;
+  height: 40px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(248, 250, 252, 0.96);
+  border: 1px solid rgba(148, 163, 184, 0.16);
 }
 
 .tab {
-  flex: 1;
-  z-index: 2;
+  position: relative;
+  z-index: 1;
   border: none;
-  background: none;
+  background: transparent;
+  color: rgba(100, 116, 139, 1);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   cursor: pointer;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  color: var(--text-muted, #888);
-  transition: color 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  outline: none;
 
   &.active {
-    color: #fff; // Колір активного тексту
-  }
-
-  &:hover:not(.active) {
-    color: var(--text-primary, #ccc);
+    color: #fff;
   }
 }
 
-/* Ефектна підкладка, що літає */
 .activeGlow {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 33.33%; // Оскільки у нас 3 валюти
-  height: 100%;
-  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); // Градієнт
-  border-radius: 100px;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-  transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28); // Ефект "пружини"
-  z-index: 1;
+  top: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / 3);
+  height: calc(100% - 8px);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+  transition: transform 220ms ease;
 }

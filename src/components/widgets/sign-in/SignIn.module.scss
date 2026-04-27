@@ -1,0 +1,148 @@
+/* ═══════════════════════════════════════════════
+   SignIn — enterprise auth page
+   ═══════════════════════════════════════════════ */
+
+.page {
+  min-height: 90vh;
+  padding: 40px 24px 56px;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  padding-top: 32px;
+}
+
+.formColumn {
+  width: 100%;
+  max-width: 620px;
+  padding: 44px 0 20px;
+}
+
+.header {
+  margin-bottom: 34px;
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 10px;
+  font-size: clamp(2.1rem, 2.2vw, 2.8rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.subtitle {
+  margin: 0 auto;
+  max-width: 560px;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #64748b;
+}
+
+/* ──────────────────────────────────────────────
+   Form
+   ────────────────────────────────────────────── */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 36px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid #e7edf5;
+  box-shadow:
+          0 24px 60px rgba(15, 23, 42, 0.06),
+          0 8px 24px rgba(15, 23, 42, 0.04);
+  backdrop-filter: blur(10px);
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.fieldLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #475569;
+}
+
+/* Optional: unify input height with signup */
+.form :global(input),
+.form :global(select) {
+  min-height: 54px;
+}
+
+/* ──────────────────────────────────────────────
+   Large desktop
+   ────────────────────────────────────────────── */
+
+@media (min-width: 1500px) {
+  .container {
+    max-width: 1480px;
+  }
+}
+
+/* ──────────────────────────────────────────────
+   Tablet
+   ────────────────────────────────────────────── */
+
+@media (max-width: 980px) {
+  .container {
+    max-width: 720px;
+    padding-top: 12px;
+  }
+
+  .formColumn {
+    max-width: 100%;
+    padding-top: 8px;
+  }
+}
+
+/* ──────────────────────────────────────────────
+   Mobile
+   ────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .page {
+    padding: 22px 16px 34px;
+  }
+
+  .container {
+    padding-top: 0;
+  }
+
+  .formColumn {
+    padding: 0;
+  }
+
+  .header {
+    margin-bottom: 24px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .form {
+    gap: 16px;
+    padding: 22px 18px;
+    border-radius: 18px;
+  }
+}
