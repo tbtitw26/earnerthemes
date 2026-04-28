@@ -1,7 +1,14 @@
 "use client";
 
-import React, { useMemo, useRef, useState } from "react";
-import { motion, useReducedMotion, useTransform } from "framer-motion";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+    motion,
+    useMotionTemplate,
+    useMotionValue,
+    useReducedMotion,
+    useSpring,
+    useTransform,
+} from "framer-motion";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 
@@ -30,6 +37,13 @@ interface HeroSectionProps {
     features?: boolean;
 }
 
+const TILT_RANGE = 10;
+const BASE_ROTATE_X = 2;
+const BASE_ROTATE_Y = -6;
+const SPRING_CONFIG = { stiffness: 200, damping: 20 };
+const SCALE_SPRING = { stiffness: 300, damping: 25 };
+const GLARE_SPRING = { stiffness: 200, damping: 30 };
+
 export default function HeroSection({
     title,
     description,
@@ -41,8 +55,62 @@ export default function HeroSection({
     const reduced = useReducedMotion();
     const videoRef = useRef<HTMLVideoElement>(null);
     const [playing, setPlaying] = useState(false);
+    const [tiltEnabled, setTiltEnabled] = useState(false);
     const { ref: sectionRef, scrollYProgress } = useStickyScrollProgressReveal<HTMLElement>();
     const parallax = useSubtleParallaxBlock<HTMLDivElement>(32);
+
+    const tiltX = useMotionValue(0);
+    const tiltY = useMotionValue(0);
+    const tiltScale = useMotionValue(1);
+    const glareX = useMotionValue(50);
+    const glareY = useMotionValue(50);
+    const glareOpacity = useMotionValue(0);
+
+    const springX = useSpring(tiltX, SPRING_CONFIG);
+    const springY = useSpring(tiltY, SPRING_CONFIG);
+    const springScale = useSpring(tiltScale, SCALE_SPRING);
+    const springGlareOpacity = useSpring(glareOpacity, GLARE_SPRING);
+
+    const finalRotateX = useTransform(springX, (v) => BASE_ROTATE_X + v);
+    const finalRotateY = useTransform(springY, (v) => BASE_ROTATE_Y + v);
+
+    const shadowOffsetX = useTransform(springY, (v) => Math.round(-v * 0.8));
+    const shadowOffsetY = useTransform(springX, (v) => Math.round(v * 0.8 + 40));
+    const boxShadow = useMotionTemplate`${shadowOffsetX}px ${shadowOffsetY}px 80px -20px rgba(15,23,42,0.28), 0px 16px 40px -12px rgba(15,23,42,0.12)`;
+
+    const glareBackground = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.15) 0%, transparent 60%)`;
+
+    useEffect(() => {
+        const mq = window.matchMedia("(min-width: 1025px) and (hover: hover)");
+        setTiltEnabled(mq.matches && !reduced);
+        const handler = (e: MediaQueryListEvent) => setTiltEnabled(e.matches && !reduced);
+        mq.addEventListener("change", handler);
+        return () => mq.removeEventListener("change", handler);
+    }, [reduced]);
+
+    const handleCardMouseMove = useCallback(
+        (e: React.MouseEvent<HTMLDivElement>) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const xPct = (x - rect.width / 2) / rect.width;
+            const yPct = (y - rect.height / 2) / rect.height;
+            tiltY.set(xPct * TILT_RANGE);
+            tiltX.set(-yPct * TILT_RANGE);
+            tiltScale.set(1.02);
+            glareX.set((x / rect.width) * 100);
+            glareY.set((y / rect.height) * 100);
+            glareOpacity.set(1);
+        },
+        [tiltX, tiltY, tiltScale, glareX, glareY, glareOpacity],
+    );
+
+    const handleCardMouseLeave = useCallback(() => {
+        tiltX.set(0);
+        tiltY.set(0);
+        tiltScale.set(1);
+        glareOpacity.set(0);
+    }, [tiltX, tiltY, tiltScale, glareOpacity]);
 
     const selectedMedia = media[image];
 
@@ -147,7 +215,21 @@ export default function HeroSection({
                     }}
                     variants={mediaReveal(reduced, "right")}
                 >
-                    <div className={styles.mediaCard}>
+                    <motion.div
+                        className={styles.mediaCard}
+                        style={
+                            tiltEnabled
+                                ? {
+                                      rotateX: finalRotateX,
+                                      rotateY: finalRotateY,
+                                      scale: springScale,
+                                      boxShadow,
+                                  }
+                                : undefined
+                        }
+                        onMouseMove={tiltEnabled ? handleCardMouseMove : undefined}
+                        onMouseLeave={tiltEnabled ? handleCardMouseLeave : undefined}
+                    >
                         {!isVideo && (
                             <Image
                                 src={selectedMedia as StaticImageData}
@@ -184,7 +266,17 @@ export default function HeroSection({
                                 </div>
                             </motion.div>
                         )}
-                    </div>
+
+                        {tiltEnabled && (
+                            <motion.div
+                                className={styles.glare}
+                                style={{
+                                    background: glareBackground,
+                                    opacity: springGlareOpacity,
+                                }}
+                            />
+                        )}
+                    </motion.div>
                 </motion.div>
             </div>
         </motion.section>

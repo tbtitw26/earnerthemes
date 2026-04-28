@@ -228,6 +228,14 @@
   object-fit: cover;
 }
 
+.glare {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
 /* Play button */
 
 .playButton {
