@@ -1,8 +1,8 @@
 "use client";
 
-import { useDeferredValue, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Funnel, Search, SlidersHorizontal, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Funnel, Search, SlidersHorizontal, X } from "lucide-react";
 
 import { ThemeTemplate } from "@/types/theme-template";
 
@@ -22,6 +22,8 @@ type SortOption =
 interface TemplatesCatalogPageProps {
     templates: ThemeTemplate[];
 }
+
+const PER_PAGE_OPTIONS = [12, 24, 48, 96];
 
 const SALES_FILTERS = [
     { value: "all", label: "All popularity" },
@@ -83,6 +85,32 @@ function normalizeQuery(value: string) {
     return value.trim().toLowerCase();
 }
 
+function buildPageNumbers(current: number, total: number): (number | "...")[] {
+    if (total <= 7) {
+        return Array.from({ length: total }, (_, i) => i + 1);
+    }
+
+    const pages: (number | "...")[] = [1];
+
+    if (current > 3) {
+        pages.push("...");
+    }
+
+    const start = Math.max(2, current - 1);
+    const end = Math.min(total - 1, current + 1);
+
+    for (let i = start; i <= end; i++) {
+        pages.push(i);
+    }
+
+    if (current < total - 2) {
+        pages.push("...");
+    }
+
+    pages.push(total);
+    return pages;
+}
+
 function matchesFacet(values: string[], value?: string) {
     if (!values.length) {
         return true;
@@ -103,6 +131,8 @@ export default function TemplatesCatalogPage({ templates }: TemplatesCatalogPage
     const [minPrice, setMinPrice] = useState(priceBounds.min);
     const [maxPrice, setMaxPrice] = useState(priceBounds.max);
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+    const [perPage, setPerPage] = useState(12);
+    const [currentPage, setCurrentPage] = useState(1);
     const deferredSearch = useDeferredValue(search);
 
     const searchQuery = normalizeQuery(deferredSearch);
@@ -216,6 +246,17 @@ export default function TemplatesCatalogPage({ templates }: TemplatesCatalogPage
         sortBy,
         templatesForSearch,
     ]);
+
+    const totalPages = Math.max(1, Math.ceil(filteredTemplates.length / perPage));
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [filteredTemplates.length, perPage]);
+
+    const paginatedTemplates = useMemo(() => {
+        const start = (currentPage - 1) * perPage;
+        return filteredTemplates.slice(start, start + perPage);
+    }, [filteredTemplates, currentPage, perPage]);
 
     const platformCounts = useMemo(() => getFacetCounts(templatesForSearch, (template) => template.platform), [templatesForSearch]);
     const categoryCounts = useMemo(() => getFacetCounts(templatesForSearch, (template) => template.category), [templatesForSearch]);
@@ -512,11 +553,66 @@ export default function TemplatesCatalogPage({ templates }: TemplatesCatalogPage
                     ) : null}
 
                     {filteredTemplates.length ? (
-                        <div className={styles.grid}>
-                            {filteredTemplates.map((template) => (
-                                <TemplateCard key={template.id} template={template} />
-                            ))}
-                        </div>
+                        <>
+                            <div className={styles.grid}>
+                                {paginatedTemplates.map((template) => (
+                                    <TemplateCard key={template.id} template={template} />
+                                ))}
+                            </div>
+
+                            <div className={styles.pagination}>
+                                <div className={styles.perPage}>
+                                    <span>Show:</span>
+                                    {PER_PAGE_OPTIONS.map((option) => (
+                                        <button
+                                            key={option}
+                                            type="button"
+                                            className={perPage === option ? styles.perPageActive : undefined}
+                                            onClick={() => setPerPage(option)}
+                                        >
+                                            {option}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {totalPages > 1 && (
+                                    <div className={styles.paginationControls}>
+                                        <button
+                                            type="button"
+                                            disabled={currentPage <= 1}
+                                            onClick={() => setCurrentPage((p) => p - 1)}
+                                            aria-label="Previous page"
+                                        >
+                                            <ChevronLeft size={16} />
+                                        </button>
+
+                                        {buildPageNumbers(currentPage, totalPages).map((page, i) =>
+                                            page === "..." ? (
+                                                <span key={`ellipsis-${i}`} className={styles.ellipsis}>...</span>
+                                            ) : (
+                                                <button
+                                                    key={page}
+                                                    type="button"
+                                                    className={currentPage === page ? styles.pageActive : undefined}
+                                                    onClick={() => setCurrentPage(page as number)}
+                                                >
+                                                    {page}
+                                                </button>
+                                            ),
+                                        )}
+
+                                        <button
+                                            type="button"
+                                            disabled={currentPage >= totalPages}
+                                            onClick={() => setCurrentPage((p) => p + 1)}
+                                            aria-label="Next page"
+                                        >
+                                            <ChevronRight size={16} />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </>
                     ) : (
                         <div className={styles.emptyState}>
                             <div className={styles.emptyIcon}>

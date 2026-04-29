@@ -430,6 +430,100 @@
   gap: 1.1rem;
 }
 
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.2rem 0 0.5rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.perPage {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  span {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    margin-right: 0.3rem;
+  }
+
+  button {
+    min-width: 40px;
+    min-height: 36px;
+    padding: 0 0.5rem;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: #fff;
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      border-color: rgba(37, 99, 235, 0.25);
+      color: var(--text-primary);
+    }
+  }
+}
+
+.perPageActive {
+  background: var(--primary-color) !important;
+  color: #fff !important;
+  border-color: var(--primary-color) !important;
+}
+
+.paginationControls {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    min-height: 38px;
+    padding: 0 0.4rem;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: #fff;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+
+    &:hover:not(:disabled) {
+      border-color: rgba(37, 99, 235, 0.25);
+      color: var(--text-primary);
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.pageActive {
+  background: var(--primary-color) !important;
+  color: #fff !important;
+  border-color: var(--primary-color) !important;
+}
+
+.ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
 .emptyState {
   display: flex;
   flex-direction: column;
@@ -601,6 +695,11 @@
 
   .grid {
     grid-template-columns: 1fr;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 0.8rem;
   }
 
   .sortSelect {
