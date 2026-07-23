@@ -224,7 +224,7 @@ export default function TemplateCartActions({ template }: TemplateCartActionsPro
                         priceLabel,
                     },
                 ]}
-                totalLabel={priceLabel}
+                totalLabel={`${priceLabel} incl. VAT`}
                 processing={buyingNow}
                 onCancel={() => {
                     if (!buyingNow) setShowConfirm(false);

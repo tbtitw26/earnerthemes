@@ -20,7 +20,7 @@ export default function GetStartedPage() {
                     </>
                 }
                 description="Create your account, top up your balance, choose the right template, complete your purchase, and start using it right away. The process is simple, fast, and built for quick launches."
-                primaryCta={{ text: "Get Started", link: "/register" }}
+                primaryCta={{ text: "Get Started", link: "/sign-up" }}
                 secondaryCta={{ text: "Browse Templates", link: "/templates" }}
                 image="image6"
             />
@@ -115,7 +115,7 @@ export default function GetStartedPage() {
             <CenteredCtaSection
                 title="Ready to get your next template?"
                 description="Create an account, top up your balance, and start buying premium templates for your next website project."
-                primaryCta={{text: "Create Account", link: "/register"}}
+                primaryCta={{text: "Create Account", link: "/sign-up"}}
                 secondaryCta={{text: "Browse Templates", link: "/templates"}}
             />
 

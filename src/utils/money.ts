@@ -18,6 +18,20 @@ export const CURRENCY_RATES_FROM_GBP: Record<SupportedCurrency, number> = {
     USD: 1.297619,
 };
 
+/**
+ * All prices shown on the site are VAT-inclusive (gross).
+ * These helpers split a gross amount into its net and VAT parts for invoicing/display.
+ */
+export const VAT_RATE = 0.2;
+
+export function netFromGross(grossAmount: number): number {
+    return roundMoney(grossAmount / (1 + VAT_RATE));
+}
+
+export function vatFromGross(grossAmount: number): number {
+    return roundMoney(grossAmount - netFromGross(grossAmount));
+}
+
 export function roundMoney(value: number): number {
     return Math.round((value + Number.EPSILON) * 100) / 100;
 }

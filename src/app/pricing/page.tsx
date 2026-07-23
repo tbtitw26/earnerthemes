@@ -9,6 +9,7 @@ import TextWithButton from "@/components/constructor/text-with-button/TextWithBu
 import PromoFeatureCard from "@/components/features/promo-card/PromoFeatureCard";
 import FAQ from "@/components/constructor/faq/FAQ";
 import PromoSection from "@/components/sections/promo-section/PromoSection";
+import { topUpPlans } from "@/data/topUpPlans";
 
 export default function PricingPage() {
     return (
@@ -21,45 +22,13 @@ export default function PricingPage() {
 
             <Grid
                 title="Balance Top-Up"
-                description="Use a suggested amount or enter your own custom top-up. Minimum £10.00."
+                description="Use a suggested amount or enter your own custom top-up. Minimum £10.00. All prices include VAT."
                 columns={4}
                 gap="2rem"
             >
-                <PricingCard
-                    variant="starter"
-                    title="Starter"
-                    amount={10}
-                    badgeTop="Minimum"
-                    description="A simple starter top-up for your first order or a quick wallet refill."
-                    buttonText="Top Up Balance"
-                />
-
-                <PricingCard
-                    variant="pro"
-                    title="Growth"
-                    amount={25}
-                    badgeTop="Popular"
-                    description="A flexible wallet top-up for ongoing service requests and repeat use."
-                    buttonText="Add Funds"
-                />
-
-                <PricingCard
-                    variant="premium"
-                    title="Pro"
-                    amount={50}
-                    badgeTop="Best Value"
-                    description="A larger wallet refill for customers who expect multiple purchases or larger service spend."
-                    buttonText="Top Up Now"
-                />
-
-                <PricingCard
-                    variant="custom"
-                    title="Custom"
-                    badgeTop="Flexible"
-                    amount={0}
-                    description="Choose the exact amount you want to add to your wallet."
-                    buttonText="Continue"
-                />
+                {topUpPlans.map((plan) => (
+                    <PricingCard key={plan.title} {...plan} />
+                ))}
             </Grid>
 
             <FAQ

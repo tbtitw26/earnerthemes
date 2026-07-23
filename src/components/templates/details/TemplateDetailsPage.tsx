@@ -152,7 +152,7 @@ export default function TemplateDetailsPage({ template }: TemplateDetailsPagePro
 
                     <aside className={styles.buyCard}>
                         <div className={styles.priceBlock}>
-                            <span className={styles.priceLabel}>Price</span>
+                            <span className={styles.priceLabel}>Price (incl. VAT)</span>
                             <strong>{formatPrice(template.price, template.currency)}</strong>
                         </div>
 

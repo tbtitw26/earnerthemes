@@ -174,30 +174,6 @@ We make sure your brand is visible, trusted, and chosen locally.`,
             ],
         },
 
-        // 💬 TESTIMONIALS
-        {
-            type: "custom",
-            component: "TestimonialsSlider",
-            title: "Real Local Success Stories",
-            description: "See how local SEO transformed businesses in their cities.",
-            testimonials: [
-                {
-                    name: "Marta L.",
-                    role: "Owner, Beauty Salon",
-                    image: "review3",
-                    text: "We jumped into the top 3 map pack within 2 months — calls doubled and appointments filled up!",
-                    rating: 5,
-                },
-                {
-                    name: "Andriy N.",
-                    role: "Founder, Car Service",
-                    image: "review5",
-                    text: "They rebuilt our local citations and optimised Google profile — we’re finally visible to local clients.",
-                    rating: 5,
-                },
-            ],
-        },
-
         // 📩 CTA
         {
             type: "custom",

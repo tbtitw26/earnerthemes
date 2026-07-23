@@ -214,6 +214,31 @@ width: fit-content;
   }
 }
 
+/* ===== TOP UP (wallet shortcut) ===== */
+.topUpButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 10px 16px;
+
+  background: #0f172a;
+  color: #fff;
+
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+
+  border-radius: 6px;
+  text-decoration: none;
+
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #1e293b;
+  }
+}
+
 /* ===== TOKENS (separate pill) ===== */
 .tokensPill {
   display: inline-flex;

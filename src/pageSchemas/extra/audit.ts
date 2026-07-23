@@ -175,30 +175,6 @@ Our audit uncovers the hidden issues that prevent Google from fully crawling, in
             ],
         },
 
-        // 💬 TESTIMONIALS
-        {
-            type: "custom",
-            component: "TestimonialsSlider",
-            title: "Client Success Stories",
-            description: "See how our audits transformed websites into fast, stable, and high-ranking assets.",
-            testimonials: [
-                {
-                    name: "Oksana L.",
-                    role: "E-commerce Manager",
-                    image: "review3",
-                    text: "After their technical audit, our page speed score jumped from 52 to 95 and organic traffic increased by 60% within 3 months.",
-                    rating: 5,
-                },
-                {
-                    name: "Mykola P.",
-                    role: "CEO, Real Estate Portal",
-                    image: "review5",
-                    text: "They found indexing issues we didn’t even know existed. The report was clear, structured, and easy to implement.",
-                    rating: 5,
-                },
-            ],
-        },
-
         // 📩 TEXT + BUTTON CTA
         {
             type: "custom",

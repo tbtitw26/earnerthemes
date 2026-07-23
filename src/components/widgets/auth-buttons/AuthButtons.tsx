@@ -3,7 +3,7 @@ import {useUser} from "@/context/UserContext";
 import ButtonUI from "@/components/ui/button/ButtonUI";
 import Link from "next/link";
 import styles from "./AuthButtons.module.scss";
-import {FaShoppingCart, FaUser} from "react-icons/fa";
+import {FaPlus, FaShoppingCart, FaUser} from "react-icons/fa";
 import { useCurrency } from "@/context/CurrencyContext";
 import { useTemplateCartStore } from "@/utils/store";
 
@@ -26,6 +26,11 @@ const AuthButtons: React.FC = () => {
 
                 <Link href="/profile" className={styles.balanceButton}>
                     {sign}{convertFromBase(user.balance ?? 0).toFixed(2)} {currency}
+                </Link>
+
+                <Link href="/checkout" className={styles.topUpButton} aria-label="Top up wallet balance">
+                    <FaPlus />
+                    <span>Top Up</span>
                 </Link>
             </div>
         );

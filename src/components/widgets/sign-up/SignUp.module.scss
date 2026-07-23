@@ -10,10 +10,10 @@
 
 .container {
   width: 100%;
-  max-width: 1400px;
+  max-width: 720px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(560px, 1.02fr) minmax(520px, 0.98fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(40px, 5vw, 88px);
   align-items: start;
   padding-top: 24px;
@@ -137,177 +137,7 @@
 }
 
 /* ──────────────────────────────────────────────
-   RIGHT — Showcase
-   ────────────────────────────────────────────── */
-
-.showcaseColumn {
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  padding-top: 12px;
-}
-
-.showcase {
-  width: 100%;
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  gap: 34px;
-}
-
-.cardPerspective {
-  perspective: 1200px;
-  width: 100%;
-}
-
-.tiltCard {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 0.9 / 1;
-  overflow: hidden;
-  border-radius: 24px;
-  background: #07111f;
-  transform: rotateY(-6deg) rotateX(2deg);
-  transform-style: preserve-3d;
-  will-change: transform;
-  transition:
-          transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
-          box-shadow 0.45s ease;
-  box-shadow:
-          0 40px 80px -20px rgba(15, 23, 42, 0.24),
-          0 18px 40px -12px rgba(15, 23, 42, 0.12);
-}
-
-.tiltCard:hover {
-  box-shadow:
-          0 54px 110px -26px rgba(15, 23, 42, 0.3),
-          0 24px 48px -14px rgba(15, 23, 42, 0.16);
-}
-
-.cardImage {
-  object-fit: cover;
-}
-
-.cardGlow {
-  position: absolute;
-  inset: auto -20% -30% -20%;
-  height: 42%;
-  background: radial-gradient(
-                  ellipse at center,
-                  rgba(37, 99, 235, 0.22) 0%,
-                  rgba(37, 99, 235, 0.08) 32%,
-                  rgba(37, 99, 235, 0) 70%
-  );
-  pointer-events: none;
-  z-index: 1;
-}
-
-.cardOverlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 28px 28px 34px;
-  background:
-          linear-gradient(
-                          180deg,
-                          rgba(5, 10, 20, 0.04) 0%,
-                          rgba(5, 10, 20, 0.14) 40%,
-                          rgba(5, 10, 20, 0.5) 100%
-          );
-  z-index: 2;
-}
-
-.cardBadge {
-  font-size: clamp(13px, 1vw, 15px);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.13em;
-  color: #ffffff;
-  text-align: center;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
-}
-
-.showcaseBottom {
-  display: grid;
-  grid-template-columns: 2px 1fr;
-  gap: 26px;
-  align-items: start;
-}
-
-.showcaseAccent {
-  width: 2px;
-  min-height: 170px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #2563eb 0%, rgba(37, 99, 235, 0.16) 100%);
-}
-
-.showcaseInfo {
-  padding-top: 2px;
-}
-
-.showcaseTitle {
-  margin: 0 0 10px;
-  font-size: clamp(1.6rem, 1.55vw, 2rem);
-  line-height: 1.15;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.showcaseDesc {
-  margin: 0;
-  max-width: 420px;
-  font-size: 0.98rem;
-  line-height: 1.7;
-  color: #64748b;
-}
-
-.showcaseBadges {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 24px;
-  max-width: 520px;
-}
-
-.badgeCard {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 74px;
-  padding: 16px 18px;
-  border-radius: 14px;
-  border: 1px solid #e7edf5;
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
-}
-
-.badgeIcon {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: #eff6ff;
-  color: #2563eb;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-.badgeText {
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  line-height: 1.4;
-  color: #334155;
-}
-
-/* ──────────────────────────────────────────────
-   Improve common inner input look inside this page
+   Form controls
    ────────────────────────────────────────────── */
 
 .form :global(input),
@@ -321,12 +151,7 @@
 
 @media (min-width: 1500px) {
   .container {
-    max-width: 1480px;
-    grid-template-columns: minmax(600px, 1.04fr) minmax(560px, 0.96fr);
-  }
-
-  .showcase {
-    max-width: 640px;
+    max-width: 780px;
   }
 }
 
@@ -340,22 +165,12 @@
   }
 
   .container {
-    max-width: 1200px;
-    grid-template-columns: minmax(0, 1fr) minmax(420px, 0.9fr);
     gap: 40px;
   }
 
   .formColumn {
     max-width: 100%;
     padding-top: 24px;
-  }
-
-  .showcase {
-    max-width: 520px;
-  }
-
-  .tiltCard {
-    aspect-ratio: 1 / 1.02;
   }
 }
 
@@ -375,22 +190,6 @@
     padding-top: 8px;
   }
 
-  .showcaseColumn {
-    justify-content: flex-start;
-    padding-top: 0;
-  }
-
-  .showcase {
-    max-width: 100%;
-  }
-
-  .cardPerspective {
-    max-width: 620px;
-  }
-
-  .showcaseBadges {
-    max-width: 620px;
-  }
 }
 
 /* ──────────────────────────────────────────────
@@ -431,7 +230,4 @@
     gap: 16px;
   }
 
-  .showcaseColumn {
-    display: none;
-  }
 }

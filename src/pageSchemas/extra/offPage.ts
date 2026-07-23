@@ -175,30 +175,6 @@ We build safe, relevant, and lasting backlinks that truly make a difference.`,
             ],
         },
 
-        // 💬 TESTIMONIALS
-        {
-            type: "custom",
-            component: "TestimonialsSlider",
-            title: "Client Results from Off-Page SEO",
-            description: "Our link building and PR outreach campaigns consistently improve authority, trust, and rankings.",
-            testimonials: [
-                {
-                    name: "Iryna B.",
-                    role: "Founder, Fashion E-commerce",
-                    image: "review2",
-                    text: "We grew from DR 24 to DR 52 in five months thanks to their outreach and guest posting campaign.",
-                    rating: 5,
-                },
-                {
-                    name: "Oleksandr G.",
-                    role: "CMO, SaaS Startup",
-                    image: "review5",
-                    text: "All links were from real media sites — no spam. Traffic and brand mentions doubled within a quarter.",
-                    rating: 5,
-                },
-            ],
-        },
-
         // 📩 CTA (text + button)
         {
             type: "custom",

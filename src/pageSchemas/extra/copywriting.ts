@@ -174,30 +174,6 @@ We combine marketing psychology, keyword strategy, and storytelling to create pa
             ],
         },
 
-        // 💬 TESTIMONIALS
-        {
-            type: "custom",
-            component: "TestimonialsSlider",
-            title: "Client Results from Our Copywriting",
-            description: "Our content has helped clients grow visibility, clicks, and conversions.",
-            testimonials: [
-                {
-                    name: "Olha T.",
-                    role: "Head of Marketing, Online Store",
-                    image: "review6",
-                    text: "Their SEO articles consistently bring organic traffic — 60% growth in blog visitors after optimisation.",
-                    rating: 5,
-                },
-                {
-                    name: "Denys P.",
-                    role: "Founder, Digital Agency",
-                    image: "review2",
-                    text: "Finally, content that sells and ranks. CTR up by 38% and average session time doubled.",
-                    rating: 5,
-                },
-            ],
-        },
-
         // 📩 CTA
         {
             type: "custom",

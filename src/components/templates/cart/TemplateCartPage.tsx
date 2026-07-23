@@ -19,6 +19,7 @@ import {
     useTemplateCartStore,
 } from "@/utils/store";
 import { getValidTemplateImageUrl } from "@/utils/templateImage";
+import { netFromGross, VAT_RATE, vatFromGross } from "@/utils/money";
 import TemplatePurchaseConfirmDialog from "@/components/templates/purchase-confirmation/TemplatePurchaseConfirmDialog";
 import TemplateCard from "@/components/templates/catalog/TemplateCard";
 import { themeforestTemplates } from "@/data/themeforestTemplates";
@@ -65,7 +66,8 @@ function formatPrice(value: number, currency: string) {
     return new Intl.NumberFormat("en-US", {
         style: "currency",
         currency,
-        maximumFractionDigits: 0,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
     }).format(value);
 }
 
@@ -495,11 +497,15 @@ export default function TemplateCartPage() {
                         <strong>{itemCount}</strong>
                     </div>
                     <div className={styles.summaryBlock}>
-                        <span className={styles.summaryLabel}>Subtotal</span>
-                        <strong>{formatPrice(total, displayCurrency)}</strong>
+                        <span className={styles.summaryLabel}>Net amount</span>
+                        <strong>{formatPrice(netFromGross(total), displayCurrency)}</strong>
                     </div>
                     <div className={styles.summaryBlock}>
-                        <span className={styles.summaryLabel}>Total</span>
+                        <span className={styles.summaryLabel}>VAT ({Math.round(VAT_RATE * 100)}%), included</span>
+                        <strong>{formatPrice(vatFromGross(total), displayCurrency)}</strong>
+                    </div>
+                    <div className={styles.summaryBlock}>
+                        <span className={styles.summaryLabel}>Total (incl. VAT)</span>
                         <strong className={styles.summaryTotal}>{formatPrice(total, displayCurrency)}</strong>
                     </div>
 
@@ -544,7 +550,7 @@ export default function TemplateCartPage() {
                     meta: [item.platform, item.category].filter(Boolean).join(" · "),
                     priceLabel: formatPrice(item.price, item.currency),
                 }))}
-                totalLabel={formatPrice(confirmTotal, confirmCurrency)}
+                totalLabel={`${formatPrice(confirmTotal, confirmCurrency)} incl. VAT`}
                 processing={buyingAll || buyingTemplateId !== null}
                 onCancel={() => {
                     if (buyingAll || buyingTemplateId !== null) return;

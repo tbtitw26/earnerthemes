@@ -50,6 +50,42 @@
     margin-bottom: 20px;
     color: var(--text-primary);
   }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    font-size: 14px;
+    background: var(--surface-color);
+    color: var(--text-primary);
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px var(--tertiary-color);
+    }
+  }
+}
+
+.amountLabel {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+.errorText {
+  margin: 0;
+  font-size: 13px;
+  color: #dc2626;
 }
 
 .itemRow {

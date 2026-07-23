@@ -4,7 +4,6 @@ import PromoSection from "@/components/sections/promo-section/PromoSection";
 import ValuesIcons from "@/components/constructor/values-icons/ValuesIcons";
 import HowItWorksSection from "@/components/sections/how-it-works-section/HowItWorksSection";
 import TeamGrid from "@/components/constructor/team-grid/TeamGrid";
-import TestimonialsSlider from "@/components/constructor/testimonials-slider/TestimonialsSlider";
 import Cta from "@/components/constructor/cta/Cta";
 import MissionBanner from "@/components/constructor/mission-banner/MissionBanner";
 import FAQ from "@/components/constructor/faq/FAQ";
@@ -27,7 +26,7 @@ export default function AboutPage() {
                 }
                 description="We build a curated ecosystem of high-quality website templates for WordPress, Shopify, eCommerce, and modern web projects. Our goal is simple — help you launch faster with designs that already work."
                 primaryCta={{text: "Browse Templates", link: "/templates"}}
-                secondaryCta={{text: "Explore Categories", link: "/categories"}}
+                secondaryCta={{text: "Explore Categories", link: "/templates"}}
                 image="image5"
             />
 
@@ -89,7 +88,7 @@ export default function AboutPage() {
                         title: "Built for Speed",
                         text: "Optimized code and lightweight structure ensure fast loading times and smooth user experience.",
                         ctaLabel: "See performance",
-                        ctaHref: "/performance",
+                        ctaHref: "/templates",
                     },
                     {
                         type: "featureLight",
@@ -101,63 +100,8 @@ export default function AboutPage() {
                         title: "Support & Continuous Updates",
                         text: "Templates are regularly updated and improved to stay compatible with modern web standards and platforms.",
                         ctaLabel: "Learn more",
-                        ctaHref: "/support",
+                        ctaHref: "/contact-us",
                         images: ["team1", "team2", "team3"],
-                    },
-                ]}
-            />
-
-            <TestimonialsSlider
-                title="Trusted by Designers, Founders, and Agencies"
-                description="Real feedback from people using templates to launch faster and build better products."
-                testimonials={[
-                    {
-                        name: "James Carter",
-                        image: "review1",
-                        rating: 5,
-                        text: "Picked a landing page template and launched the same day. The structure was clean and required almost no changes.",
-                    },
-                    {
-                        name: "Sophia Bennett",
-                        image: "review5",
-                        rating: 4.9,
-                        text: "I used a Shopify template from here and it instantly made my store look more professional. Conversion rate improved within a week.",
-                    },
-                    {
-                        name: "Liam Anderson",
-                        image: "review2",
-                        rating: 5,
-                        text: "As a freelancer, this saves me hours on every project. I just customize the template instead of building everything from scratch.",
-                    },
-                    {
-                        name: "Emily Turner",
-                        image: "review6",
-                        rating: 4.8,
-                        text: "The quality is way better than free themes. Everything feels polished and ready for real business use.",
-                    },
-                    {
-                        name: "Noah Williams",
-                        image: "review3",
-                        rating: 5,
-                        text: "Found a perfect WordPress template for a client project. Delivered faster and still made a great profit.",
-                    },
-                    {
-                        name: "Olivia Martinez",
-                        image: "review7",
-                        rating: 4.7,
-                        text: "Super easy to browse and compare templates. I didn’t waste time scrolling through low-quality designs.",
-                    },
-                    {
-                        name: "Ethan Brown",
-                        image: "review4",
-                        rating: 4.9,
-                        text: "The templates are actually built for real use — clean code, good UX, and easy to customize.",
-                    },
-                    {
-                        name: "Ava Johnson",
-                        image: "review8",
-                        rating: 5,
-                        text: "I launched my portfolio site in a couple of hours. Before that, I was stuck for weeks trying to design everything myself.",
                     },
                 ]}
             />
@@ -166,7 +110,7 @@ export default function AboutPage() {
                 title="Start building with the right template"
                 description="Browse premium website templates and launch your next project faster with designs that are ready to go."
                 primaryCta={{text: "Browse Templates", link: "/templates"}}
-                secondaryCta={{text: "Explore Categories", link: "/categories"}}
+                secondaryCta={{text: "Explore Categories", link: "/templates"}}
             />
         </>
     );

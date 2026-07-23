@@ -142,8 +142,6 @@ Today, we help businesses in 20+ countries increase visibility and sales through
             ],
         },
 
-
-
         // 🧭 PHILOSOPHY BLOCK
         {
             type: "custom",
@@ -197,51 +195,6 @@ Today, we help businesses in 20+ countries increase visibility and sales through
                     role: "UX & Conversion Specialist",
                     bio: "Optimises user experience and landing flows to boost conversions and dwell time.",
                     image: "team2",
-                },
-            ],
-        },
-
-        // 💬 TESTIMONIALS
-        {
-            type: "custom",
-            component: "TestimonialsSlider",
-            title: "What Our Clients Say",
-            description: "Real feedback from companies we’ve helped grow organically.",
-            testimonials: [
-                {
-                    name: "Anastasia Romanova",
-                    role: "CMO, Local Clinic",
-                    image: "review6",
-                    text: "The local SEO campaign doubled our calls in just two months. The analytics dashboard is pure gold — everything is transparent and easy to track.",
-                    rating: 5,
-                },
-                {
-                    name: "Viktor Kovalenko",
-                    role: "Founder, Tech Startup",
-                    image: "review5",
-                    text: "I love the token-based model — simple, flexible, and cost-effective. We scaled traffic by 3x without unpredictable retainers.",
-                    rating: 5,
-                },
-                {
-                    name: "Oleksandr Hryn",
-                    role: "Marketing Director, Retail Brand",
-                    image: "review4",
-                    text: "Professional, responsive, and strategic. Their off-page SEO helped us dominate Google rankings in our niche within 6 months.",
-                    rating: 5,
-                },
-                {
-                    name: "Maria Koval",
-                    role: "E-commerce Manager",
-                    image: "review3",
-                    text: "After their audit and on-page optimisation, our organic sales skyrocketed. They also improved UX — now our bounce rate is down 35%.",
-                    rating: 5,
-                },
-                {
-                    name: "Andrii Poltavets",
-                    role: "CEO, Logistics Company",
-                    image: "review2",
-                    text: "Their team understood our complex B2B structure and delivered results fast. Real professionals who think like business partners.",
-                    rating: 5,
                 },
             ],
         },

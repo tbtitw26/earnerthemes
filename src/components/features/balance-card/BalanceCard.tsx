@@ -40,9 +40,14 @@ export default function BalanceCard() {
             </div>
 
             <div className={styles.actions}>
-                <Link href="/pricing">
+                <Link href="/checkout">
                     <ButtonUI variant="solid" color="primary" size="lg">
-                        Top-Up
+                        Top-Up Balance
+                    </ButtonUI>
+                </Link>
+                <Link href="/pricing">
+                    <ButtonUI variant="soft" size="lg">
+                        View packages
                     </ButtonUI>
                 </Link>
             </div>

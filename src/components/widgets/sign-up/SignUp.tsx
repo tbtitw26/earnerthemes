@@ -9,15 +9,12 @@ import {
     useFormikContext,
 } from "formik";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
-import Image from "next/image";
 import { useAlert } from "@/context/AlertContext";
 
 import InputUI from "@/components/ui/input/InputUI";
 import ButtonUI from "@/components/ui/button/ButtonUI";
 import CountrySelect from "@/components/ui/country-select/CountrySelect";
 import styles from "./SignUp.module.scss";
-import asideImage from "@/assets/images/image7.png";
 
 import {
     signUpInitialValues,
@@ -176,91 +173,6 @@ function SignUpForm({ isSubmitting }: { isSubmitting: boolean }) {
     );
 }
 
-function ShowcaseCard() {
-    const cardRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (typeof window === "undefined") return;
-        if (window.matchMedia("(pointer: coarse)").matches) return;
-
-        const target = { x: -8, y: 6 };
-        const current = { x: -8, y: 6 };
-        let rafId = 0;
-
-        const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-
-        const animate = () => {
-            current.x = lerp(current.x, target.x, 0.12);
-            current.y = lerp(current.y, target.y, 0.12);
-
-            if (cardRef.current) {
-                cardRef.current.style.transform = `rotateY(${current.x}deg) rotateX(${current.y}deg)`;
-            }
-
-            rafId = requestAnimationFrame(animate);
-        };
-
-        const onMouseMove = (e: MouseEvent) => {
-            const nx = e.clientX / window.innerWidth - 0.5;
-            const ny = e.clientY / window.innerHeight - 0.5;
-
-            target.x = nx * -10;
-            target.y = ny * 9;
-        };
-
-        window.addEventListener("mousemove", onMouseMove);
-        rafId = requestAnimationFrame(animate);
-
-        return () => {
-            window.removeEventListener("mousemove", onMouseMove);
-            cancelAnimationFrame(rafId);
-        };
-    }, []);
-
-    return (
-        <div className={styles.showcase}>
-            <div className={styles.cardPerspective}>
-                <div className={styles.tiltCard} ref={cardRef}>
-                    <Image
-                        src={asideImage}
-                        alt="Premium template preview"
-                        fill
-                        priority
-                        quality={95}
-                        sizes="(max-width: 1360px) 42vw, 560px"
-                        className={styles.cardImage}
-                    />
-
-                    <div className={styles.cardGlow} />
-                    <div className={styles.cardOverlay}>
-                        <span className={styles.cardBadge}>Premium Template Preview</span>
-                    </div>
-                </div>
-            </div>
-
-            <div className={styles.showcaseBottom}>
-                <div className={styles.showcaseAccent} />
-
-                <div className={styles.showcaseInfo}>
-                    <h3 className={styles.showcaseTitle}>The Professional Choice</h3>
-
-                    <div className={styles.showcaseBadges}>
-                        <div className={styles.badgeCard}>
-                            <span className={styles.badgeIcon}>✦</span>
-                            <span className={styles.badgeText}>Quality Guaranteed</span>
-                        </div>
-
-                        <div className={styles.badgeCard}>
-                            <span className={styles.badgeIcon}>◌</span>
-                            <span className={styles.badgeText}>24/7 Support</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-}
-
 export default function SignUp() {
     const { showAlert } = useAlert();
     const router = useRouter();
@@ -287,10 +199,6 @@ export default function SignUp() {
                             <SignUpForm isSubmitting={isSubmitting} />
                         )}
                     </Formik>
-                </div>
-
-                <div className={styles.showcaseColumn}>
-                    <ShowcaseCard />
                 </div>
             </div>
         </div>

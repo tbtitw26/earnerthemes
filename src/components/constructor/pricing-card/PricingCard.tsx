@@ -105,7 +105,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
                         {sign}
                         {displayPrice.toFixed(2)}
                     </span>
-                    <span className={styles.oneTime}>one-time</span>
+                    <span className={styles.oneTime}>one-time, incl. VAT</span>
                 </motion.div>
                 <motion.div className={styles.tokenHighlight} variants={contentReveal(reduced)}>
                     {isCustom
@@ -138,7 +138,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
                             />
                         </motion.div>
                         <motion.div className={styles.totalRow} variants={contentReveal(reduced)}>
-                            <span>Total Price</span>
+                            <span>Total Price (incl. VAT)</span>
                             <span className={styles.totalValue}>
                                 {sign}
                                 {displayPrice.toFixed(2)}

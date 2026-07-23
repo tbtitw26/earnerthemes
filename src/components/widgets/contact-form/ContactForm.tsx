@@ -49,7 +49,7 @@ const ContactSupport: React.FC = () => {
             await sendContactRequest(payload);
             resetForm();
             setSuccessMsg(
-                "Your message has been sent. Our culinary team will get back to you shortly."
+                "Your message has been sent. Our support team will get back to you shortly."
             );
             showAlert("Success", "Message sent successfully", "success");
         } catch {

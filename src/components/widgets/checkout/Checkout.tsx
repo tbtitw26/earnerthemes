@@ -4,7 +4,14 @@ import React, {useEffect, useMemo, useState} from "react";
 import styles from "./Checkout.module.scss";
 import {useCurrency} from "@/context/CurrencyContext";
 import {CheckoutPlan, useCheckoutStore} from "@/utils/store";
-import { isSupportedCurrency, MIN_TOP_UP_AMOUNT } from "@/utils/money";
+import {
+    isSupportedCurrency,
+    MIN_TOP_UP_AMOUNT,
+    netFromGross,
+    parseMoneyAmount,
+    VAT_RATE,
+    vatFromGross,
+} from "@/utils/money";
 
 type StoredPlan = CheckoutPlan & {
     price?: number;
@@ -16,8 +23,10 @@ const Checkout = () => {
     const [activePlan, setActivePlan] = useState<CheckoutPlan | null>(plan ?? null);
     const [agreed, setAgreed] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [customAmount, setCustomAmount] = useState("");
+    const [amountError, setAmountError] = useState("");
 
-    const {currency, sign, convertFromBase} = useCurrency();
+    const {currency, sign, convertFromBase, convertToBase} = useCurrency();
 
     // hydrate plan from localStorage / store
     useEffect(() => {
@@ -44,23 +53,49 @@ const Checkout = () => {
     }, [plan, setPlan]);
 
     /**
-     * UI price:
-     * - activePlan.basePrice is GBP (base)
-     * - convert to selected currency for display
+     * Price handling:
+     * - activePlan.basePrice is a VAT-inclusive (gross) amount in GBP (base currency)
+     * - it is converted to the selected currency purely for display
      */
     const basePriceAmount = useMemo(() => activePlan?.basePrice ?? 0, [activePlan]);
 
-    const subtotal = useMemo(() => {
-        return convertFromBase(basePriceAmount);
-    }, [basePriceAmount, convertFromBase]);
+    // Gross (VAT-inclusive) total in the display currency — this is what the customer pays.
+    const total = useMemo(() => convertFromBase(basePriceAmount), [basePriceAmount, convertFromBase]);
+    const netAmount = useMemo(() => netFromGross(total), [total]);
+    const vat = useMemo(() => vatFromGross(total), [total]);
 
-    const vat = useMemo(() => subtotal * 0.2, [subtotal]);
-    const total = useMemo(() => subtotal + vat, [subtotal, vat]);
+    const startTopUp = (e: React.FormEvent) => {
+        e.preventDefault();
 
-    const displayAmountForPayment = useMemo(
-        () => convertFromBase(basePriceAmount),
-        [basePriceAmount, convertFromBase]
-    );
+        const parsed = parseMoneyAmount(customAmount);
+        const minInCurrency = convertFromBase(MIN_TOP_UP_AMOUNT);
+
+        if (parsed === null) {
+            setAmountError("Enter a valid amount, for example 25.00.");
+            return;
+        }
+
+        if (parsed < minInCurrency) {
+            setAmountError(`The minimum top-up is ${sign}${minInCurrency.toFixed(2)}.`);
+            return;
+        }
+
+        setAmountError("");
+
+        // Convert the entered display amount back to the base currency for storage.
+        const baseAmount = convertToBase(parsed);
+        const newPlan: CheckoutPlan = {
+            title: "Wallet Top-Up",
+            basePrice: baseAmount,
+            amount: baseAmount,
+            variant: "custom",
+            currency,
+        };
+
+        setPlan(newPlan);
+        setActivePlan(newPlan);
+        localStorage.setItem("selectedPlan", JSON.stringify(newPlan));
+    };
 
     const handlePay = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -68,7 +103,7 @@ const Checkout = () => {
         if (!agreed || loading) return;
 
         // guard
-        if (!displayAmountForPayment || displayAmountForPayment <= 0) {
+        if (!total || total <= 0) {
             alert("Invalid amount");
             return;
         }
@@ -81,7 +116,7 @@ const Checkout = () => {
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
                     currency,
-                    amount: displayAmountForPayment,
+                    amount: total,
                 }),
             });
 
@@ -101,13 +136,49 @@ const Checkout = () => {
         }
     };
 
-    // ✅ ранній return тільки ПІСЛЯ всіх хуків
+    // No plan selected yet — let the customer enter an amount here instead of dead-ending.
     if (!activePlan) {
         return (
-            <div className={styles.checkoutEmpty}>
-                <p>
-                    No top-up selected. Please go back to <a href="/pricing">Pricing</a>.
-                </p>
+            <div className={styles.checkout}>
+                <div className={styles.header}>
+                    <h1>Wallet Top-Up</h1>
+                    <p>Secure checkout</p>
+                </div>
+
+                <div className={styles.main}>
+                    <div className={styles.summary}>
+                        <h2>Choose an amount</h2>
+                        <p className={styles.helper}>
+                            Enter how much you want to add to your wallet, or pick a package on the{" "}
+                            <a href="/pricing">Plans</a> page. All amounts include VAT.
+                        </p>
+
+                        <form onSubmit={startTopUp}>
+                            <label className={styles.amountLabel} htmlFor="topUpAmount">
+                                Amount ({currency})
+                            </label>
+                            <input
+                                id="topUpAmount"
+                                type="text"
+                                inputMode="decimal"
+                                placeholder={convertFromBase(MIN_TOP_UP_AMOUNT).toFixed(2)}
+                                value={customAmount}
+                                onChange={(e) => setCustomAmount(e.target.value)}
+                            />
+
+                            {amountError ? <p className={styles.errorText}>{amountError}</p> : null}
+
+                            <p className={styles.helper}>
+                                Minimum top-up amount is {sign}
+                                {convertFromBase(MIN_TOP_UP_AMOUNT).toFixed(2)}.
+                            </p>
+
+                            <button type="submit" className={styles.payButton}>
+                                Continue to payment
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -129,36 +200,43 @@ const Checkout = () => {
                             <p>Add funds to your wallet balance</p>
                         </div>
                         <span>
-              {sign}
-                            {subtotal.toFixed(2)} {currency}
-            </span>
+                            {sign}
+                            {total.toFixed(2)} {currency}
+                        </span>
                     </div>
 
                     <div className={styles.line}/>
 
                     <div className={styles.itemRow}>
-                        <p>Subtotal</p>
+                        <p>Net amount</p>
                         <span>
-              {sign}
-                            {subtotal.toFixed(2)} {currency}
-            </span>
+                            {sign}
+                            {netAmount.toFixed(2)} {currency}
+                        </span>
                     </div>
 
                     <div className={styles.itemRow}>
-                        <p>VAT (20%)</p>
+                        <p>VAT ({Math.round(VAT_RATE * 100)}%), included</p>
                         <span>
-              {sign}
+                            {sign}
                             {vat.toFixed(2)} {currency}
-            </span>
+                        </span>
                     </div>
 
                     <div className={styles.totalRow}>
-                        <h3>Total</h3>
+                        <h3>Total (incl. VAT)</h3>
                         <h3>
                             {sign}
                             {total.toFixed(2)} {currency}
                         </h3>
                     </div>
+
+                    <p className={styles.note}>
+                        The full amount you pay is credited to your wallet balance.{" "}
+                        <a href="/checkout" onClick={() => { clearPlan(); localStorage.removeItem("selectedPlan"); }}>
+                            Change amount
+                        </a>
+                    </p>
                 </div>
 
                 <div className={styles.payment}>
@@ -188,7 +266,8 @@ const Checkout = () => {
                         </div>
 
                         <p className={styles.helper}>
-                            Minimum top-up amount is {sign}{convertFromBase(MIN_TOP_UP_AMOUNT).toFixed(2)}.
+                            Minimum top-up amount is {sign}{convertFromBase(MIN_TOP_UP_AMOUNT).toFixed(2)}. All prices
+                            include VAT.
                         </p>
 
                         <button
@@ -198,9 +277,6 @@ const Checkout = () => {
                         >
                             {loading ? "Processing..." : `Pay ${sign}${total.toFixed(2)} ${currency}`}
                         </button>
-
-                        {/* optional debug */}
-                        {/* <pre>{JSON.stringify({ currency, displayAmountForPayment }, null, 2)}</pre> */}
                     </form>
                 </div>
             </div>

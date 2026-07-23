@@ -174,30 +174,6 @@ Our team ensures that every page communicates clearly with Google — and convin
             ],
         },
 
-        // 💬 TESTIMONIALS
-        {
-            type: "custom",
-            component: "TestimonialsSlider",
-            title: "Real Results from On-Page Optimisation",
-            description: "Our clients see instant ranking improvements and measurable traffic growth after our adjustments.",
-            testimonials: [
-                {
-                    name: "Kateryna S.",
-                    role: "Marketing Director, IT Company",
-                    image: "review4",
-                    text: "After their on-page optimisation, our organic CTR grew by 45% and we entered the top-10 for 12 core keywords within two months.",
-                    rating: 5,
-                },
-                {
-                    name: "Roman D.",
-                    role: "Owner, Local Service Website",
-                    image: "review6",
-                    text: "The keyword mapping and metadata rewrite gave immediate visibility boost — now 80% of our pages rank in Google’s first page.",
-                    rating: 5,
-                },
-            ],
-        },
-
         // 📩 TEXT + BUTTON CTA
         {
             type: "custom",

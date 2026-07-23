@@ -6,7 +6,6 @@ import ValuesIcons from "@/components/constructor/values-icons/ValuesIcons";
 import Grid from "@/components/constructor/grid/Grid";
 import FAQ from "@/components/constructor/faq/FAQ";
 import PricingCard from "@/components/constructor/pricing-card/PricingCard";
-import TestimonialsSlider from "@/components/constructor/testimonials-slider/TestimonialsSlider";
 import PromoFeatureCard from "@/components/features/promo-card/PromoFeatureCard";
 import InfoBlock from "@/components/constructor/Info-block/InfoBlock";
 import Cta from "@/components/constructor/cta/Cta";
@@ -15,12 +14,20 @@ import StatsStrip from "@/components/constructor/stats-strip/StatsStrip";
 import HowItWorksSection from "@/components/sections/how-it-works-section/HowItWorksSection";
 import ThemeForestShowcase from "@/components/sections/themeforest-showcase/ThemeForestShowcase";
 import {themeforestTemplates} from "@/data/themeforestTemplates";
+import {topUpPlans} from "@/data/topUpPlans";
 
 export const metadata: Metadata = {
     title: `${COMPANY_NAME} — Website Templates Marketplace`,
     description:
         "Browse premium website templates for WordPress, Shopify, eCommerce, business, portfolio, and landing pages. Discover top-rated designs, new arrivals, and marketplace-ready digital products.",
     alternates: {canonical: "/"},
+};
+
+/** Derived from the generated catalogue so the numbers on the page are always real. */
+const catalogStats = {
+    templateCount: themeforestTemplates.templates.length,
+    categoryCount: new Set(themeforestTemplates.templates.map((template) => template.category)).size,
+    platformCount: new Set(themeforestTemplates.templates.map((template) => template.platform)).size,
 };
 
 export default function HomePage() {
@@ -35,16 +42,16 @@ export default function HomePage() {
                 }
                 description="Discover a curated marketplace of high-quality website templates for WordPress, Shopify, eCommerce, portfolios, landing pages, and business sites. Browse top-rated designs, launch faster, and find the perfect template for your next project."
                 primaryCta={{text: "Browse Templates", link: "/templates"}}
-                secondaryCta={{text: "Explore Categories", link: "/categories"}}
+                secondaryCta={{text: "Explore Categories", link: "/templates"}}
                 image="image1"
             />
 
             {/* STATS */}
             <StatsStrip
                 items={[
-                    {value: "100+", label: "Premium Templates"},
-                    {value: "20+", label: "Popular Categories"},
-                    {value: "4.9/5", label: "Average Ratings"},
+                    {value: `${catalogStats.templateCount}`, label: "Templates in Catalogue"},
+                    {value: `${catalogStats.categoryCount}`, label: "Categories"},
+                    {value: `${catalogStats.platformCount}`, label: "Supported Platforms"},
                     {value: "24/7", label: "Marketplace Access"},
                 ]}
             />
@@ -168,110 +175,22 @@ export default function HomePage() {
 
             {/* PRICING */}
             <Grid
-                title="Pricing for Every Budget"
-                description="Choose from affordable template options, premium designs, and flexible products that match your project scope."
+                title="Top Up Your Balance"
+                description="Add funds to your wallet and use your balance for any template on the marketplace. All prices include VAT."
                 columns={4}
                 gap="2rem"
             >
-                <PricingCard
-                    variant="starter"
-                    title="Starter"
-                    amount={19}
-                    badgeTop="Entry"
-                    description="A great starting point for personal projects, landing pages, and small websites."
-                    buttonText="Browse Starter"
-                />
-
-                <PricingCard
-                    variant="pro"
-                    title="Business"
-                    amount={39}
-                    badgeTop="Popular"
-                    description="Ideal for agencies, service businesses, and brands that need polished, scalable layouts."
-                    buttonText="Explore Business"
-                />
-
-                <PricingCard
-                    variant="premium"
-                    title="Premium"
-                    amount={59}
-                    badgeTop="Best Value"
-                    description="High-converting, feature-rich templates for serious launches, stores, and advanced websites."
-                    buttonText="View Premium"
-                />
-
-                <PricingCard
-                    variant="custom"
-                    title="Custom Range"
-                    amount={0}
-                    badgeTop="Flexible"
-                    description="Browse the full marketplace and choose the template that best fits your needs and budget."
-                    buttonText="See All"
-                />
+                {topUpPlans.map((plan) => (
+                    <PricingCard key={plan.title} {...plan} />
+                ))}
             </Grid>
-
-            {/* TESTIMONIALS */}
-            <TestimonialsSlider
-                title="Trusted by Designers, Founders, and Agencies"
-                description="Real feedback from people using templates to launch faster and build better products."
-                testimonials={[
-                    {
-                        name: "James Carter",
-                        image: "review1",
-                        rating: 5,
-                        text: "Picked a landing page template and launched the same day. The structure was clean and required almost no changes.",
-                    },
-                    {
-                        name: "Sophia Bennett",
-                        image: "review5",
-                        rating: 4.9,
-                        text: "I used a Shopify template from here and it instantly made my store look more professional. Conversion rate improved within a week.",
-                    },
-                    {
-                        name: "Liam Anderson",
-                        image: "review2",
-                        rating: 5,
-                        text: "As a freelancer, this saves me hours on every project. I just customize the template instead of building everything from scratch.",
-                    },
-                    {
-                        name: "Emily Turner",
-                        image: "review6",
-                        rating: 4.8,
-                        text: "The quality is way better than free themes. Everything feels polished and ready for real business use.",
-                    },
-                    {
-                        name: "Noah Williams",
-                        image: "review3",
-                        rating: 5,
-                        text: "Found a perfect WordPress template for a client project. Delivered faster and still made a great profit.",
-                    },
-                    {
-                        name: "Olivia Martinez",
-                        image: "review7",
-                        rating: 4.7,
-                        text: "Super easy to browse and compare templates. I didn’t waste time scrolling through low-quality designs.",
-                    },
-                    {
-                        name: "Ethan Brown",
-                        image: "review4",
-                        rating: 4.9,
-                        text: "The templates are actually built for real use — clean code, good UX, and easy to customize.",
-                    },
-                    {
-                        name: "Ava Johnson",
-                        image: "review8",
-                        rating: 5,
-                        text: "I launched my portfolio site in a couple of hours. Before that, I was stuck for weeks trying to design everything myself.",
-                    },
-                ]}
-            />
 
             {/* FINAL CTA */}
             <CenteredCtaSection
                 title="Ready to find your next template?"
                 description="Explore a marketplace of premium website templates for WordPress, Shopify, eCommerce, portfolios, and more."
                 primaryCta={{text: "Browse Templates", link: "/templates"}}
-                secondaryCta={{text: "View Categories", link: "/categories"}}
+                secondaryCta={{text: "View Categories", link: "/templates"}}
             />
 
             {/* FAQ */}

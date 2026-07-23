@@ -175,30 +175,6 @@ Our analysis gives you clarity — showing what works in your niche and how to o
             ],
         },
 
-        // 💬 TESTIMONIALS
-        {
-            type: "custom",
-            component: "TestimonialsSlider",
-            title: "Client Success with Competitor Research",
-            description: "Our clients use competitive analysis as a springboard for powerful SEO strategies.",
-            testimonials: [
-                {
-                    name: "Oleh K.",
-                    role: "CEO, Logistics Platform",
-                    image: "review4",
-                    text: "Their competitor report completely reshaped our SEO strategy — we discovered missed keyword clusters and overtook two top rivals within 3 months.",
-                    rating: 5,
-                },
-                {
-                    name: "Yulia R.",
-                    role: "Marketing Manager, SaaS Startup",
-                    image: "review1",
-                    text: "The backlink comparison and keyword gap audit gave us clear direction — finally, SEO decisions backed by data, not guesses.",
-                    rating: 5,
-                },
-            ],
-        },
-
         // 📩 CTA text + button
         {
             type: "custom",

@@ -99,7 +99,7 @@ export default function TemplateCard({ template }: TemplateCardProps) {
 
                 <div className={styles.footer}>
                     <div className={styles.priceBlock}>
-                        <span className={styles.priceLabel}>Starting at</span>
+                        <span className={styles.priceLabel}>Starting at (incl. VAT)</span>
                         <strong>{formatPrice(template.price, template.currency)}</strong>
                     </div>
 
