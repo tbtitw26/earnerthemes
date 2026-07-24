@@ -5,8 +5,12 @@ import styles from "./Checkout.module.scss";
 import {useCurrency} from "@/context/CurrencyContext";
 import {CheckoutPlan, useCheckoutStore} from "@/utils/store";
 import {
+    BILLING_DESCRIPTOR,
+    CURRENCY_CONVERSION_NOTICE,
+    WITHDRAWAL_WAIVER_TEXT,
+} from "@/resources/constants";
+import {
     isSupportedCurrency,
-    MIN_TOP_UP_AMOUNT,
     netFromGross,
     parseMoneyAmount,
     VAT_RATE,
@@ -17,11 +21,21 @@ type StoredPlan = CheckoutPlan & {
     price?: number;
 };
 
-const Checkout = () => {
+interface CheckoutProps {
+    /**
+     * Test checkout (/checkout-test) collects no card details and credits the
+     * Account Balance directly so the receipt and email flow can be verified
+     * before a payment provider is connected.
+     */
+    testMode?: boolean;
+}
+
+const Checkout = ({testMode = false}: CheckoutProps) => {
     const {plan, setPlan, clearPlan} = useCheckoutStore();
 
     const [activePlan, setActivePlan] = useState<CheckoutPlan | null>(plan ?? null);
     const [agreed, setAgreed] = useState(false);
+    const [waiverAccepted, setWaiverAccepted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [customAmount, setCustomAmount] = useState("");
     const [amountError, setAmountError] = useState("");
@@ -37,6 +51,8 @@ const Checkout = () => {
                 const normalizedPlan: CheckoutPlan = {
                     ...parsed,
                     basePrice: typeof parsed.basePrice === "number" ? parsed.basePrice : parsed.price ?? 0,
+                    displayPrice:
+                        typeof parsed.displayPrice === "number" ? parsed.displayPrice : undefined,
                     currency: isSupportedCurrency(parsed.currency) ? parsed.currency : "GBP",
                     variant: typeof parsed.variant === "string" ? parsed.variant : "starter",
                     title: typeof parsed.title === "string" ? parsed.title : "Wallet Top-Up",
@@ -59,8 +75,18 @@ const Checkout = () => {
      */
     const basePriceAmount = useMemo(() => activePlan?.basePrice ?? 0, [activePlan]);
 
-    // Gross (VAT-inclusive) total in the display currency — this is what the customer pays.
-    const total = useMemo(() => convertFromBase(basePriceAmount), [basePriceAmount, convertFromBase]);
+    /**
+     * Gross (VAT-inclusive) total in the display currency — this is what the customer pays.
+     * While the customer is still in the currency the plan was priced in, the exact price
+     * they were shown is used as-is. Converting to GBP and back would round it off
+     * (e.g. $25.00 → £19.27 → $25.01).
+     */
+    const total = useMemo(() => {
+        if (activePlan?.currency === currency && typeof activePlan.displayPrice === "number") {
+            return activePlan.displayPrice;
+        }
+        return convertFromBase(basePriceAmount);
+    }, [activePlan, basePriceAmount, convertFromBase, currency]);
     const netAmount = useMemo(() => netFromGross(total), [total]);
     const vat = useMemo(() => vatFromGross(total), [total]);
 
@@ -68,15 +94,9 @@ const Checkout = () => {
         e.preventDefault();
 
         const parsed = parseMoneyAmount(customAmount);
-        const minInCurrency = convertFromBase(MIN_TOP_UP_AMOUNT);
 
-        if (parsed === null) {
+        if (parsed === null || parsed <= 0) {
             setAmountError("Enter a valid amount, for example 25.00.");
-            return;
-        }
-
-        if (parsed < minInCurrency) {
-            setAmountError(`The minimum top-up is ${sign}${minInCurrency.toFixed(2)}.`);
             return;
         }
 
@@ -88,6 +108,7 @@ const Checkout = () => {
             title: "Wallet Top-Up",
             basePrice: baseAmount,
             amount: baseAmount,
+            displayPrice: parsed,
             variant: "custom",
             currency,
         };
@@ -100,11 +121,11 @@ const Checkout = () => {
     const handlePay = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!activePlan) return;
-        if (!agreed || loading) return;
+        if (!agreed || !waiverAccepted || loading) return;
 
         // guard
         if (!total || total <= 0) {
-            alert("Invalid amount");
+            setAmountError("Invalid amount.");
             return;
         }
 
@@ -117,6 +138,8 @@ const Checkout = () => {
                 body: JSON.stringify({
                     currency,
                     amount: total,
+                    acceptedTerms: agreed,
+                    acceptedWithdrawalWaiver: waiverAccepted,
                 }),
             });
 
@@ -130,7 +153,7 @@ const Checkout = () => {
             clearPlan();
             window.location.href = "/profile";
         } catch (err: unknown) {
-            alert(err instanceof Error ? err.message : "Payment failed");
+            setAmountError(err instanceof Error ? err.message : "Payment failed");
         } finally {
             setLoading(false);
         }
@@ -141,7 +164,7 @@ const Checkout = () => {
         return (
             <div className={styles.checkout}>
                 <div className={styles.header}>
-                    <h1>Wallet Top-Up</h1>
+                    <h1>{testMode ? "Wallet Top-Up (Test)" : "Wallet Top-Up"}</h1>
                     <p>Secure checkout</p>
                 </div>
 
@@ -149,7 +172,7 @@ const Checkout = () => {
                     <div className={styles.summary}>
                         <h2>Choose an amount</h2>
                         <p className={styles.helper}>
-                            Enter how much you want to add to your wallet, or pick a package on the{" "}
+                            Enter how much you want to add to your Account Balance, or pick a package on the{" "}
                             <a href="/pricing">Plans</a> page. All amounts include VAT.
                         </p>
 
@@ -161,7 +184,7 @@ const Checkout = () => {
                                 id="topUpAmount"
                                 type="text"
                                 inputMode="decimal"
-                                placeholder={convertFromBase(MIN_TOP_UP_AMOUNT).toFixed(2)}
+                                placeholder="25.00"
                                 value={customAmount}
                                 onChange={(e) => setCustomAmount(e.target.value)}
                             />
@@ -169,8 +192,9 @@ const Checkout = () => {
                             {amountError ? <p className={styles.errorText}>{amountError}</p> : null}
 
                             <p className={styles.helper}>
-                                Minimum top-up amount is {sign}
-                                {convertFromBase(MIN_TOP_UP_AMOUNT).toFixed(2)}.
+                                You can top up any amount you like. Account Balance is non-transferable store
+                                credit usable only on this website. It is not cryptocurrency, is not tradable and
+                                is not redeemable for cash.
                             </p>
 
                             <button type="submit" className={styles.payButton}>
@@ -186,7 +210,7 @@ const Checkout = () => {
     return (
         <div className={styles.checkout}>
             <div className={styles.header}>
-                <h1>Wallet Top-Up</h1>
+                <h1>{testMode ? "Wallet Top-Up (Test)" : "Wallet Top-Up"}</h1>
                 <p>Secure checkout</p>
             </div>
 
@@ -197,7 +221,7 @@ const Checkout = () => {
                     <div className={styles.itemRow}>
                         <div className={styles.itemInfo}>
                             <h3>{activePlan.title}</h3>
-                            <p>Add funds to your wallet balance</p>
+                            <p>Add funds to your Account Balance</p>
                         </div>
                         <span>
                             {sign}
@@ -232,24 +256,52 @@ const Checkout = () => {
                     </div>
 
                     <p className={styles.note}>
-                        The full amount you pay is credited to your wallet balance.{" "}
+                        The full amount you pay is credited to your Account Balance.{" "}
                         <a href="/checkout" onClick={() => { clearPlan(); localStorage.removeItem("selectedPlan"); }}>
                             Change amount
                         </a>
                     </p>
+
+                    <p className={styles.helper}>
+                        Account Balance is non-transferable store credit usable only on this website. It is not
+                        cryptocurrency, is not tradable and is not redeemable for cash. See the{" "}
+                        <a href="/payment-policy" target="_blank" rel="noreferrer">
+                            Payment and Account Balance Policy
+                        </a>{" "}
+                        for how currency conversion rates are calculated.
+                    </p>
                 </div>
 
                 <div className={styles.payment}>
-                    <h2>Payment Details</h2>
+                    <h2>{testMode ? "Confirm Test Payment" : "Payment Details"}</h2>
 
                     <form onSubmit={handlePay}>
-                        <input type="text" placeholder="Card number"/>
-                        <div className={styles.row}>
-                            <input type="text" placeholder="MM/YY"/>
-                            <input type="text" placeholder="CVV"/>
+                        {testMode ? (
+                            <div className={styles.testModeNotice}>
+                                <strong>Test mode</strong>
+                                <p>
+                                    This is the test checkout. No card details are collected and no card is
+                                    charged. Confirming below credits your Account Balance so the full purchase,
+                                    receipt and confirmation-email flow can be verified end to end.
+                                </p>
+                            </div>
+                        ) : (
+                            <>
+                                <input type="text" placeholder="Card number" autoComplete="off"/>
+                                <div className={styles.row}>
+                                    <input type="text" placeholder="MM/YY" autoComplete="off"/>
+                                    <input type="text" placeholder="CVV" autoComplete="off"/>
+                                </div>
+                                <input type="text" placeholder="Cardholder name" autoComplete="off"/>
+                                <input type="text" placeholder="Billing address" autoComplete="off"/>
+                            </>
+                        )}
+
+                        <div className={styles.descriptorNotice}>
+                            <span>Card statement descriptor</span>
+                            <strong>{BILLING_DESCRIPTOR}</strong>
+                            <p>This is how the payment will appear on your bank or card statement.</p>
                         </div>
-                        <input type="text" placeholder="Cardholder name"/>
-                        <input type="text" placeholder="Billing address"/>
 
                         <div className={styles.agreement}>
                             <label>
@@ -260,19 +312,27 @@ const Checkout = () => {
                                 />{" "}
                                 I agree to the{" "}
                                 <a href="/terms-and-conditions" target="_blank" rel="noreferrer">
-                                    terms & conditions
+                                    terms &amp; conditions
                                 </a>
+                            </label>
+
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={waiverAccepted}
+                                    onChange={(e) => setWaiverAccepted(e.target.checked)}
+                                />{" "}
+                                {WITHDRAWAL_WAIVER_TEXT}
                             </label>
                         </div>
 
-                        <p className={styles.helper}>
-                            Minimum top-up amount is {sign}{convertFromBase(MIN_TOP_UP_AMOUNT).toFixed(2)}. All prices
-                            include VAT.
-                        </p>
+                        <p className={styles.conversionNotice}>{CURRENCY_CONVERSION_NOTICE}</p>
+
+                        {amountError ? <p className={styles.errorText}>{amountError}</p> : null}
 
                         <button
                             type="submit"
-                            disabled={!agreed || loading}
+                            disabled={!agreed || !waiverAccepted || loading}
                             className={styles.payButton}
                         >
                             {loading ? "Processing..." : `Pay ${sign}${total.toFixed(2)} ${currency}`}

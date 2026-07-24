@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import fs from "fs";
 import path from "path";
 import { baseURL } from "@/resources/content";
+import { isUnpublishedRoute } from "@/resources/unpublishedRoutes";
 
 function collectRoutes(dir: string, base = ""): { route: string; mtime: Date }[] {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -53,6 +54,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const items = discovered
         .filter(({ route }) => {
             if (seen.has(route)) return false;
+            if (isUnpublishedRoute(route)) return false;
             seen.add(route);
             return true;
         })

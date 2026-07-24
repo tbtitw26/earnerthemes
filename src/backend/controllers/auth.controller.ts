@@ -76,8 +76,9 @@ function toUser(u: IUserSchema): UserType {
         lastName: u.lastName,
 
         email: u.email,
-        phoneNumber: u.phoneNumber || u.phone,
-        phone: u.phoneNumber || u.phone,
+        // Documents created before the field rename still carry the legacy names.
+        phoneNumber: u.phoneNumber || u.phone || "",
+        phone: u.phoneNumber || u.phone || "",
         dateOfBirth: u.dateOfBirth || u.birthDate,
         birthDate: u.dateOfBirth || u.birthDate,
 
@@ -85,8 +86,8 @@ function toUser(u: IUserSchema): UserType {
             street: u.address?.street,
             city: u.address?.city,
             country: u.address?.country,
-            postCode: u.address?.postCode || u.address?.zip,
-            zip: u.address?.postCode || u.address?.zip,
+            postCode: u.address?.postCode || u.address?.zip || "",
+            zip: u.address?.postCode || u.address?.zip || "",
         },
 
         role: u.role,

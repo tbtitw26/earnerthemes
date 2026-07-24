@@ -95,6 +95,19 @@ export type LegacyCard = {
     description: string;
     buttonLink?: string;
     buttonText?: string;
+
+    /**
+     * Some older schemas describe grid cards as if they were pricing blocks.
+     * RenderGrid always renders `cards` as plain cards, so these fields are
+     * accepted but ignored — use `items` with a `pricing` block to render prices.
+     */
+    type?: PageBlock["type"];
+    variant?: string;
+    price?: string;
+    tokens?: number;
+    badgeTop?: string;
+    badgeBottom?: string;
+    features?: string[];
 };
 
 export type GridBlock = {

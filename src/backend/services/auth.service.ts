@@ -25,7 +25,7 @@ const REFRESH_TTL_SEC = parseDurationToSec(ENV.REFRESH_TOKEN_EXPIRES);
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
-type RegisterInput = {
+export type RegisterInput = {
     firstName?: string;
     lastName?: string;
     email?: string;
@@ -46,19 +46,9 @@ type RegisterInput = {
 };
 
 export const authService = {
-    async register(data: {
-        firstName: string;
-        lastName: string;
-        email: string;
-        password: string;
-        confirmPassword?: string;
-        phoneNumber: string;
-        dateOfBirth: string;
-        street: string;
-        city: string;
-        country: string;
-        postCode: string;
-    }) {
+    // Fields are optional here because normalizeRegisterPayload below performs the
+    // validation and throws on anything missing or malformed.
+    async register(data: RegisterInput) {
         const normalized = normalizeRegisterPayload(data);
         const {
             firstName,
@@ -251,6 +241,15 @@ function normalizeRegisterPayload(data: RegisterInput) {
     if (!dateOfBirth) throw new Error("Date of birth is required");
     if (!DATE_REGEX.test(dateOfBirth) || Number.isNaN(Date.parse(dateOfBirth))) {
         throw new Error("Invalid date of birth");
+    }
+    // Clause 5 of the Terms requires account holders to be at least 18.
+    {
+        const birth = new Date(dateOfBirth);
+        const now = new Date();
+        let age = now.getFullYear() - birth.getFullYear();
+        const monthDiff = now.getMonth() - birth.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birth.getDate())) age -= 1;
+        if (age < 18) throw new Error("You must be at least 18 years old to create an account");
     }
     if (!street) throw new Error("Street is required");
     if (!city) throw new Error("City is required");

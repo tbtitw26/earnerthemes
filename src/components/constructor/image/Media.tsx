@@ -40,12 +40,17 @@ const Media: React.FC<MediaProps> = ({
                                          hoverButton,
                                      }) => {
 
-    function resolveMedia(key?: string | StaticImageData) {
+    /** Registry values are a mix of imported images and plain URLs, hence the union. */
+    function resolveMedia(
+        key?: string | StaticImageData
+    ): string | StaticImageData | undefined {
         if (typeof key === "string" && key in mediaMap) {
-            return (mediaMap as Record<string, string>)[key];
+            return (mediaMap as Record<string, string | StaticImageData>)[key];
         }
         return key;
     }
+
+    const resolvedSrc = resolveMedia(src);
 
     return (
         <div
@@ -53,13 +58,15 @@ const Media: React.FC<MediaProps> = ({
             style={{ aspectRatio }}
         >
             {type === "image" ? (
-                <Image
-                    src={resolveMedia(src)}
-                    alt={alt}
-                    fill
-                    style={{ objectFit }}
-                    className={styles.image}
-                />
+                resolvedSrc && (
+                    <Image
+                        src={resolvedSrc}
+                        alt={alt}
+                        fill
+                        style={{ objectFit }}
+                        className={styles.image}
+                    />
+                )
             ) : (
                 typeof src === "string" && (
                     <video

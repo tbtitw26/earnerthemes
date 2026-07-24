@@ -20,6 +20,20 @@ type SignUpErrors = Partial<Record<keyof typeof signUpInitialValues, string>>;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
+/** Minimum age required to hold an account, matching clause 5 of the Terms and Conditions. */
+export const MINIMUM_AGE = 18;
+
+function calculateAge(dateOfBirth: string): number {
+    const birth = new Date(dateOfBirth);
+    const now = new Date();
+    let age = now.getFullYear() - birth.getFullYear();
+    const monthDiff = now.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birth.getDate())) {
+        age -= 1;
+    }
+    return age;
+}
+
 export const signUpValidation = (values: typeof signUpInitialValues) => {
     const errors: SignUpErrors = {};
     const firstName = values.firstName.trim();
@@ -39,6 +53,9 @@ export const signUpValidation = (values: typeof signUpInitialValues) => {
         errors.dateOfBirth = "Date of birth is required";
     } else if (!DATE_REGEX.test(values.dateOfBirth) || Number.isNaN(Date.parse(values.dateOfBirth))) {
         errors.dateOfBirth = "Enter a valid date";
+    } else if (calculateAge(values.dateOfBirth) < MINIMUM_AGE) {
+        // The Terms require capacity to enter a binding contract, so the age gate is enforced here too.
+        errors.dateOfBirth = `You must be at least ${MINIMUM_AGE} years old to create an account`;
     }
     if (!email) {
         errors.email = "Email is required";

@@ -210,9 +210,19 @@
   }
 }
 .agreement {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin: 1rem 0;
   font-size: 0.9rem;
-  color: #444;
+  color: var(--text-secondary);
+
+  label {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    line-height: 1.5;
+  }
 
   a {
     color: #2563eb;
@@ -221,7 +231,79 @@
 
   input {
     margin-right: 6px;
+    margin-top: 3px;
+    flex: 0 0 auto;
     transform: scale(1.1);
+  }
+}
+
+/* Verbatim card-scheme currency-conversion warning, shown right before the pay button. */
+.conversionNotice {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--surface-color);
+
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+}
+
+/* Billing / statement descriptor disclosure. */
+.descriptorNotice {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  padding: 12px 14px;
+  border: 1px dashed var(--border-color);
+  border-radius: 8px;
+  background: var(--surface-color);
+
+  span {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+  }
+
+  strong {
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    color: var(--text-primary);
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+  }
+}
+
+.testModeNotice {
+  padding: 12px 14px;
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.08);
+
+  strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #b45309;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
   }
 }
 

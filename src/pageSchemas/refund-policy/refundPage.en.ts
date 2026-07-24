@@ -1,32 +1,21 @@
-import { PageSchema } from "@/components/constructor/page-render/types";
+import {PageSchema} from "@/components/constructor/page-render/types";
 import {
     COMPANY_NAME,
     COMPANY_ADDRESS,
-    COMPANY_PHONE,
     COMPANY_LEGAL_NAME,
     COMPANY_NUMBER,
     COMPANY_EMAIL,
 } from "@/resources/constants";
 
-const refundPolicySchema: PageSchema = {
+const refundPolicyEn: PageSchema = {
     meta: {
-        title: `Refund & Returns Policy – ${COMPANY_NAME ?? "Tera Fit"}`,
+        title: `Refund and Cancellation Policy – ${COMPANY_NAME}`,
         description:
-            "Official Refund & Returns Policy for Tera Fit: refunds for tokens, digital fitness services, and consumer rights.",
-        keywords: [
-            "refund policy",
-            "returns policy",
-            "tera fit",
-            "tokens",
-            "digital fitness services",
-            "consumer rights",
-            "refunds",
-        ],
+            "Refund, cancellation and chargeback rules for digital products purchased on EarnerThemes.",
         canonical: "/refund-policy",
         ogImage: {
-            title: `Refund & Returns Policy – ${COMPANY_NAME ?? "Tera Fit"}`,
-            description:
-                "Transparent refund and returns policy for Tera Fit digital fitness services and token system.",
+            title: `Refund and Cancellation Policy – ${COMPANY_NAME}`,
+            description: "Refund, cancellation and chargeback rules for digital products purchased on EarnerThemes.",
             bg: "#ffffff",
             color: "#000000",
         },
@@ -34,187 +23,592 @@ const refundPolicySchema: PageSchema = {
     blocks: [
         {
             type: "text",
-            title: "Refund & Returns Policy",
+            title: "Refund and Cancellation Policy",
+            description: "Effective date: 23 July 2026",
+        },
+        {
+            type: "text",
+            title: "1. About This Policy",
+            description: `This Refund and Cancellation Policy (“Policy”) explains when an order, Account Balance top-up or digital Product purchased through www.earnerthemes.com may be cancelled, replaced, corrected or refunded.\n\nThe Website is operated by:\n\n${COMPANY_LEGAL_NAME}\nCompany number: ${COMPANY_NUMBER}\nRegistered office: ${COMPANY_ADDRESS}\nEmail: ${COMPANY_EMAIL}\n\nIn this Policy, “EarnerThemes”, “we”, “us” and “our” refer to SENIOR EARNER LTD. “You” and “your” refer to the person or organisation making a purchase or requesting a cancellation or refund.\n\nThis Policy forms part of our Terms and Conditions.`,
+        },
+        {
+            type: "text",
+            title: "2. Related Policies",
             description:
-                "Effective date: 26 March 2026\n\nThis Refund Policy applies to the digital services offered through Tera Fit at tera-fit.eu and is issued by:\n" +
-                `${COMPANY_LEGAL_NAME}\n` +
-                `Company number: ${COMPANY_NUMBER}\n` +
-                `Address: ${COMPANY_ADDRESS}\n` +
-                `Email: ${COMPANY_EMAIL}\n` +
-                `Phone: ${COMPANY_PHONE}\n\n` +
-                "Tera Fit provides digital fitness services only. No physical goods are sold or shipped. As a result, this Policy governs refunds only. It does not create any right to return physical products.\n\nNothing in this Policy limits any mandatory rights you may have under the laws of the Republic of Lithuania or under applicable EU consumer protection law.",
-        },
-        {
-            type: "text",
-            title: "1. Summary",
+                "This Policy should be read together with:",
             bullets: [
-                "1.1 Refund requests are assessed in accordance with this Policy, applicable Lithuanian law, and mandatory EU consumer rights.",
-                "1.2 Refunds, where approved, are usually processed within 5 to 10 business days after approval. The time for funds to appear may vary depending on your payment provider.",
-                "1.3 Refunds will not exceed the amount originally paid by you for the relevant transaction.",
-                "1.4 Tokens already used to obtain a Program or other paid digital service are generally non-refundable, except where required by law or where we fail to provide the purchased service as described.",
-                "1.5 Tokens are account-bound, non-transferable, and cannot be exchanged for cash except where required by law or expressly stated by us.",
-                "1.6 Promotional or bonus Tokens are non-refundable, unless the relevant promotion expressly states otherwise.",
-                "1.7 If you expressly request immediate supply of digital content or digital services and acknowledge the loss of your withdrawal right where applicable, your statutory right to withdraw may end once supply begins.",
-                "1.8 Refund requests must be sent to info@tera-fit.eu with sufficient details to allow us to review the matter.",
+                "our Terms and Conditions;",
+                "Digital Product Licence Agreement;",
+                "Payment and Account Balance Policy;",
+                "Digital Delivery and Download Policy;",
+                "Support Policy; and",
+                "the description and Product-Specific Terms applicable to the purchased Product.",
             ],
         },
         {
             type: "text",
-            title: "2. Scope",
-            bullets: [
-                "2.1 This Policy applies to:",
-                "(a) purchases of Tokens;",
-                "(b) redemption of Tokens for Programs or other digital services; and",
-                "(c) refund requests relating to digital fitness content delivered through Tera Fit.",
-                "2.2 This Policy applies to both AI-generated and specialist-prepared Programs made available through the Service.",
-                "2.3 This Policy does not apply to third-party products or services purchased outside Tera Fit, even if linked from our website.",
-            ],
+            description:
+                "Nothing in this Policy excludes or limits rights that cannot lawfully be excluded, including mandatory rights relating to Digital Content that is faulty, materially not as described or otherwise non-compliant with applicable law.",
         },
         {
             type: "text",
             title: "3. Definitions",
-            description: "For the purposes of this Policy:",
-            bullets: [
-                "Tokens means internal digital credits used solely within Tera Fit to obtain Programs and related paid services.",
-                "Unused Tokens means Tokens credited to your Account that have not been redeemed, spent, or consumed.",
-                "Used Tokens means Tokens that have been redeemed for a Program or other paid digital service, or where performance of the relevant service has already begun.",
-                "Program means any digital fitness-related product, including training plans, workout guidance, recommendations, schedules, trackers, downloadable PDFs, and similar content.",
-                "Promotional or Bonus Tokens means Tokens granted free of charge, at a discount, or as part of a promotion, incentive, or goodwill gesture.",
-                "Custom or Specialist Program means a Program prepared, reviewed, adapted, or structured by a human coach, trainer, or specialist, including work involving manual review or personalised effort.",
-            ],
-        },
-        {
-            type: "text",
-            title: "4. General Refund Principles",
-            bullets: [
-                "4.1 Refund limit. Any refund will be limited to the amount actually paid by you for the relevant transaction.",
-                "4.2 Used Tokens are generally non-refundable. Once Tokens have been used to obtain a Program or once performance of the relevant digital service has begun, those Tokens are generally non-refundable, except:",
-                "(a) where required by applicable law;",
-                "(b) where we fail to provide the purchased service;",
-                "(c) where the delivered Program is materially defective; or",
-                "(d) where the delivered Program is materially not as described.",
-                "4.3 Unused Tokens. Unused Tokens may be eligible for refund if you request a refund before they are redeemed or used.",
-                "4.4 Account-bound Tokens. Tokens are linked to the Account to which they were credited and may not be transferred to another user or account unless we expressly agree otherwise in writing.",
-                "4.5 No cash-out. Tokens are not redeemable for cash or other currency except where required by law.",
-                "4.6 Promotional or bonus Tokens. Promotional or bonus Tokens are non-refundable and have no cash value unless the relevant promotion expressly states otherwise.",
-                "4.7 Immediate digital supply. If, at checkout or before fulfilment, you expressly request immediate supply of digital content or immediate performance of digital services and acknowledge that your statutory withdrawal right may be lost, then your right of withdrawal may no longer apply once supply or performance begins, to the extent permitted by law.",
-                "4.8 Custom or specialist work. Where a Program involves personalised manual work, specialist review, or bespoke preparation, refunds may be refused once substantial work has begun, except where required by law or where the delivered output is materially defective or materially not as described.",
-            ],
-        },
-        {
-            type: "text",
-            title: "5. When Refunds May Be Approved",
             description:
-                "We may approve a full or partial refund, replacement, re-delivery, or restoration of Tokens where appropriate, including where:",
+                "For the purposes of this Policy:\n\n“Account Balance” means purchased store credit recorded in your Account and available to purchase eligible Products through the Website.\n\n“Activation Credentials” means a Licence key, activation code, token, login information or other credential supplied for the activation or use of a Product.\n\n“Business User” means a person or organisation purchasing wholly or mainly for purposes relating to a trade, business, profession or commercial activity.\n\n“Consumer” means an individual acting wholly or mainly outside their trade, business, craft or profession.\n\n“Digital Content” means data supplied in digital form, including themes, templates, files, archives, documentation and Activation Credentials.\n\n“Delivery” means sending the Product, download information, Activation Credentials or access instructions to the email address associated with the Order.\n\n“Licence” means the permission granted to use a Product under our Digital Product Licence Agreement.\n\n“Order” means a request submitted through the Website to purchase a Product.\n\n“Product” means a digital website theme, template, file, activation credential or related Digital Content offered through the Website.\n\n“Top-Up” means a payment made to add purchased store credit to an Account Balance.",
+        },
+        {
+            type: "text",
+            title: "4. Digital Nature of Products",
+            description:
+                "Products sold through EarnerThemes are digital and are delivered electronically. No physical goods are shipped.\n\nDigital files can be downloaded, stored and copied after Delivery. For this reason, change-of-mind cancellations and refunds may be restricted once supply of the Product has begun.\n\nHowever, the digital nature of a Product does not remove any mandatory legal rights you may have if the Product:",
             bullets: [
-                "5.1 you paid for Tokens but they were not credited to your Account due to a technical failure attributable to us;",
-                "5.2 you redeemed Tokens for a Program that was not delivered within a reasonable time and the failure is attributable to us;",
-                "5.3 the delivered Program is materially corrupted, inaccessible, or technically unusable due to an issue attributable to us;",
-                "5.4 the delivered Program materially differs from the service description shown at the time of purchase;",
-                "5.5 duplicate payment has been taken for the same transaction; or",
-                "5.6 a refund is otherwise required by applicable law.",
+                "is faulty;",
+                "is materially not as described;",
+                "cannot be accessed or activated as promised;",
+                "was not supplied with reasonable care and skill where a service is involved; or",
+                "otherwise fails to meet applicable legal requirements.",
             ],
         },
         {
             type: "text",
-            title: "6. When Refunds Will Normally Not Be Approved",
-            description: "Refunds will normally not be approved where:",
+            title: "5. Delivery Period",
+            description:
+                "Following successful checkout and payment confirmation, a member of our team will contact you and send the purchased Product and applicable Activation Credentials to the email address associated with your Order.\n\nDelivery will normally be completed within 24 hours after successful checkout and payment confirmation.\n\nIf you have not received the Product within 24 hours, you should:",
             bullets: [
-                "6.1 Tokens have already been used or consumed, unless clause 5 applies or applicable law requires otherwise;",
-                "6.2 you changed your mind after delivery began or after the Program was made available to you, where your withdrawal right has been validly lost under applicable law;",
-                "6.3 the issue arises from incomplete, inaccurate, misleading, or contradictory information submitted by you;",
-                "6.4 the Program matches the description generally, but you are dissatisfied due to personal preference, training style preference, or subjective expectations;",
-                "6.5 the issue results from your device, software, internet connection, or failure to follow access or download instructions;",
-                "6.6 the claim concerns promotional or bonus Tokens;",
-                "6.7 a Custom or Specialist Program has already entered substantial preparation or delivery, unless the service is materially defective or not as described; or",
-                "6.8 we reasonably suspect fraud, abuse, manipulation, or misuse of the refund process.",
+                "check your spam, junk and filtered email folders;",
+                "confirm that the email address provided with the Order is correct;",
+                "check whether your email provider rejected or blocked attachments; and",
+                "contact info@earnerthemes.com with your Order details.",
             ],
         },
         {
             type: "text",
-            title: "7. How to Request a Refund",
+            description:
+                "Where Delivery has failed, we will first make reasonable efforts to resend the Product or provide an alternative secure delivery method.\n\nIf we cannot deliver the Product within a reasonable time after being notified, you may be entitled to cancel the Order and receive a refund.",
+        },
+        {
+            type: "text",
+            title: "6. Cancelling Before Delivery",
+            description:
+                "You may request cancellation of an Order before Delivery has begun by contacting info@earnerthemes.com as soon as possible.\n\nA cancellation request should include:",
             bullets: [
-                "7.1 To request a refund, you must contact us at info@tera-fit.eu.",
-                "7.2 Your request should include, where applicable:",
-                "(a) your Account email address;",
-                "(b) your order or transaction reference;",
-                "(c) the date of purchase;",
-                "(d) whether your request relates to Unused Tokens, Used Tokens, or a delivered Program;",
-                "(e) a clear description of the issue; and",
-                "(f) any supporting evidence, such as screenshots, file names, payment confirmation, or a description of the technical problem.",
-                "7.3 If you do not provide enough information for us to assess the request, we may ask for further details before making a decision.",
+                "your name;",
+                "the email address associated with the Order;",
+                "the Order number;",
+                "the Product purchased; and",
+                "the reason for the request.",
             ],
         },
         {
             type: "text",
-            title: "8. Review Procedure and Decisions",
+            description:
+                "We will attempt to stop Delivery, but we cannot guarantee cancellation if the Product, files or Activation Credentials have already been prepared and sent.\n\nIf the Order is cancelled before Delivery begins:",
             bullets: [
-                "8.1 We will review refund requests within a reasonable time.",
-                "8.2 We may examine relevant records, including:",
-                "(a) transaction logs;",
-                "(b) Token credit and redemption history;",
-                "(c) checkout and payment confirmations;",
-                "(d) delivery records;",
-                "(e) download or access timestamps; and",
-                "(f) correspondence and evidence provided by you.",
-                "8.3 If the refund is approved, we will normally issue it to the original payment method used for the transaction, unless this is not reasonably possible.",
-                "8.4 Where appropriate, instead of a monetary refund, we may:",
-                "(a) re-deliver the Program;",
-                "(b) correct the technical issue;",
-                "(c) replace the Program; or",
-                "(d) restore the relevant Tokens to your Account.",
-                "8.5 If we reject the request, we may provide a brief explanation of the outcome.",
+                "any corresponding Account Balance deduction will be restored; or",
+                "any external payment will be refunded to the original payment method.",
             ],
         },
         {
             type: "text",
-            title: "9. Chargebacks, Fraud, and Abuse",
+            description:
+                "This section does not limit any statutory cancellation rights available to Consumers.",
+        },
+        {
+            type: "text",
+            title: "7. Consumer Cancellation Rights",
+            description:
+                "If you are a Consumer, you may have a statutory right to cancel certain online contracts within 14 days.\n\nFor Digital Content supplied without a physical medium, that ordinary cancellation right may be lost once supply begins if, before Delivery:",
             bullets: [
-                "9.1 If you open a chargeback or payment dispute with your payment provider, we may suspend the related refund review while the payment dispute is being handled.",
-                "9.2 We may submit relevant evidence to the payment provider or financial institution, including transaction logs, checkout confirmations, delivery records, timestamps, and account activity records.",
-                "9.3 We reserve the right to suspend access to the Service, reverse Token balances where justified, refuse future purchases, or close Accounts where we reasonably suspect fraud, abuse, bad-faith refund claims, repeated unjustified chargebacks, or misuse of the Service.",
+                "you expressly requested that supply begin during the cancellation period; and",
+                "you acknowledged that you would lose the ordinary right to cancel once supply began.",
             ],
         },
         {
             type: "text",
-            title: "10. Processing Time",
+            description:
+                "Where required, these confirmations must be provided through a separate affirmative action, such as an unticked checkout checkbox. We may retain a record of your consent and acknowledgement and confirm them in your Order communication.\n\nOnce the Product, files, access information or Activation Credentials have been sent following the required consent and acknowledgement, a change-of-mind cancellation may no longer be available.\n\nIf the required consent and acknowledgement were not properly obtained, any applicable statutory cancellation right will remain unaffected.\n\nThe loss of a change-of-mind cancellation right does not remove your legal rights if the Product is faulty, materially not as described or otherwise non-compliant.",
+        },
+        {
+            type: "text",
+            title: "8. Eligible Refund Circumstances",
+            description:
+                "Subject to the evidence provided, the Product description, the available remedy and applicable law, a full or partial refund may be available in the following circumstances.",
+        },
+        {
+            type: "text",
+            title: "8.1 Non-Delivery",
+            description:
+                "A refund may be available where:",
             bullets: [
-                "10.1 If a refund is approved, we typically process it within 5 to 10 business days from the approval date.",
-                "10.2 Actual receipt times depend on your payment provider, card issuer, bank, or payment method.",
-                "10.3 We are not responsible for delays caused by third-party banking or payment systems once the refund has been processed by us.",
+                "payment was successfully completed;",
+                "the Product was not delivered within 24 hours;",
+                "you provided a valid email address;",
+                "you notified us of the issue; and",
+                "we could not complete Delivery within a reasonable time after notification.",
             ],
         },
         {
             type: "text",
-            title: "11. Changes to This Policy",
+            description:
+                "A temporary email delay does not automatically create a right to a refund where the Product can be promptly resent.",
+        },
+        {
+            type: "text",
+            title: "8.2 Duplicate Purchase or Duplicate Charge",
+            description:
+                "A refund may be available where:",
             bullets: [
-                "11.1 We may update this Refund Policy from time to time for legal, regulatory, operational, or commercial reasons.",
-                "11.2 The latest version will be published on the Service with the updated effective date.",
-                "11.3 Any changes will apply prospectively unless otherwise required by law.",
+                "you were charged more than once for the same Order;",
+                "the same Top-Up was processed more than once; or",
+                "you accidentally purchased more than one identical Licence for the same End Product.",
             ],
         },
         {
             type: "text",
-            title: "12. Governing Law and Consumer Rights",
+            description:
+                "We may request the relevant Order and payment references before issuing a refund.",
+        },
+        {
+            type: "text",
+            title: "8.3 Material Defect",
+            description:
+                "A refund or other remedy may be available where a reproducible technical defect materially prevents the Product from operating in the manner described.\n\nBefore issuing a refund, we may offer to:",
             bullets: [
-                "12.1 This Policy shall be governed by the laws of the Republic of Lithuania.",
-                "12.2 Nothing in this Policy excludes, restricts, or limits any mandatory rights or remedies available to consumers under Lithuanian law or applicable EU law.",
-                "12.3 If you are a consumer resident in another EU country, you may also benefit from mandatory consumer protections applicable in your country of habitual residence where such protections cannot be contractually excluded.",
+                "provide corrected files;",
+                "repair the defect;",
+                "provide an update;",
+                "replace the affected Product; or",
+                "supply reasonable instructions to resolve the issue.",
             ],
         },
         {
             type: "text",
-            title: "13. Contact Details",
-            description: "For refund-related questions or requests, contact:",
+            description:
+                "A refund may be appropriate where repair or replacement is impossible, cannot be completed within a reasonable time or would cause significant inconvenience.",
+        },
+        {
+            type: "text",
+            title: "8.4 Product Materially Not as Described",
+            description:
+                "A remedy may be available where the delivered Product is materially different from the Product description, supported platform, included features or files presented at the time of purchase.\n\nMinor visual differences, subjective preferences or features not stated in the Product description do not make a Product materially not as described.",
+        },
+        {
+            type: "text",
+            title: "8.5 Invalid Activation Credentials",
+            description:
+                "A remedy may be available where Activation Credentials:",
             bullets: [
-                `${COMPANY_LEGAL_NAME}`,
-                `Company number: ${COMPANY_NUMBER}`,
-                `Address: ${COMPANY_ADDRESS}`,
-                `Email: ${COMPANY_EMAIL}`,
-                `Phone: ${COMPANY_PHONE}`,
+                "are invalid when first supplied;",
+                "do not activate the Product as described;",
+                "were previously used without your authorisation; or",
+                "cannot be corrected or replaced within a reasonable time.",
             ],
+        },
+        {
+            type: "text",
+            description:
+                "You must use the Activation Credentials only in accordance with the Digital Product Licence Agreement.\n\nActivation failure caused by unauthorised installations, prohibited sharing, unsupported software or breach of Licence restrictions will not normally qualify for a refund.",
+        },
+        {
+            type: "text",
+            title: "8.6 Incorrect Product Delivered",
+            description:
+                "If we deliver a Product different from the one stated in your accepted Order, we will provide the correct Product or issue an appropriate refund.\n\nYou must not use or distribute a Product delivered to you by mistake.",
+        },
+        {
+            type: "text",
+            title: "8.7 Product Unavailable",
+            description:
+                "If we accept an Order but cannot provide the Product because it has become unavailable, we will:",
+            bullets: [
+                "offer an appropriate replacement only with your agreement; or",
+                "cancel the Order and refund or restore the amount paid.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "You are not required to accept a substitute Product.",
+        },
+        {
+            type: "text",
+            title: "8.8 Unauthorised Payment",
+            description:
+                "If a payment or Top-Up was made without the payment method holder’s authorisation, we will investigate the report and cooperate with the relevant Payment Provider.\n\nA refund, reversal or other remedy will be provided where required by law or confirmed by the Payment Provider.",
+        },
+        {
+            type: "text",
+            title: "9. Circumstances That Normally Do Not Qualify",
+            description:
+                "Unless required by law, a refund will not normally be provided solely because:",
+            bullets: [
+                "you changed your mind after Delivery;",
+                "you no longer need or want the Product;",
+                "you purchased the wrong Product, platform version or Licence;",
+                "you lack the knowledge or experience required to use the Product;",
+                "you do not have suitable hosting, software, plugins or technical infrastructure;",
+                "your hosting environment does not meet disclosed requirements;",
+                "the Product is incompatible with a platform, plugin or software version not listed as supported;",
+                "a desired feature was not included in the Product description;",
+                "you expected installation, customisation or development services that were not included;",
+                "you do not like the design after accessing the files;",
+                "your Client rejected the Product;",
+                "your project was cancelled or delayed;",
+                "you found another Product at a lower price;",
+                "you purchased a Product during or before a promotional sale;",
+                "you failed to review the Product description, preview, Licence or requirements;",
+                "you modified the Product and the modification caused the issue;",
+                "a third-party service or plugin outside the Product caused the issue;",
+                "you refused to provide information reasonably necessary to reproduce or investigate a reported defect;",
+                "the Product works as described but does not produce a particular commercial result;",
+                "an update or feature that was never promised is not released; or",
+                "you breached the applicable Licence.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "This list does not override mandatory legal rights.",
+        },
+        {
+            type: "text",
+            title: "10. Compatibility Issues",
+            description:
+                "Before purchasing, you are responsible for reviewing the Product’s:",
+            bullets: [
+                "supported platform;",
+                "software version;",
+                "hosting requirements;",
+                "plugin requirements;",
+                "browser requirements;",
+                "technical documentation; and",
+                "other compatibility information.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "A compatibility issue may qualify for a remedy where:",
+            bullets: [
+                "the Product was advertised as compatible with your stated environment at the time of purchase;",
+                "the incompatibility materially prevents normal use; and",
+                "the issue cannot be corrected within a reasonable time.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "A refund will not normally be available where the incompatibility concerns an environment or version that was not listed as supported.\n\nFuture changes made by WordPress, Shopify, WooCommerce, Elementor, a browser, a hosting provider or another third party do not automatically make the Product defective at the time it was supplied.",
+        },
+        {
+            type: "text",
+            title: "11. Technical Issue Resolution",
+            description:
+                "Before deciding a refund request involving a technical issue, we may attempt to verify and resolve the problem.\n\nYou may be asked to provide:",
+            bullets: [
+                "the Order number;",
+                "the Product name and version;",
+                "the relevant platform and software version;",
+                "a description of the issue;",
+                "steps required to reproduce it;",
+                "screenshots or error messages; and",
+                "other non-sensitive technical information reasonably necessary for investigation.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "Do not send passwords, payment card details or other sensitive credentials by ordinary email.\n\nYou must provide reasonable cooperation. A refusal to provide information necessary to investigate the issue may prevent us from confirming eligibility for a discretionary refund.\n\nWe will not require unnecessary information or information unrelated to the reported problem.",
+        },
+        {
+            type: "text",
+            title: "12. Available Remedies",
+            description:
+                "Depending on the circumstances, we may provide one or more of the following:",
+            bullets: [
+                "re-delivery;",
+                "corrected files;",
+                "replacement Activation Credentials;",
+                "repair or update;",
+                "technical instructions;",
+                "replacement with the same Product;",
+                "replacement with another Product, with your agreement;",
+                "restoration of Account Balance;",
+                "partial refund;",
+                "price reduction; or",
+                "full refund.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "Where applicable law gives you a particular remedy, we will provide that remedy as required.\n\nWe will not replace a Product with a different Product without your agreement.",
+        },
+        {
+            type: "text",
+            title: "13. Partial Refunds",
+            description:
+                "A partial refund or price reduction may be appropriate where:",
+            bullets: [
+                "only part of a Product is defective;",
+                "only part of a bundle cannot be supplied;",
+                "you retain and continue using the unaffected part;",
+                "the issue reduces but does not eliminate the Product’s value; or",
+                "another proportionate remedy is agreed.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "The amount will reflect the affected part of the Product and the amount actually paid.\n\nIf a partial refund relates to a separable Product or Licence, your right to use the refunded part ends.",
+        },
+        {
+            type: "text",
+            title: "14. Bundles and Multiple-Product Orders",
+            description:
+                "Where an Order contains multiple Products, a refund may be limited to the affected Product.\n\nA full Order refund will not normally be issued where:",
+            bullets: [
+                "the Products are separately priced or usable; and",
+                "the other Products were correctly delivered and remain usable.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "If a bundle is sold as a single inseparable Product and a material defect affects the bundle as a whole, a broader remedy may be appropriate.",
+        },
+        {
+            type: "text",
+            title: "15. Discounted and Promotional Purchases",
+            description:
+                "Refund eligibility is not reduced merely because a Product was purchased at a discount.\n\nThe maximum refund will normally be the amount actually paid for the affected Product, including any amount paid through Account Balance.\n\nPromotional Credit, coupons and discounts do not have a cash refund value.\n\nWhere a refund causes the remaining Order to fall below the requirements of a promotion, we may recalculate the refund to reflect the valid price of the Products retained, provided that this was clearly disclosed and is lawful.",
+        },
+        {
+            type: "text",
+            title: "16. Account Balance Top-Up Refunds",
+            description:
+                "Top-Up refunds are governed primarily by the Payment and Account Balance Policy.\n\nA Top-Up refund may be available where:",
+            bullets: [
+                "the same Top-Up was charged more than once;",
+                "payment was taken but no balance was credited;",
+                "the wrong amount was charged because of a technical error;",
+                "the payment was unauthorised;",
+                "we cannot provide the purchased Account Balance; or",
+                "applicable law gives you a cancellation or refund right.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "Completed Top-Ups are not ordinarily refundable merely because you no longer wish to use the Website.\n\nWhere part of a Top-Up has already been used, only the unused portion may be considered for cancellation, unless the related Product purchase independently qualifies for a refund or applicable law requires another result.",
+        },
+        {
+            type: "text",
+            title: "17. Refund Method",
+            description:
+                "The refund method normally depends on the original payment method.",
+        },
+        {
+            type: "text",
+            title: "17.1 Purchases Paid With Account Balance",
+            description:
+                "If a Product was purchased entirely with Account Balance, an approved refund will normally be returned to the Account Balance.",
+        },
+        {
+            type: "text",
+            title: "17.2 Purchases Paid Externally",
+            description:
+                "If a Product was paid for directly using an external payment method, an approved refund will normally be returned to that payment method.",
+        },
+        {
+            type: "text",
+            title: "17.3 Split Payments",
+            description:
+                "Where a purchase was paid partly with Account Balance and partly through an external payment method, the refund may be divided proportionately between those methods.",
+        },
+        {
+            type: "text",
+            title: "17.4 Alternative Methods",
+            description:
+                "A different refund method may be used where:",
+            bullets: [
+                "the original method is unavailable;",
+                "the Payment Provider cannot process the refund;",
+                "you expressly agree to another lawful method; or",
+                "applicable law requires a different method.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "We will not substitute store credit for a monetary refund where applicable law requires a refund to the original payment method unless you expressly agree.",
+        },
+        {
+            type: "text",
+            title: "18. Refund Amount",
+            description:
+                "An approved refund will not ordinarily exceed the amount actually paid for the affected Product or Transaction.\n\nWhere required, the refund will include applicable taxes paid on the refunded amount.\n\nA refund will not include:",
+            bullets: [
+                "exchange-rate differences imposed by your bank;",
+                "international transaction charges imposed by a third party;",
+                "independent hosting, domain, software or service expenses;",
+                "customisation or development costs paid to another person; or",
+                "other consequential expenses not charged by EarnerThemes.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "This does not exclude any compensation or remedy that applicable law requires us to provide.",
+        },
+        {
+            type: "text",
+            title: "19. Refund Processing Time",
+            description:
+                "We will process an approved monetary refund without undue delay and, where required by consumer law, within 14 days after confirming that you are entitled to the refund.\n\nRefunds to Account Balance will normally appear sooner, subject to technical processing.\n\nYour bank, card issuer or Payment Provider may require additional time to display the refund. That external processing time is outside our control.\n\nWe do not charge a refund fee where charging one is prohibited by law.",
+        },
+        {
+            type: "text",
+            title: "20. Effect of a Product Refund",
+            description:
+                "Once a full Product refund is issued:",
+            bullets: [
+                "the Licence ends;",
+                "your right to install, activate or use the Product ends;",
+                "Activation Credentials may be cancelled or disabled;",
+                "you must remove the Product from active websites;",
+                "you must delete all Product files and backup copies under your control;",
+                "you must stop distributing or making the Product available; and",
+                "you must ensure that any Client or contractor also stops using the Product.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "A refund does not transfer ownership of the Product to you.\n\nContinuing to use a Product after receiving a full refund may constitute copyright infringement and breach of the Digital Product Licence Agreement.\n\nWhere only a partial refund is issued, we will explain which Licence rights, if any, remain in effect.",
+        },
+        {
+            type: "text",
+            title: "21. How to Request a Refund",
+            description:
+                "Send your request to info@earnerthemes.com.\n\nInclude:",
+            bullets: [
+                "your full name;",
+                "the email address associated with the Order;",
+                "the Order number;",
+                "the Product name;",
+                "the purchase date;",
+                "the payment amount and method;",
+                "the reason for the request;",
+                "a clear description of any defect or delivery issue; and",
+                "relevant supporting information.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "Refund requests should be submitted as soon as reasonably possible after discovering the issue.\n\nFor discretionary refund requests, delays may make it more difficult to verify the issue. However, no time limit in this Policy reduces any longer period or right available under applicable law.",
+        },
+        {
+            type: "text",
+            title: "22. Review Process",
+            description:
+                "After receiving a complete request, we may:",
+            bullets: [
+                "verify the Order and payment;",
+                "review the Product description and Licence;",
+                "request reasonable additional information;",
+                "attempt re-delivery, repair, correction or replacement;",
+                "consult the relevant Author where necessary;",
+                "determine whether a full or partial refund is appropriate; and",
+                "notify you of the decision and available next steps.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "We will review requests fairly and in good faith.\n\nWhere a request is declined, we will provide a reasonable explanation.",
+        },
+        {
+            type: "text",
+            title: "23. Business Users",
+            description:
+                "Business Users do not have statutory change-of-mind cancellation rights intended exclusively for Consumers.\n\nA Business User may receive a refund only where:",
+            bullets: [
+                "this Policy expressly permits it;",
+                "the Product is materially defective or not as described;",
+                "the Order was not delivered;",
+                "the parties agree to a refund; or",
+                "applicable law requires one.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "Nothing in this section excludes liability that cannot lawfully be excluded.",
+        },
+        {
+            type: "text",
+            title: "24. Fraudulent or Abusive Requests",
+            description:
+                "We may decline a refund request and restrict an Account where there is reasonable evidence of:",
+            bullets: [
+                "fabricated technical issues;",
+                "altered payment evidence;",
+                "repeated abusive refund activity;",
+                "unauthorised redistribution;",
+                "sharing or resale of Activation Credentials;",
+                "use of a Product after claiming non-delivery;",
+                "a false chargeback;",
+                "identity or payment fraud; or",
+                "another material breach of our Terms or Licence.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "Any restriction will be proportionate and will not override mandatory legal rights.",
+        },
+        {
+            type: "text",
+            title: "25. Chargebacks and Payment Disputes",
+            description:
+                "If you believe a payment is incorrect or unauthorised, please contact us before initiating a chargeback so that we can investigate.\n\nWe may suspend the affected Account, Account Balance, Product Licence or Activation Credentials while a chargeback is pending.\n\nIf a chargeback is successful, the related Product Licence ends unless the payment dispute is later reversed or the Product is repurchased.\n\nNothing in this section prevents you from exercising lawful rights through your bank, card issuer, Payment Provider or consumer protection authority.",
+        },
+        {
+            type: "text",
+            title: "26. Changes to This Policy",
+            description:
+                "We may update this Policy to reflect changes in law, Products, payment methods, delivery procedures or business operations.\n\nThe updated version will be published with a revised effective date.\n\nThe Policy in force when you placed an Order will normally apply to that Order unless:",
+            bullets: [
+                "a change is required by law;",
+                "the updated Policy gives you more favourable rights; or",
+                "you expressly agree otherwise.",
+            ],
+        },
+        {
+            type: "text",
+            title: "27. Governing Law and Disputes",
+            description:
+                "This Policy and any non-contractual obligations arising from it are governed by the laws of England and Wales.\n\nIf you are a Consumer, this choice of law does not deprive you of mandatory protections available under the law of the country in which you ordinarily reside.\n\nIf you disagree with a refund decision, contact info@earnerthemes.com and identify:",
+            bullets: [
+                "the Order;",
+                "the original decision;",
+                "the reason you disagree; and",
+                "the resolution requested.",
+            ],
+        },
+        {
+            type: "text",
+            description:
+                "We will review the complaint in good faith.\n\nBusiness Users submit to the exclusive jurisdiction of the courts of England and Wales. Consumers may also have the right to bring proceedings in another competent court under applicable consumer law.",
+        },
+        {
+            type: "text",
+            title: "28. Contact Us",
+            description: `Cancellation and refund requests may be sent to:\n\n${COMPANY_LEGAL_NAME}\nCompany number: ${COMPANY_NUMBER}\nRegistered office: ${COMPANY_ADDRESS}\nEmail: ${COMPANY_EMAIL}`,
         },
     ],
 };
 
-export default refundPolicySchema;
+export default refundPolicyEn;

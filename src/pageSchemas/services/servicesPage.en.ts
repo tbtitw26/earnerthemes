@@ -93,12 +93,7 @@ const servicesSchema: PageSchema = {
         {
             type: "custom",
             component: "HighlightStrip",
-            messages: [
-                "🏋️ Personalized workouts updated weekly",
-                "🥗 Nutrition guidance tailored to your goals",
-                "📊 Progress tracking with clear stats",
-                "🎯 Motivation through achievements",
-            ],
+            items: [],
         },
         {
             type: "section",

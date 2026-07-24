@@ -11,13 +11,15 @@ import { useCurrency } from "@/context/CurrencyContext";
 import { useRouter } from "next/navigation";
 import { useCheckoutStore } from "@/utils/store";
 import { PiPencilSimpleLineBold } from "react-icons/pi";
-import { MIN_TOP_UP_AMOUNT, parseMoneyAmount } from "@/utils/money";
+import { parseMoneyAmount, SupportedCurrency } from "@/utils/money";
 import { cardStagger, contentReveal, softScaleReveal } from "@/components/motion/system";
 
 interface PricingCardProps {
     variant?: "starter" | "pro" | "premium" | "custom";
     title: string;
     amount: number;
+    /** Optional clean per-currency price, so the customer never sees a converted figure. */
+    amounts?: Record<SupportedCurrency, number>;
     description: string;
     features?: string[];
     buttonText: string;
@@ -31,6 +33,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
                                                      variant = "starter",
                                                      title,
                                                      amount,
+                                                     amounts,
                                                      description,
                                                      buttonText,
                                                      badgeTop,
@@ -39,7 +42,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
     const reduced = useReducedMotion();
     const { showAlert } = useAlert();
     const user = useUser();
-    const { sign, convertFromBase, currency } = useCurrency();
+    const { sign, convertFromBase, convertToBase, currency } = useCurrency();
     const router = useRouter();
     const { setPlan } = useCheckoutStore();
 
@@ -51,11 +54,18 @@ const PricingCard: React.FC<PricingCardProps> = ({
         return parsed ?? 0;
     }, [customAmount]);
 
-    const baseTopUpAmount = useMemo(() => (isCustom ? effectiveAmount : amount), [amount, effectiveAmount, isCustom]);
-
+    /**
+     * The price the customer sees, always in the currency they selected.
+     * Fixed packages use a clean per-currency denomination when one is defined,
+     * and a custom amount is whatever the customer typed — neither is a converted figure.
+     */
     const displayPrice = useMemo(() => {
-        return convertFromBase(baseTopUpAmount);
-    }, [baseTopUpAmount, convertFromBase]);
+        if (isCustom) return effectiveAmount;
+        return amounts?.[currency] ?? convertFromBase(amount);
+    }, [amount, amounts, convertFromBase, currency, effectiveAmount, isCustom]);
+
+    // Stored in the base currency (GBP) because that is what the wallet balance is denominated in.
+    const baseTopUpAmount = useMemo(() => convertToBase(displayPrice), [convertToBase, displayPrice]);
 
     const handleBuy = () => {
         if (!user) {
@@ -64,16 +74,16 @@ const PricingCard: React.FC<PricingCardProps> = ({
             return;
         }
 
-        const finalAmount = isCustom ? effectiveAmount : amount;
-        if (isCustom && finalAmount < MIN_TOP_UP_AMOUNT) {
-            showAlert("Minimum top-up", `Please enter at least ${sign}${convertFromBase(MIN_TOP_UP_AMOUNT).toFixed(2)}.`, "warning");
+        if (displayPrice <= 0) {
+            showAlert("Enter an amount", "Please enter the amount you would like to add to your balance.", "warning");
             return;
         }
 
         const plan = {
             title,
             basePrice: baseTopUpAmount,
-            amount: finalAmount,
+            amount: baseTopUpAmount,
+            displayPrice,
             variant,
             currency,
         };
@@ -145,7 +155,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
                             </span>
                         </motion.div>
                         <motion.p className={styles.description} variants={contentReveal(reduced)}>
-                            Enter any amount from {sign}{convertFromBase(MIN_TOP_UP_AMOUNT).toFixed(2)} and continue to checkout.
+                            Enter any amount you like and continue to checkout. All prices include VAT.
                         </motion.p>
                     </motion.div>
                 ) : (

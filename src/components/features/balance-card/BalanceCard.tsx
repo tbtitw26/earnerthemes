@@ -25,7 +25,7 @@ export default function BalanceCard() {
 
             <div className={styles.balanceMeta}>
                 <span className={styles.currencyTag}>{currency}</span>
-                <p className={styles.desc}>Use your wallet balance for template purchases and billing activity.</p>
+                <p className={styles.desc}>Use your Account Balance for template purchases and billing activity.</p>
             </div>
 
             <div className={styles.metrics}>

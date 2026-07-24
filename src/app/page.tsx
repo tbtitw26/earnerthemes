@@ -176,7 +176,7 @@ export default function HomePage() {
             {/* PRICING */}
             <Grid
                 title="Top Up Your Balance"
-                description="Add funds to your wallet and use your balance for any template on the marketplace. All prices include VAT."
+                description="Add funds to your Account Balance and use it for any template on the marketplace. All prices include VAT."
                 columns={4}
                 gap="2rem"
             >

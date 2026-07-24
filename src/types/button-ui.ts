@@ -1,5 +1,5 @@
-import { ButtonColor } from "@/resources/styles-config";
-import {SxProps} from "@mui/joy/styles";
+import { ButtonColor } from "@/resources/types";
+import { SxProps } from "@mui/material/styles";
 
 export type ButtonUIProps = {
     variant?: "solid" | "outlined" | "soft" | "plain";

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import type { MetaSchema } from "@/components/constructor/page-render/types";
 import {COMPANY_NAME} from "@/resources/constants";
+import { isUnpublishedRoute } from "@/resources/unpublishedRoutes";
 
 async function absoluteUrl(path: string): Promise<string> {
     const envBase = process.env.NEXT_PUBLIC_FRONTEND_URL;
@@ -61,6 +62,10 @@ export async function metadataFromSchema(meta: MetaSchema): Promise<Metadata> {
             description,
             images: [ogImageAbs],
         },
-        robots: { index: true, follow: true },
+        // Schema pages that are not part of the published site must stay out of
+        // search results — this would otherwise override the layout's noindex.
+        robots: isUnpublishedRoute(meta.canonical ?? "/")
+            ? { index: false, follow: false }
+            : { index: true, follow: true },
     };
 }

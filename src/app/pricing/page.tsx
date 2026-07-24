@@ -17,12 +17,12 @@ export default function PricingPage() {
             <PromoSection
                 title="Top Up Your"
                 highlight="Balance"
-                description="Add funds to your wallet, choose any amount from £10.00, and use your balance across specialist services, AI workflows, and future orders."
+                description="Add funds to your Account Balance, choose any amount you like, and use your balance across the template catalogue and future orders."
             />
 
             <Grid
                 title="Balance Top-Up"
-                description="Use a suggested amount or enter your own custom top-up. Minimum £10.00. All prices include VAT."
+                description="Use a suggested amount or enter your own custom top-up. All prices include VAT."
                 columns={4}
                 gap="2rem"
             >
@@ -34,23 +34,29 @@ export default function PricingPage() {
             <FAQ
                 items={[
                     {
-                        question: "What is my wallet balance used for?",
+                        question: "What is my Account Balance used for?",
                         answer:
-                            "Your wallet balance is used for service purchases across the platform. You only pay when you place an order.",
+                            "Your Account Balance is store credit used to buy templates and other digital products on this website. It is non-transferable, is not cryptocurrency, is not tradable and is not redeemable for cash.",
                     },
                     {
                         question: "Is there a minimum top-up?",
-                        answer: "Yes. The minimum balance top-up is £10.00.",
+                        answer:
+                            "No. There is no minimum or maximum top-up amount, and no minimum transaction amount for card payments. The fixed packages are offered for convenience only — you can enter any custom amount instead.",
                     },
                     {
                         question: "Can I enter a custom amount?",
                         answer:
-                            "Yes. You can top up with any custom amount as long as it is at least £10.00.",
+                            "Yes. Choose the Custom option and enter any amount you want to add to your Account Balance.",
+                    },
+                    {
+                        question: "How are prices in EUR and USD calculated?",
+                        answer:
+                            "GBP is the base currency. EUR and USD prices are calculated from the GBP price using a fixed reference rate we maintain, with no conversion fee or surcharge added by us. Your bank or card issuer may apply its own rate and fees. See the Payment and Account Balance Policy for details.",
                     },
                     {
                         question: "When is my balance available?",
                         answer:
-                            "Successful top-ups are credited to your wallet immediately after checkout.",
+                            "Successful top-ups are credited to your Account Balance immediately after checkout, and a confirmation email with a receipt reference is sent to you.",
                     },
                 ]}
             />

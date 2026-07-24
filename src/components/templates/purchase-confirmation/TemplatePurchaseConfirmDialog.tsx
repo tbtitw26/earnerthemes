@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import styles from "./TemplatePurchaseConfirmDialog.module.scss";
+import { WITHDRAWAL_WAIVER_TEXT } from "@/resources/constants";
 
 interface TemplatePurchaseConfirmItem {
     id: string;
@@ -36,6 +37,13 @@ export default function TemplatePurchaseConfirmDialog({
     onConfirm,
     onCancel,
 }: TemplatePurchaseConfirmDialogProps) {
+    // EU/UK consumers must waive their withdrawal right before digital content is delivered.
+    const [waiverAccepted, setWaiverAccepted] = useState(false);
+
+    useEffect(() => {
+        if (!open) setWaiverAccepted(false);
+    }, [open]);
+
     useEffect(() => {
         if (!open) return;
 
@@ -101,6 +109,16 @@ export default function TemplatePurchaseConfirmDialog({
                     <strong>{totalLabel}</strong>
                 </div>
 
+                <label className={styles.waiver}>
+                    <input
+                        type="checkbox"
+                        checked={waiverAccepted}
+                        onChange={(event) => setWaiverAccepted(event.target.checked)}
+                        disabled={processing}
+                    />
+                    <span>{WITHDRAWAL_WAIVER_TEXT}</span>
+                </label>
+
                 <div className={styles.actions}>
                     <button
                         type="button"
@@ -114,7 +132,7 @@ export default function TemplatePurchaseConfirmDialog({
                         type="button"
                         className={styles.confirmButton}
                         onClick={onConfirm}
-                        disabled={processing}
+                        disabled={processing || !waiverAccepted}
                     >
                         {processing ? "Processing..." : confirmLabel}
                     </button>

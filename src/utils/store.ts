@@ -9,6 +9,12 @@ export interface CheckoutPlan {
     amount: number;
     currency: string;
     variant: string;
+    /**
+     * The exact price shown to the customer in `currency`.
+     * Kept alongside basePrice so the amount is never re-derived by converting
+     * to the base currency and back, which would round it off by a cent.
+     */
+    displayPrice?: number;
 }
 
 interface CheckoutStore {

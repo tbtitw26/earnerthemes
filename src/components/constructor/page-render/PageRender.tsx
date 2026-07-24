@@ -216,6 +216,20 @@ function RenderCard(b: CardBlock) {
     );
 }
 
+/**
+ * Schemas describe pricing tiers as basic/highlight/premium, while PricingCard
+ * styles them as starter/pro/premium/custom. Without this mapping the card gets
+ * a class name that does not exist and loses its tier styling entirely.
+ */
+const PRICING_VARIANTS: Record<
+    NonNullable<PricingBlock["variant"]>,
+    "starter" | "pro" | "premium" | "custom"
+> = {
+    basic: "starter",
+    highlight: "pro",
+    premium: "premium",
+};
+
 function RenderPricingCard(b: PricingBlock) {
     const amount =
         typeof b.amount === "number"
@@ -226,7 +240,7 @@ function RenderPricingCard(b: PricingBlock) {
 
     return (
         <PricingCard
-            variant={b.variant}
+            variant={b.variant ? PRICING_VARIANTS[b.variant] : undefined}
             title={b.title}
             amount={amount}
             description={b.description}

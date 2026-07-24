@@ -28,9 +28,9 @@ export default function SignIn() {
             <div className={styles.container}>
                 <div className={styles.formColumn}>
                     <header className={styles.header}>
-                        <h1 className={styles.title}>Sign In to Your Training Hub</h1>
+                        <h1 className={styles.title}>Sign In to Your Account</h1>
                         <p className={styles.subtitle}>
-                            Continue your progress with personalized workout programs and coaching.
+                            Access your purchased templates, downloads and Account Balance.
                         </p>
                     </header>
 

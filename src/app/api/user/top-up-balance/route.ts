@@ -2,12 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/backend/middlewares/auth.middleware";
 import { userController } from "@/backend/controllers/user.controller";
 import { ENV } from "@/backend/config/env";
+import { BILLING_DESCRIPTOR } from "@/resources/constants";
 import {
     convertToBaseCurrency,
-    formatMoney,
     isSupportedCurrency,
-    MIN_TOP_UP_AMOUNT,
+    netFromGross,
     parseMoneyAmount,
+    VAT_RATE,
+    vatFromGross,
 } from "@/utils/money";
 
 export async function POST(req: NextRequest) {
@@ -25,22 +27,41 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: "Unsupported currency." }, { status: 400 });
         }
 
-        const amountInBaseCurrency = convertToBaseCurrency(parsedAmount, currency);
-        if (amountInBaseCurrency < MIN_TOP_UP_AMOUNT) {
+        // Both consents are mandatory for EU/UK consumers buying digital content.
+        if (body.acceptedTerms !== true) {
+            return NextResponse.json({ message: "You must accept the Terms & Conditions." }, { status: 400 });
+        }
+        if (body.acceptedWithdrawalWaiver !== true) {
             return NextResponse.json(
-                { message: `Minimum top-up amount is ${formatMoney(MIN_TOP_UP_AMOUNT)}.` },
+                { message: "You must acknowledge the withdrawal-right waiver before payment." },
                 { status: 400 }
             );
         }
 
+        const amountInBaseCurrency = convertToBaseCurrency(parsedAmount, currency);
+        const now = new Date();
+
         const user = await userController.topUpBalance(payload.sub, amountInBaseCurrency, {
             simulated: ENV.PAYMENT_TEST_MODE,
+            meta: {
+                reference: `ET-${now.getTime().toString(36).toUpperCase()}`,
+                chargedCurrency: currency,
+                chargedAmount: parsedAmount,
+                netAmount: netFromGross(parsedAmount),
+                vatAmount: vatFromGross(parsedAmount),
+                vatRate: VAT_RATE,
+                termsAcceptedAt: now,
+                withdrawalWaiverAcceptedAt: now,
+                billingDescriptor: BILLING_DESCRIPTOR,
+                simulated: ENV.PAYMENT_TEST_MODE,
+            },
         });
 
         return NextResponse.json({
             user,
             topUpAmount: amountInBaseCurrency,
             simulated: ENV.PAYMENT_TEST_MODE,
+            billingDescriptor: BILLING_DESCRIPTOR,
             message: ENV.PAYMENT_TEST_MODE
                 ? "Test mode enabled: balance credited without payment provider."
                 : "Balance top-up completed successfully.",

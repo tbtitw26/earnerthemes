@@ -7,7 +7,6 @@ import styles from "./Footer.module.scss";
 import {footerContent} from "@/resources/content";
 import {footerStyles} from "@/resources/styles-config";
 import {SmartLinkProps} from "@/types/smart-link";
-import {FaInstagram, FaPinterest} from "react-icons/fa";
 import visa from "@/assets/cards/visa.png";
 import mastercard from "@/assets/cards/mastercard.png";
 import pciDss from "@/assets/cards/pci-dss-compliant-logo-vector.svg";
@@ -51,14 +50,6 @@ const Footer: React.FC = () => {
                             <p className={styles.brandDesc}>
                                 Premium marketplace for website templates, landing pages, eCommerce designs, and modern web layouts built to help you launch faster.
                             </p>
-                            <div className={styles.socials}>
-                                <a href="https://www.instagram.com/terafit.eu" className={styles.socialLink} aria-label="Instagram">
-                                    <FaInstagram />
-                                </a>
-                                <a href="https://www.pinterest.com/terafitgo/" className={styles.socialLink} aria-label="Pinterest">
-                                    <FaPinterest />
-                                </a>
-                            </div>
                         </div>
 
                         {/* Link columns */}

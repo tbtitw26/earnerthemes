@@ -1,5 +1,4 @@
 export const BASE_CURRENCY = "GBP" as const;
-export const MIN_TOP_UP_AMOUNT = 10;
 export const LEGACY_TOKENS_PER_BALANCE_UNIT = 100;
 
 export const SUPPORTED_CURRENCIES = ["GBP", "EUR", "USD"] as const;
