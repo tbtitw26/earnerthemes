@@ -6,8 +6,10 @@ import {
     BASE_CURRENCY,
     CURRENCY_RATES_FROM_GBP,
     CURRENCY_SIGNS,
+    convertCurrency,
     convertFromBaseCurrency,
     convertToBaseCurrency,
+    formatMoney,
     SupportedCurrency,
 } from "@/utils/money";
 
@@ -20,6 +22,10 @@ interface CurrencyContextType {
     rateFromGbp: number;
     convertFromBase: (baseAmount: number) => number;
     convertToBase: (displayAmount: number) => number;
+    /** Converts an amount stored in `sourceCurrency` into the currency the customer selected. */
+    convertFromCurrency: (amount: number, sourceCurrency?: string) => number;
+    /** Formats an amount stored in `sourceCurrency` using the currency the customer selected. */
+    formatPrice: (amount: number, sourceCurrency?: string) => string;
 }
 
 const CurrencyContext = createContext<CurrencyContextType>({
@@ -29,6 +35,10 @@ const CurrencyContext = createContext<CurrencyContextType>({
     rateFromGbp: CURRENCY_RATES_FROM_GBP[BASE_CURRENCY],
     convertFromBase: (value) => value,
     convertToBase: (value) => value,
+    convertFromCurrency: (value, sourceCurrency) =>
+        convertCurrency(value, sourceCurrency, BASE_CURRENCY),
+    formatPrice: (value, sourceCurrency) =>
+        formatMoney(convertCurrency(value, sourceCurrency, BASE_CURRENCY), BASE_CURRENCY),
 });
 
 export const useCurrency = () => useContext(CurrencyContext);
@@ -58,6 +68,10 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
             rateFromGbp,
             convertFromBase: (baseAmount) => convertFromBaseCurrency(baseAmount, currency),
             convertToBase: (displayAmount) => convertToBaseCurrency(displayAmount, currency),
+            convertFromCurrency: (amount, sourceCurrency) =>
+                convertCurrency(amount, sourceCurrency ?? BASE_CURRENCY, currency),
+            formatPrice: (amount, sourceCurrency) =>
+                formatMoney(convertCurrency(amount, sourceCurrency ?? BASE_CURRENCY, currency), currency),
         };
     }, [currency]);
 

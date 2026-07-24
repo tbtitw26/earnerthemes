@@ -359,6 +359,28 @@
   }
 }
 
+.policyCheck {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+
+  input[type="checkbox"] {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    margin: 2px 0 0;
+    accent-color: var(--primary-color, #0f172a);
+    cursor: pointer;
+  }
+
+  a {
+    color: #0f172a;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+}
+
 .success {
   display: grid;
   gap: 8px;

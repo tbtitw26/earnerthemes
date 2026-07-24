@@ -6,19 +6,12 @@ import { themeforestTemplates } from "@/data/themeforestTemplates";
 import { ThemeTemplate } from "@/types/theme-template";
 import { getValidTemplateImageUrl } from "@/utils/templateImage";
 import TemplateCartActions from "@/components/templates/details/TemplateCartActions";
+import TemplatePrice from "@/components/templates/price/TemplatePrice";
 
 import styles from "./TemplateDetailsPage.module.scss";
 
 interface TemplateDetailsPageProps {
     template: ThemeTemplate;
-}
-
-function formatPrice(value: number, currency: string) {
-    return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency,
-        maximumFractionDigits: 0,
-    }).format(value);
 }
 
 function formatSales(value: number) {
@@ -153,7 +146,9 @@ export default function TemplateDetailsPage({ template }: TemplateDetailsPagePro
                     <aside className={styles.buyCard}>
                         <div className={styles.priceBlock}>
                             <span className={styles.priceLabel}>Price (incl. VAT)</span>
-                            <strong>{formatPrice(template.price, template.currency)}</strong>
+                            <strong>
+                                <TemplatePrice value={template.price} currency={template.currency} />
+                            </strong>
                         </div>
 
                         <div className={styles.miniStats}>
@@ -278,10 +273,10 @@ export default function TemplateDetailsPage({ template }: TemplateDetailsPagePro
                                             <div className={styles.relatedTitleRow}>
                                                 <h3>{relatedTemplate.title}</h3>
                                                 <strong>
-                                                    {formatPrice(
-                                                        relatedTemplate.price,
-                                                        relatedTemplate.currency
-                                                    )}
+                                                    <TemplatePrice
+                                                        value={relatedTemplate.price}
+                                                        currency={relatedTemplate.currency}
+                                                    />
                                                 </strong>
                                             </div>
 

@@ -16,15 +16,20 @@ export async function sendContactRequest(data: {
     return res.json();
 }
 
+const countDigits = (value?: string) => (value || "").replace(/\D/g, "").length;
+
 export const validationSchema = Yup.object().shape({
-    name: Yup.string().required("First name is required"),
-    secondName: Yup.string().required("Second name is required"),
-    email: Yup.string().email("Invalid email").required("Email is required"),
+    name: Yup.string().trim().required("First name is required"),
+    secondName: Yup.string().trim().required("Second name is required"),
+    email: Yup.string().trim().email("Invalid email").required("Email is required"),
     phone: Yup.string()
-        .matches(/^[0-9]+$/, "Only numbers allowed")
-        .min(5, "Minimum 5 digits")
-        .required("Phone number is required"),
+        .required("Phone number is required")
+        // Customers type numbers with "+", spaces, dashes and brackets — only the digits matter.
+        .matches(/^[+()\d\s-]+$/, "Only numbers, spaces and + ( ) - are allowed")
+        .test("min-digits", "Minimum 5 digits", (value) => countDigits(value) >= 5)
+        .test("max-digits", "Maximum 15 digits", (value) => countDigits(value) <= 15),
     message: Yup.string(),
+    acceptPolicy: Yup.boolean().oneOf([true], "Please accept the Privacy Policy"),
 });
 
 export const initialValues = {
@@ -33,4 +38,5 @@ export const initialValues = {
     email: "",
     phone: "",
     message: "",
+    acceptPolicy: false,
 };

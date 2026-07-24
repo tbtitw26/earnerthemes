@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { BadgeCheck, Download, LayoutTemplate, Sparkles } from "lucide-react";
 
 import { useAlert } from "@/context/AlertContext";
+import { useCurrency } from "@/context/CurrencyContext";
 import { useUser } from "@/context/UserContext";
 import {
     CartTemplatePurchaseResult,
@@ -62,15 +63,6 @@ const EMPTY_STATE_CATEGORIES = [
     { label: "AI Tools", href: "/templates" },
 ];
 
-function formatPrice(value: number, currency: string) {
-    return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency,
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    }).format(value);
-}
-
 function CartRow({
     item,
     purchased,
@@ -84,6 +76,7 @@ function CartRow({
     onBuy: (item: TemplateCartItem) => void;
     loading: boolean;
 }) {
+    const { formatPrice } = useCurrency();
     const imageUrl = getValidTemplateImageUrl(item.previewImage);
 
     return (
@@ -148,6 +141,7 @@ function CartRow({
 export default function TemplateCartPage() {
     const user = useUser();
     const { showAlert } = useAlert();
+    const { formatPrice } = useCurrency();
     const router = useRouter();
 
     const items = useTemplateCartStore((state) => state.items);
@@ -198,7 +192,8 @@ export default function TemplateCartPage() {
 
     const itemCount = useMemo(() => getTemplateCartItemCount(items), [items]);
     const total = useMemo(() => getTemplateCartTotal(items), [items]);
-    const displayCurrency = items[0]?.currency || "USD";
+    // Catalog currency the cart amounts are stored in; formatPrice converts it to the selected one.
+    const sourceCurrency = items[0]?.currency || "USD";
     const purchasedItemsInCart = useMemo(
         () => items.filter((item) => purchasedIds.includes(item.templateId)).length,
         [items, purchasedIds]
@@ -215,7 +210,7 @@ export default function TemplateCartPage() {
         return [];
     }, [confirmItem, confirmMode, items, purchasedIds]);
     const confirmTotal = useMemo(() => getTemplateCartTotal(confirmItems), [confirmItems]);
-    const confirmCurrency = confirmItems[0]?.currency || displayCurrency;
+    const confirmCurrency = confirmItems[0]?.currency || sourceCurrency;
     const popularTemplates = useMemo<ThemeTemplate[]>(() => {
         return [...themeforestTemplates.templates]
             .sort((left, right) => {
@@ -498,15 +493,15 @@ export default function TemplateCartPage() {
                     </div>
                     <div className={styles.summaryBlock}>
                         <span className={styles.summaryLabel}>Net amount</span>
-                        <strong>{formatPrice(netFromGross(total), displayCurrency)}</strong>
+                        <strong>{formatPrice(netFromGross(total), sourceCurrency)}</strong>
                     </div>
                     <div className={styles.summaryBlock}>
                         <span className={styles.summaryLabel}>VAT ({Math.round(VAT_RATE * 100)}%), included</span>
-                        <strong>{formatPrice(vatFromGross(total), displayCurrency)}</strong>
+                        <strong>{formatPrice(vatFromGross(total), sourceCurrency)}</strong>
                     </div>
                     <div className={styles.summaryBlock}>
                         <span className={styles.summaryLabel}>Total (incl. VAT)</span>
-                        <strong className={styles.summaryTotal}>{formatPrice(total, displayCurrency)}</strong>
+                        <strong className={styles.summaryTotal}>{formatPrice(total, sourceCurrency)}</strong>
                     </div>
 
                     {purchasedItemsInCart > 0 ? (

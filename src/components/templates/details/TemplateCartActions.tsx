@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { useAlert } from "@/context/AlertContext";
+import { useCurrency } from "@/context/CurrencyContext";
 import { useUser } from "@/context/UserContext";
 import { ThemeTemplate } from "@/types/theme-template";
 import {
@@ -32,6 +33,7 @@ interface DirectPurchaseResponse {
 export default function TemplateCartActions({ template }: TemplateCartActionsProps) {
     const user = useUser();
     const { showAlert } = useAlert();
+    const { formatPrice } = useCurrency();
     const router = useRouter();
 
     const addItem = useTemplateCartStore((state) => state.addItem);
@@ -97,13 +99,8 @@ export default function TemplateCartActions({ template }: TemplateCartActionsPro
     }, [buyingNow, purchased]);
 
     const priceLabel = useMemo(
-        () =>
-            new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: template.currency,
-                maximumFractionDigits: 0,
-            }).format(template.price),
-        [template.currency, template.price]
+        () => formatPrice(template.price, template.currency),
+        [formatPrice, template.currency, template.price]
     );
 
     const handleAddToCart = () => {

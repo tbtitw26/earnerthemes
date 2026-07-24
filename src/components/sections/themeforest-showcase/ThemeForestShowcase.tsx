@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
+import { useCurrency } from "@/context/CurrencyContext";
 import { getTemplateHref } from "@/data/themeforestTemplateHelpers";
 import { ThemeTemplate } from "@/types/theme-template";
 import { getValidTemplateImageUrl } from "@/utils/templateImage";
@@ -46,14 +47,6 @@ const DEFAULT_TITLE = (
     </>
 );
 const DEFAULT_SUBTITLE = "The most popular designs this month";
-
-function formatPrice(value: number, currency: string) {
-    return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency,
-        maximumFractionDigits: 0,
-    }).format(value);
-}
 
 function toTimestamp(value?: string) {
     if (!value) {
@@ -225,6 +218,7 @@ export default function ThemeForestShowcase({
     filterOptions,
 }: ThemeForestShowcaseProps) {
     const reduced = useReducedMotion();
+    const { formatPrice } = useCurrency();
     const parallax = useSubtleParallaxBlock<HTMLDivElement>(18);
     const normalizedCategory = normalizeTemplateFilter(category) || DEFAULT_CATEGORY;
     const [activeFilter, setActiveFilter] = useState(normalizedCategory);

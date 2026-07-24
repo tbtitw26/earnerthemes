@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import { motion } from "framer-motion";
 import { FaArrowRight, FaClock, FaEnvelope, FaHeadset, FaShieldAlt } from "react-icons/fa";
@@ -41,9 +42,10 @@ const ContactSupport: React.FC = () => {
         { setSubmitting, resetForm }: FormikHelpers<ContactFormValues>
     ) => {
         try {
+            const { acceptPolicy: _acceptPolicy, ...contactValues } = values;
             const payload = {
-                ...values,
-                phone: values.phone.replace(/\D/g, ""),
+                ...contactValues,
+                phone: values.phone.trim(),
             };
 
             await sendContactRequest(payload);
@@ -188,7 +190,7 @@ const ContactSupport: React.FC = () => {
                             validateOnChange
                             onSubmit={handleSubmit}
                         >
-                            {({ isSubmitting, isValid }) => (
+                            {({ isSubmitting }) => (
                                 <Form className={styles.form}>
                                     <div className={styles.row}>
                                         <div className={styles.field}>
@@ -246,13 +248,32 @@ const ContactSupport: React.FC = () => {
 
                                     <div className={styles.formFooter}>
                                         <div className={styles.policy}>
-                                            By submitting this form, you agree to our <b>Privacy Policy</b>.
+                                            <label className={styles.policyCheck} htmlFor="contact-accept-policy">
+                                                <Field
+                                                    id="contact-accept-policy"
+                                                    name="acceptPolicy"
+                                                    type="checkbox"
+                                                />
+                                                <span>
+                                                    I agree to the{" "}
+                                                    <Link href="/privacy-policy" target="_blank">
+                                                        Privacy Policy
+                                                    </Link>{" "}
+                                                    and to being contacted about my request.
+                                                </span>
+                                            </label>
+                                            <ErrorMessage
+                                                name="acceptPolicy"
+                                                component="div"
+                                                className={styles.error}
+                                            />
                                         </div>
 
                                         <ButtonUI
                                             type="submit"
                                             loading={isSubmitting}
-                                            disabled={!isValid || isSubmitting}
+                                            // Never block the button on validity — Formik surfaces the field errors on submit.
+                                            disabled={isSubmitting}
                                             text="Send Message"
                                             endIcon={<FaArrowRight />}
                                             color="primary"

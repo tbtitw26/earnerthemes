@@ -1,9 +1,10 @@
 "use client";
 
-import { useDeferredValue, useEffect, useMemo, useState } from "react";
+import { useCallback, useDeferredValue, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Funnel, Search, SlidersHorizontal, X } from "lucide-react";
 
+import { useCurrency } from "@/context/CurrencyContext";
 import { ThemeTemplate } from "@/types/theme-template";
 
 import TemplateCard from "./TemplateCard";
@@ -41,12 +42,19 @@ function toTimestamp(value?: string) {
     return Number.isNaN(parsed.getTime()) ? 0 : parsed.getTime();
 }
 
-function getPriceBounds(templates: ThemeTemplate[]) {
-    const prices = templates.map((template) => template.price).filter((price) => Number.isFinite(price));
+function getPriceBounds(
+    templates: ThemeTemplate[],
+    toDisplayPrice: (template: ThemeTemplate) => number,
+) {
+    const prices = templates.map(toDisplayPrice).filter((price) => Number.isFinite(price));
+
+    if (!prices.length) {
+        return { min: 0, max: 0 };
+    }
 
     return {
-        min: Math.min(...prices),
-        max: Math.max(...prices),
+        min: Math.floor(Math.min(...prices)),
+        max: Math.ceil(Math.max(...prices)),
     };
 }
 
@@ -67,14 +75,6 @@ function getFacetCounts(
 
 function toggleValue(current: string[], value: string) {
     return current.includes(value) ? current.filter((item) => item !== value) : [...current, value];
-}
-
-function formatPrice(value: number) {
-    return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-        maximumFractionDigits: 0,
-    }).format(value);
 }
 
 function formatNumber(value: number) {
@@ -120,7 +120,17 @@ function matchesFacet(values: string[], value?: string) {
 }
 
 export default function TemplatesCatalogPage({ templates }: TemplatesCatalogPageProps) {
-    const priceBounds = useMemo(() => getPriceBounds(templates), [templates]);
+    const { currency, convertFromCurrency, formatPrice } = useCurrency();
+
+    // Catalog prices are stored in the source currency, the filter works in the selected one.
+    const toDisplayPrice = useCallback(
+        (template: ThemeTemplate) => convertFromCurrency(template.price, template.currency),
+        [convertFromCurrency],
+    );
+    const priceBounds = useMemo(
+        () => getPriceBounds(templates, toDisplayPrice),
+        [templates, toDisplayPrice],
+    );
     const [search, setSearch] = useState("");
     const [sortBy, setSortBy] = useState<SortOption>("recommended");
     const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
@@ -179,7 +189,8 @@ export default function TemplatesCatalogPage({ templates }: TemplatesCatalogPage
                 return false;
             }
 
-            if (template.price < minPrice || template.price > maxPrice) {
+            const displayPrice = toDisplayPrice(template);
+            if (displayPrice < minPrice || displayPrice > maxPrice) {
                 return false;
             }
 
@@ -238,6 +249,7 @@ export default function TemplatesCatalogPage({ templates }: TemplatesCatalogPage
     }, [
         maxPrice,
         minPrice,
+        toDisplayPrice,
         salesThreshold,
         selectedBuilders,
         selectedCategories,
@@ -252,6 +264,12 @@ export default function TemplatesCatalogPage({ templates }: TemplatesCatalogPage
     useEffect(() => {
         setCurrentPage(1);
     }, [filteredTemplates.length, perPage]);
+
+    // The price range lives in the selected currency, so realign it when the bounds change.
+    useEffect(() => {
+        setMinPrice(priceBounds.min);
+        setMaxPrice(priceBounds.max);
+    }, [priceBounds.min, priceBounds.max]);
 
     const paginatedTemplates = useMemo(() => {
         const start = (currentPage - 1) * perPage;
@@ -287,7 +305,7 @@ export default function TemplatesCatalogPage({ templates }: TemplatesCatalogPage
         }
 
         if (minPrice !== priceBounds.min || maxPrice !== priceBounds.max) {
-            next.push({ key: "price", value: `${formatPrice(minPrice)} - ${formatPrice(maxPrice)}` });
+            next.push({ key: "price", value: `${formatPrice(minPrice, currency)} - ${formatPrice(maxPrice, currency)}` });
         }
 
         if (searchQuery) {
@@ -296,7 +314,9 @@ export default function TemplatesCatalogPage({ templates }: TemplatesCatalogPage
 
         return next;
     }, [
+        currency,
         deferredSearch,
+        formatPrice,
         maxPrice,
         minPrice,
         priceBounds.max,
@@ -437,11 +457,11 @@ export default function TemplatesCatalogPage({ templates }: TemplatesCatalogPage
                             <div className={styles.priceSummary}>
                                 <div>
                                     <span>Min</span>
-                                    <strong>{formatPrice(minPrice)}</strong>
+                                    <strong>{formatPrice(minPrice, currency)}</strong>
                                 </div>
                                 <div>
                                     <span>Max</span>
-                                    <strong>{formatPrice(maxPrice)}</strong>
+                                    <strong>{formatPrice(maxPrice, currency)}</strong>
                                 </div>
                             </div>
 

@@ -65,6 +65,24 @@ export function convertFromBaseCurrency(amount: number, currency: SupportedCurre
     return roundMoney(amount * CURRENCY_RATES_FROM_GBP[currency]);
 }
 
+/**
+ * Converts an amount denominated in one supported currency into another one.
+ * Unknown source currencies are treated as the base currency, so catalog data
+ * with an unexpected currency code still renders instead of blowing up.
+ */
+export function convertCurrency(
+    amount: number,
+    from: string | undefined,
+    to: SupportedCurrency
+): number {
+    if (!Number.isFinite(amount)) return 0;
+
+    const source = isSupportedCurrency(from) ? from : BASE_CURRENCY;
+    if (source === to) return roundMoney(amount);
+
+    return roundMoney((amount / CURRENCY_RATES_FROM_GBP[source]) * CURRENCY_RATES_FROM_GBP[to]);
+}
+
 export function legacyTokensToBalance(tokens: number): number {
     return roundMoney(tokens / LEGACY_TOKENS_PER_BALANCE_UNIT);
 }

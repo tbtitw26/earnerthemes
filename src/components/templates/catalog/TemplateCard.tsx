@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Layers3, ShoppingBag, Sparkles } from "lucide-react";
 
+import { useCurrency } from "@/context/CurrencyContext";
 import { getTemplateHref } from "@/data/themeforestTemplateHelpers";
 import { ThemeTemplate } from "@/types/theme-template";
 import { getValidTemplateImageUrl } from "@/utils/templateImage";
@@ -18,14 +19,6 @@ function formatSales(value: number) {
     return new Intl.NumberFormat("en-US", {
         notation: value >= 1000 ? "compact" : "standard",
         maximumFractionDigits: 1,
-    }).format(value);
-}
-
-function formatPrice(value: number, currency: string) {
-    return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency,
-        maximumFractionDigits: 0,
     }).format(value);
 }
 
@@ -44,6 +37,7 @@ function resolveBadgeIcon(platform: string) {
 export default function TemplateCard({ template }: TemplateCardProps) {
     const detailsUrl = getTemplateHref(template);
     const ctaUrl = template.livePreviewUrl || template.sourceUrl;
+    const { formatPrice } = useCurrency();
     const description = template.shortDescription || template.description;
     const imageUrl = getValidTemplateImageUrl(template.coverImage);
 
