@@ -270,6 +270,17 @@ const Checkout = ({testMode = false}: CheckoutProps) => {
                         </a>{" "}
                         for how currency conversion rates are calculated.
                     </p>
+
+                    {!testMode ? (
+                        <aside className={styles.processorDisclosure} aria-label="Payment processor disclosure">
+                            <strong>Payment processor</strong>
+                            <p>
+                                Payments are securely processed by PAYTECH LTD (HE 440168), Rafail Santi 58,
+                                NEFELI COURT 11, 6052 Larnaca, Cyprus. We do not store full card details. All
+                                transactions are tokenised and processed in compliance with PCI-DSS standards.
+                            </p>
+                        </aside>
+                    ) : null}
                 </div>
 
                 <div className={styles.payment}>

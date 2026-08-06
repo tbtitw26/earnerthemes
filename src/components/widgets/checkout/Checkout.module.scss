@@ -313,6 +313,31 @@
   color: var(--text-secondary);
 }
 
+.processorDisclosure {
+  margin-top: 20px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--surface-color);
+
+  strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+}
+
 .payButton {
   width: 100%;
   background: #2563eb;
