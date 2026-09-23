@@ -7,6 +7,10 @@ import { ThemeTemplate } from "@/types/theme-template";
 import { getValidTemplateImageUrl } from "@/utils/templateImage";
 import TemplateCartActions from "@/components/templates/details/TemplateCartActions";
 import TemplatePrice from "@/components/templates/price/TemplatePrice";
+import TemplateLicenceSummary, {
+    getLicenceName,
+    getLicenceScopeLabel,
+} from "@/components/templates/licence/TemplateLicenceSummary";
 
 import styles from "./TemplateDetailsPage.module.scss";
 
@@ -56,7 +60,7 @@ function getHighlights(template: ThemeTemplate) {
         `${template.platform} template`,
         template.category,
         template.tech.builder || null,
-        template.livePreviewUrl ? "Live preview availablxe" : null,
+        template.livePreviewUrl ? "Live preview available" : null,
     ].filter(Boolean);
 
     return highlights.slice(0, 4) as string[];
@@ -79,6 +83,8 @@ export default function TemplateDetailsPage({ template }: TemplateDetailsPagePro
         { label: "Sales", value: formatSales(template.sales) },
         { label: "Created", value: formatDate(template.createdAt) },
         { label: "Updated", value: formatDate(template.updatedAt) },
+        { label: "Licence", value: getLicenceName(template) },
+        { label: "Licence scope", value: getLicenceScopeLabel(template) },
     ];
 
     return (
@@ -162,6 +168,8 @@ export default function TemplateDetailsPage({ template }: TemplateDetailsPagePro
                             </div>
                         </div>
 
+                        <TemplateLicenceSummary template={template} variant="compact" />
+
                         <div className={styles.actionBlock}>
                             <TemplateCartActions template={template} />
                             {template.livePreviewUrl ? (
@@ -212,6 +220,15 @@ export default function TemplateDetailsPage({ template }: TemplateDetailsPagePro
                         ))}
                     </div>
                 </article>
+            </section>
+
+            <section className={styles.panel}>
+                <div className={styles.panelHeader}>
+                    <span className={styles.sectionLabel}>Before you buy</span>
+                    <h2>Licence &amp; usage</h2>
+                </div>
+
+                <TemplateLicenceSummary template={template} variant="panel" />
             </section>
 
             {images.length > 1 ? (

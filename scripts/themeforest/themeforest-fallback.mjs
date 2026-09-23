@@ -80,10 +80,15 @@ function parseImages(markdown) {
         .filter((url) => !IMAGE_SKIP_PATTERNS.some((pattern) => url.includes(pattern)));
 }
 
+/** Metadata the mirror prepends to every page — never part of the product copy. */
+const MIRROR_PREAMBLE_PATTERN = /^(?:Title:|URL Source:|Published Time:|Warning:|Markdown Content:)/i;
+
 function extractDescription(markdown) {
     const lines = markdown.split("\n");
     const livePreviewIndex = lines.findIndex((line) => line.includes("[Live Preview]"));
-    const startIndex = livePreviewIndex >= 0 ? livePreviewIndex + 1 : 0;
+    const markdownStartIndex = lines.findIndex((line) => /^Markdown Content:/i.test(line.trim()));
+    const startIndex =
+        livePreviewIndex >= 0 ? livePreviewIndex + 1 : markdownStartIndex >= 0 ? markdownStartIndex + 1 : 0;
     const stopPatterns = [
         "Regular License",
         "Last Update",
@@ -107,6 +112,10 @@ function extractDescription(markdown) {
         }
 
         if (line.startsWith("![") || line.startsWith("[![") || line.startsWith("*   [")) {
+            continue;
+        }
+
+        if (MIRROR_PREAMBLE_PATTERN.test(line)) {
             continue;
         }
 

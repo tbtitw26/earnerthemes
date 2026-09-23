@@ -12,6 +12,11 @@ import {
     useTemplateCartStore,
 } from "@/utils/store";
 import TemplatePurchaseConfirmDialog from "@/components/templates/purchase-confirmation/TemplatePurchaseConfirmDialog";
+import {
+    getLicenceName,
+    getLicenceScopeLabel,
+    getProductTerms,
+} from "@/components/templates/licence/TemplateLicenceSummary";
 
 import styles from "./TemplateCartActions.module.scss";
 
@@ -212,13 +217,15 @@ export default function TemplateCartActions({ template }: TemplateCartActionsPro
             <TemplatePurchaseConfirmDialog
                 open={showConfirm}
                 title="You are about to purchase this template"
-                description="Review the item below. The purchase will only complete after you confirm."
+                description="Review the item and the licence below. The purchase will only complete after you confirm."
                 items={[
                     {
                         id: template.id,
                         title: template.title,
                         meta: [template.platform, template.category].filter(Boolean).join(" · "),
                         priceLabel,
+                        licenceLabel: `${getLicenceName(template)} · ${getLicenceScopeLabel(template)}`,
+                        productTerms: getProductTerms(template),
                     },
                 ]}
                 totalLabel={`${priceLabel} incl. VAT`}

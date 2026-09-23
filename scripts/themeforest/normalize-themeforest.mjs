@@ -87,7 +87,13 @@ function inferLanguage(platform) {
     return "PHP";
 }
 
-function inferBuilder({ title = "", description = "", compatibility = [], tags = [] }) {
+function inferBuilder({ platform = "", title = "", description = "", compatibility = [], tags = [] }) {
+    // Every builder below is WordPress-only; reporting one for a Shopify theme
+    // would put an inaccurate spec on the product page.
+    if (platform === "Shopify") {
+        return "";
+    }
+
     const haystack = `${title} ${description} ${compatibility.join(" ")} ${tags.join(" ")}`.toLowerCase();
 
     if (haystack.includes("elementor")) {
@@ -133,14 +139,37 @@ function normalizeGallery(rawGallery) {
         .filter(Boolean);
 }
 
+/** Metadata the HTML mirror prepends to a page — never part of the product copy. */
+const MIRROR_PREAMBLE =
+    /^\s*(?:Title:[^\n]*|URL Source:[^\n]*|Published Time:[^\n]*|Warning:[^\n]*|Markdown Content:)\s*/gi;
+
+function stripMirrorPreamble(value) {
+    return String(value || "")
+        .replace(MIRROR_PREAMBLE, "")
+        .replace(/URL Source:\s*\S+/i, "")
+        .trim();
+}
+
+/**
+ * Product pages must show a complete description, so a description is only ever
+ * cut at a sentence boundary — never mid-word with an ellipsis.
+ */
 function truncateDescription(value, maxLength = 220) {
-    const clean = stripHtml(value);
+    const clean = stripHtml(stripMirrorPreamble(value));
 
     if (clean.length <= maxLength) {
         return clean;
     }
 
-    return `${clean.slice(0, maxLength - 1).trimEnd()}…`;
+    const window = clean.slice(0, maxLength);
+    const lastSentenceEnd = Math.max(window.lastIndexOf("."), window.lastIndexOf("!"), window.lastIndexOf("?"));
+
+    if (lastSentenceEnd > maxLength * 0.4) {
+        return window.slice(0, lastSentenceEnd + 1).trim();
+    }
+
+    const lastSpace = window.lastIndexOf(" ");
+    return `${window.slice(0, lastSpace > 0 ? lastSpace : maxLength).trimEnd()}...`;
 }
 
 export function normalizeThemeForestItem(rawItem, sourceUrl, fallbackCategory = "") {
@@ -166,7 +195,7 @@ export function normalizeThemeForestItem(rawItem, sourceUrl, fallbackCategory = 
     );
     const description = truncateDescription(
         getFirstDefined(source.description, source.summary, source.short_description, ""),
-        420,
+        2000,
     );
     const shortDescription = truncateDescription(description, 160);
     const compatibility = Array.isArray(source.compatible_with) ? source.compatible_with : [];
@@ -215,7 +244,7 @@ export function normalizeThemeForestItem(rawItem, sourceUrl, fallbackCategory = 
         shortDescription,
         tech: {
             language: inferLanguage(platform),
-            builder: inferBuilder({ title, description, compatibility, tags }),
+            builder: inferBuilder({ platform, title, description, compatibility, tags }),
         },
         livePreviewUrl: String(
             getFirstDefined(source.live_preview_url, source.url && `${source.url}/full_screen_preview`, ""),

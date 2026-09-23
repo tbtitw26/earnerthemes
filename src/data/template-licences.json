@@ -1,0 +1,3 @@
+{
+  "_readme": "Product-Specific Terms, keyed by template id. Anything listed here is shown on the product page and inside the purchase confirmation, on top of the Standard Licence. Shape: { \"<id>\": { \"name\"?: string, \"productionWebsites\"?: number, \"endProducts\"?: number, \"productTerms\"?: string[] } }."
+}

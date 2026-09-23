@@ -24,6 +24,16 @@ import { netFromGross, VAT_RATE, vatFromGross } from "@/utils/money";
 import TemplatePurchaseConfirmDialog from "@/components/templates/purchase-confirmation/TemplatePurchaseConfirmDialog";
 import TemplateCard from "@/components/templates/catalog/TemplateCard";
 import { themeforestTemplates } from "@/data/themeforestTemplates";
+import { findTemplateBySlug } from "@/data/themeforestTemplateHelpers";
+import {
+    getLicenceName,
+    getLicenceScopeLabel,
+    getProductTerms,
+} from "@/components/templates/licence/TemplateLicenceSummary";
+import {
+    LICENCE_AGREEMENT_HREF,
+    STANDARD_LICENCE_HEADLINE,
+} from "@/resources/licence";
 import { ThemeTemplate } from "@/types/theme-template";
 
 import styles from "./TemplateCartPage.module.scss";
@@ -41,8 +51,8 @@ const EMPTY_STATE_FEATURES = [
     },
     {
         icon: <BadgeCheck size={18} />,
-        title: "Lifetime updates",
-        description: "Keep your storefront current with polished, maintained builds.",
+        title: "Maintained releases",
+        description: "Download the updates the Author publishes for the version you licensed.",
     },
     {
         icon: <LayoutTemplate size={18} />,
@@ -504,6 +514,14 @@ export default function TemplateCartPage() {
                         <strong className={styles.summaryTotal}>{formatPrice(total, sourceCurrency)}</strong>
                     </div>
 
+                    <div className={styles.licenceNotice}>
+                        <strong>Licence</strong>
+                        <p>{STANDARD_LICENCE_HEADLINE}</p>
+                        <Link href={LICENCE_AGREEMENT_HREF} className={styles.inlineLink}>
+                            Read the full Licence Agreement
+                        </Link>
+                    </div>
+
                     {purchasedItemsInCart > 0 ? (
                         <div className={styles.notice}>
                             {purchasedItemsInCart} item{purchasedItemsInCart > 1 ? "s are" : " is"} already purchased on
@@ -536,15 +554,23 @@ export default function TemplateCartPage() {
                 }
                 description={
                     confirmMode === "all"
-                        ? "Review the templates below. The purchase will only complete after you confirm this checkout."
-                        : "Review the item below. The purchase will only complete after you confirm."
+                        ? "Review the templates and the licence below. The purchase will only complete after you confirm this checkout."
+                        : "Review the item and the licence below. The purchase will only complete after you confirm."
                 }
-                items={confirmItems.map((item) => ({
-                    id: item.templateId,
-                    title: item.title,
-                    meta: [item.platform, item.category].filter(Boolean).join(" · "),
-                    priceLabel: formatPrice(item.price, item.currency),
-                }))}
+                items={confirmItems.map((item) => {
+                    const catalogTemplate = findTemplateBySlug(item.templateSlug || item.templateId);
+
+                    return {
+                        id: item.templateId,
+                        title: item.title,
+                        meta: [item.platform, item.category].filter(Boolean).join(" · "),
+                        priceLabel: formatPrice(item.price, item.currency),
+                        licenceLabel: catalogTemplate
+                            ? `${getLicenceName(catalogTemplate)} · ${getLicenceScopeLabel(catalogTemplate)}`
+                            : undefined,
+                        productTerms: catalogTemplate ? getProductTerms(catalogTemplate) : undefined,
+                    };
+                })}
                 totalLabel={`${formatPrice(confirmTotal, confirmCurrency)} incl. VAT`}
                 processing={buyingAll || buyingTemplateId !== null}
                 onCancel={() => {

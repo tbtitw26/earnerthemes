@@ -179,6 +179,83 @@
   }
 }
 
+.itemLicence {
+  color: rgba(15, 23, 42, 0.8) !important;
+  font-size: 0.8rem !important;
+  font-weight: 700;
+}
+
+.licencePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(255, 255, 255, 0.76);
+
+  h3 {
+    margin: 0;
+    color: rgba(15, 23, 42, 0.96);
+    font-size: 0.92rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  h4 {
+    margin: 0;
+    color: rgba(71, 85, 105, 1);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  li {
+    color: rgba(51, 65, 85, 1);
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+}
+
+.productTerms {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.16);
+  background: rgba(15, 23, 42, 0.04);
+
+  strong {
+    display: block;
+    margin-bottom: 4px;
+    color: rgba(15, 23, 42, 0.96);
+    font-size: 0.86rem;
+  }
+}
+
+.licenceLink {
+  color: var(--primary-color);
+  font-size: 0.84rem;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.waiver + .waiver {
+  margin-top: 10px;
+}
+
 .actions {
   display: flex;
   justify-content: flex-end;
