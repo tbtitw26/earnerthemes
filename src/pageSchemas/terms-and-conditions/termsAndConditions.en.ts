@@ -60,7 +60,7 @@ const termsAndConditionsEn: PageSchema = {
         },
         {
             type: "text",
-            title: "4. Nature of the Marketplace",
+            title: "4. Nature of the Service",
             description: `EarnerThemes provides an online catalogue and distribution platform through which users can obtain licensed digital website themes, templates and related Products.\n\nSome Products are created and owned by third-party Authors. EarnerThemes makes such Products available under commercial, distribution or licensing arrangements with the relevant Authors or rights holders.\n\nUnless expressly stated otherwise on a Product page, your purchase contract is with SENIOR EARNER LTD. The relevant Author retains ownership of the intellectual property rights in the Product.\n\nPurchasing a Product does not transfer ownership of the Product, its source code, design, trademarks or other intellectual property to you. You receive only the rights expressly granted under the applicable Licence.`,
         },
         {

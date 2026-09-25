@@ -141,7 +141,7 @@ const FAQ: React.FC<FAQProps> = ({
 
                     <div className={styles.searchWrap}>
                         <label className={styles.searchLabel} htmlFor={searchId}>
-                            Search template marketplace questions
+                            Search template store questions
                         </label>
                         <div className={styles.searchField}>
                             <FiSearch className={styles.searchIcon} aria-hidden="true" />
@@ -254,7 +254,7 @@ const FAQ: React.FC<FAQProps> = ({
 
                 <div className={styles.cta}>
                     <div className={styles.ctaContent}>
-                        <p className={styles.ctaEyebrow}>Marketplace Support</p>
+                        <p className={styles.ctaEyebrow}>Store Support</p>
                         <h3 className={styles.ctaTitle}>{cta.title}</h3>
                         <p className={styles.ctaDescription}>{cta.description}</p>
                     </div>

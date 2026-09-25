@@ -184,7 +184,7 @@ export default function SignUp() {
                     <header className={styles.header}>
                         <h1 className={styles.title}>Create your account</h1>
                         <p className={styles.subtitle}>
-                            Join the enterprise marketplace for high-performance assets.
+                            Join the enterprise store for high-performance assets.
                         </p>
                     </header>
 

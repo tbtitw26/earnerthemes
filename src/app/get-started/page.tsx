@@ -61,7 +61,7 @@ export default function GetStartedPage() {
                 highlights={[
                     {
                         title: "Fast onboarding",
-                        description: "Create an account and start exploring the marketplace right away.",
+                        description: "Create an account and start exploring the catalogue right away.",
                     },
                     {
                         title: "Flexible balance system",
@@ -77,7 +77,7 @@ export default function GetStartedPage() {
                         icon: "login",
                         title: "Register",
                         description:
-                            "Create your account to unlock access to the marketplace, your balance, and purchased products.",
+                            "Create your account to unlock access to the catalogue, your balance, and purchased products.",
                     },
                     {
                         icon: "wallet",
@@ -122,7 +122,7 @@ export default function GetStartedPage() {
             {/* FAQ */}
             <FAQ
                 title="Frequently Asked Questions"
-                description="Quick answers before you start using the marketplace."
+                description="Quick answers before you start using the store."
                 items={[
                     {
                         question: "Why do I need an account?",
@@ -132,7 +132,7 @@ export default function GetStartedPage() {
                     {
                         question: "What is my balance used for?",
                         answer:
-                            "Your balance is used to purchase templates on the marketplace quickly, without repeating full checkout for each order.",
+                            "Your balance is used to purchase templates in the store quickly, without repeating full checkout for each order.",
                     },
                     {
                         question: "Does my balance expire?",

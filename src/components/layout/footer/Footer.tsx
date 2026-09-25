@@ -48,7 +48,7 @@ const Footer: React.FC = () => {
                                 />
                             </SmartLink>
                             <p className={styles.brandDesc}>
-                                Premium marketplace for website templates, landing pages, eCommerce designs, and modern web layouts built to help you launch faster.
+                                Premium store for website templates, landing pages, eCommerce designs, and modern web layouts built to help you launch faster.
                             </p>
                         </div>
 

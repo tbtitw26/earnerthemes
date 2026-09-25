@@ -92,9 +92,9 @@ const schema: PageSchema = {
                     icon: "sim",
                     title: "3. Choose eSIM",
                     description:
-                        "Browse the global eSIM marketplace and select a country or regional data plan.",
-                    buttonText: "Open Marketplace",
-                    buttonLink: "/e-sim-marketplace",
+                        "Browse the global eSIM catalogue and select a country or regional data plan.",
+                    buttonText: "Open Catalogue",
+                    buttonLink: "/templates",
                 },
                 {
                     icon: "pay",
@@ -102,7 +102,7 @@ const schema: PageSchema = {
                     description:
                         "Pay for your selected eSIM using tokens. No hidden fees or subscriptions.",
                     buttonText: "Buy eSIM",
-                    buttonLink: "/e-sim-marketplace",
+                    buttonLink: "/templates",
                 },
                 {
                     icon: "mail",

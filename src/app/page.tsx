@@ -17,9 +17,9 @@ import {themeforestTemplates} from "@/data/themeforestTemplates";
 import {topUpPlans} from "@/data/topUpPlans";
 
 export const metadata: Metadata = {
-    title: `${COMPANY_NAME} — Website Templates Marketplace`,
+    title: `${COMPANY_NAME} — Website Templates Store`,
     description:
-        "Browse premium website templates for WordPress, Shopify, eCommerce, business, portfolio, and landing pages. Discover top-rated designs, new arrivals, and marketplace-ready digital products.",
+        "Browse premium website templates for WordPress, Shopify, eCommerce, business, portfolio, and landing pages. Discover top-rated designs, new arrivals, and launch-ready digital products.",
     alternates: {canonical: "/"},
 };
 
@@ -40,7 +40,7 @@ export default function HomePage() {
                         Premium Website <span>Templates</span> for Every Project
                     </>
                 }
-                description="Discover a curated marketplace of high-quality website templates for WordPress, Shopify, eCommerce, portfolios, landing pages, and business sites. Browse top-rated designs, launch faster, and find the perfect template for your next project."
+                description="Discover a curated store of high-quality website templates for WordPress, Shopify, eCommerce, portfolios, landing pages, and business sites. Browse top-rated designs, launch faster, and find the perfect template for your next project."
                 primaryCta={{text: "Browse Templates", link: "/templates"}}
                 secondaryCta={{text: "Explore Categories", link: "/templates"}}
                 image="image1"
@@ -52,7 +52,7 @@ export default function HomePage() {
                     {value: `${catalogStats.templateCount}`, label: "Templates in Catalogue"},
                     {value: `${catalogStats.categoryCount}`, label: "Categories"},
                     {value: `${catalogStats.platformCount}`, label: "Supported Platforms"},
-                    {value: "24/7", label: "Marketplace Access"},
+                    {value: "24/7", label: "Store Access"},
                 ]}
             />
 
@@ -83,7 +83,7 @@ export default function HomePage() {
             <ThemeForestShowcase
                 templates={themeforestTemplates.templates}
                 title={<>Most Popular <span>Templates</span></>}
-                subtitle="Best-selling marketplace picks chosen by customers"
+                subtitle="Best-selling templates chosen by customers"
                 category="most-popular"
                 limit={4}
                 showFilterBar={false}
@@ -100,7 +100,7 @@ export default function HomePage() {
 
             {/* WHY CHOOSE US */}
             <ValuesIcons
-                tagline="WHY OUR MARKETPLACE"
+                tagline="WHY OUR STORE"
                 title="Templates Built to Launch Faster"
                 description="Carefully selected designs, trusted quality, flexible categories, and a smoother way to find the right template for any niche."
                 values={[
@@ -116,7 +116,7 @@ export default function HomePage() {
                     },
                     {
                         title: "Secure Purchases",
-                        description: "A reliable marketplace experience with safe checkout and protected downloads.",
+                        description: "A reliable store experience with safe checkout and protected downloads.",
                         icon: "shield",
                     },
                     {
@@ -134,7 +134,7 @@ export default function HomePage() {
                 steps={[
                     {
                         icon: "login",
-                        title: "Browse the Marketplace",
+                        title: "Browse the Templates",
                         description: "Explore categories, popular products, and fresh arrivals to find the right fit.",
                     },
                     {
@@ -176,7 +176,7 @@ export default function HomePage() {
             {/* PRICING */}
             <Grid
                 title="Top Up Your Balance"
-                description="Add funds to your Account Balance and use it for any template on the marketplace. All prices include VAT."
+                description="Add funds to your Account Balance and use it for any template in the store. All prices include VAT."
                 columns={4}
                 gap="2rem"
             >
@@ -188,7 +188,7 @@ export default function HomePage() {
             {/* FINAL CTA */}
             <CenteredCtaSection
                 title="Ready to find your next template?"
-                description="Explore a marketplace of premium website templates for WordPress, Shopify, eCommerce, portfolios, and more."
+                description="Explore a store of premium website templates for WordPress, Shopify, eCommerce, portfolios, and more."
                 primaryCta={{text: "Browse Templates", link: "/templates"}}
                 secondaryCta={{text: "View Categories", link: "/templates"}}
             />
@@ -209,12 +209,12 @@ export default function HomePage() {
                     {
                         question: "Can I explore templates by category?",
                         answer:
-                            "Yes. The marketplace is structured around categories so visitors can quickly find WordPress, Shopify, portfolio, business, and other template types.",
+                            "Yes. The catalogue is structured around categories so visitors can quickly find WordPress, Shopify, portfolio, business, and other template types.",
                     },
                     {
-                        question: "Why use a marketplace instead of building from scratch?",
+                        question: "Why use a ready-made template instead of building from scratch?",
                         answer:
-                            "A template marketplace helps you launch faster, reduce design time, and start with layouts that are already structured for modern websites.",
+                            "A ready-made template helps you launch faster, reduce design time, and start with layouts that are already structured for modern websites.",
                     },
                 ]}
             />

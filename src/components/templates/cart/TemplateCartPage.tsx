@@ -419,7 +419,7 @@ export default function TemplateCartPage() {
                         <span className={styles.emptyKicker}>Template Cart</span>
                         <h1>Your cart is empty</h1>
                         <p>
-                            Explore premium marketplace templates, save the strongest options, and return here when
+                            Explore premium templates, save the strongest options, and return here when
                             you are ready to check out.
                         </p>
                         <div className={styles.emptyActions}>
@@ -427,21 +427,21 @@ export default function TemplateCartPage() {
                                 Browse Templates
                             </Link>
                             <Link href="/templates" className={styles.secondaryButton}>
-                                View Marketplace
+                                View Templates
                             </Link>
                         </div>
                     </div>
 
                     <div className={styles.emptyHeroAside}>
                         <div className={styles.emptyStatCard}>
-                            <span>Marketplace ready</span>
+                            <span>Launch ready</span>
                             <strong>{themeforestTemplates.templates.length} templates</strong>
                             <p>Shop curated Shopify and WordPress themes with real preview and purchase flows.</p>
                         </div>
                     </div>
                 </section>
 
-                <section className={styles.featureStrip} aria-label="Marketplace benefits">
+                <section className={styles.featureStrip} aria-label="Store benefits">
                     {EMPTY_STATE_FEATURES.map((feature) => (
                         <article key={feature.title} className={styles.featureCard}>
                             <div className={styles.featureIcon}>{feature.icon}</div>
@@ -456,7 +456,7 @@ export default function TemplateCartPage() {
                 <ThemeForestShowcase
                     templates={themeforestTemplates.templates}
                     title={<>Most Popular <span>Templates</span></>}
-                    subtitle="Top-selling marketplace picks"
+                    subtitle="Top-selling templates"
                     category="most-popular"
                     limit={4}
                     showFilterBar={false}

@@ -48,7 +48,7 @@
     "shortDescription": "Multipurpose WooCommerce theme with prebuilt shop demos plus header, product and checkout builders."
   },
   "15995336": {
-    "description": "Auto Showroom is a WordPress theme built for car dealerships, rental fleets and vehicle marketplaces. It ships with a vehicle inventory system, filterable search by make, model, year, price and body type, individual vehicle detail pages with specification tables and image galleries, plus dealer, financing, service and contact page layouts. Layouts, colours and typography are configured from the theme options and the bundled page builder, without editing code. The download contains the theme files, demo content for one-click import and the installation and setup documentation.",
+    "description": "Auto Showroom is a WordPress theme built for car dealerships, rental fleets and vehicle listing sites. It ships with a vehicle inventory system, filterable search by make, model, year, price and body type, individual vehicle detail pages with specification tables and image galleries, plus dealer, financing, service and contact page layouts. Layouts, colours and typography are configured from the theme options and the bundled page builder, without editing code. The download contains the theme files, demo content for one-click import and the installation and setup documentation.",
     "shortDescription": "Car dealership WordPress theme with vehicle inventory, filtered search and editable page layouts."
   },
   "20264492": {
@@ -122,5 +122,9 @@
   "62056044": {
     "description": "Luvix is a multipurpose Shopify Online Store 2.0 theme built around reusable theme blocks, so sections and individual blocks can be added, reordered and restyled directly in the Shopify theme editor. It includes multiple home page presets for fashion, electronics, home and general retail, collection pages with filtering and sorting, product layouts with variant swatches and quick view, a cart drawer, and blog and contact templates. The download contains the theme package for upload to a Shopify store and the setup documentation.",
     "shortDescription": "Multipurpose Shopify OS 2.0 theme built on reusable theme blocks with multiple store presets."
+  },
+  "58972123": {
+    "description": "Cosmika is a WooCommerce WordPress theme for beauty, cosmetics, makeup and skincare stores. It includes shop home page presets, product listing pages with filtering, product layouts with variant swatches, ingredient and routine content blocks, and blog and contact templates. Pages are built with Elementor and the theme is compatible with the Dokan multi-vendor plugin for stores that sell on behalf of several sellers. It runs on the Avanam theme as its parent theme, and the download contains the theme files, demo content and the installation and setup documentation.",
+    "shortDescription": "WooCommerce theme for beauty and cosmetics stores, built with Elementor on the Avanam parent theme."
   }
 }

@@ -374,11 +374,11 @@ export default function TemplatesCatalogPage({ templates }: TemplatesCatalogPage
 
                 <div className={styles.heroTop}>
                     <div className={styles.heroCopy}>
-                        <p className={styles.kicker}>Digital Assets Marketplace</p>
+                        <p className={styles.kicker}>Digital Assets Store</p>
                         <h1>Browse premium Shopify and WordPress templates in one catalog.</h1>
                         <p className={styles.subtitle}>
                             Imported ThemeForest inventory, normalized for quick comparison, fast filtering,
-                            and marketplace-style browsing.
+                            and catalogue-style browsing.
                         </p>
                     </div>
 

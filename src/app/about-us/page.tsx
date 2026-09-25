@@ -21,7 +21,7 @@ export default function AboutPage() {
             <HeroSection
                 title={
                     <>
-                        A Marketplace for <span>Premium Templates</span>
+                        A Store for <span>Premium Templates</span>
                     </>
                 }
                 description="We build a curated ecosystem of high-quality website templates for WordPress, Shopify, eCommerce, and modern web projects. Our goal is simple — help you launch faster with designs that already work."
@@ -54,7 +54,7 @@ export default function AboutPage() {
             </Grid>
 
             <Timeline
-                title="How We Build Marketplace-Ready Templates"
+                title="How We Build Production-Ready Templates"
                 description="Every template in our ecosystem follows a strict quality process to ensure performance, scalability, and usability."
                 steps={[
                     {

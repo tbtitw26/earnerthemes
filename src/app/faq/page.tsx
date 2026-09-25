@@ -9,12 +9,12 @@ import { COMPANY_EMAIL, COMPANY_NAME } from "@/resources/constants";
 import { metadataFromSchema } from "@/utils/fromSchema";
 
 const faqMeta = {
-    title: `FAQ — ${COMPANY_NAME} Template Marketplace`,
+    title: `FAQ — ${COMPANY_NAME} Template Store`,
     description: `Frequently asked questions about buying website templates, account balance, payments, downloads, and usage on ${COMPANY_NAME}.`,
     keywords: [
         "website templates FAQ",
         "buy website templates",
-        "template marketplace",
+        "template store",
         "shopify templates",
         "wordpress templates",
         "download templates",
@@ -23,7 +23,7 @@ const faqMeta = {
     ogImage: {
         title: `${COMPANY_NAME} — Templates FAQ`,
         description:
-            "Answers about template purchases, balance system, downloads, and marketplace usage.",
+            "Answers about template purchases, balance system, downloads, and store usage.",
         bg: "#111827",
         color: "#ffffff",
     },
@@ -42,7 +42,7 @@ const faqCards: FAQCard[] = [
         icon: "book",
         title: "Getting Started",
         description:
-            "Learn how the marketplace works, how to buy templates, and how to get started quickly.",
+            "Learn how the store works, how to buy templates, and how to get started quickly.",
         linkText: "Explore basics",
         href: "/contact-us",
     },
@@ -68,7 +68,7 @@ const faqItems: FAQItem[] = [
     {
         category: "General",
         question: `What is ${COMPANY_NAME}?`,
-        answer: `${COMPANY_NAME} is a marketplace where you can browse, purchase, and use premium website templates for WordPress, Shopify, and other platforms.`,
+        answer: `${COMPANY_NAME} is a store where you can browse, purchase, and use premium website templates for WordPress, Shopify, and other platforms.`,
     },
     {
         category: "General",
@@ -200,7 +200,7 @@ export default function Page() {
     return (
         <FAQ
             title="Frequently Asked Questions"
-            description="Find answers about buying templates, account balance, downloads, and how the marketplace works."
+            description="Find answers about buying templates, account balance, downloads, and how the store works."
             items={faqItems}
             categories={faqCategories}
             cards={faqCards}

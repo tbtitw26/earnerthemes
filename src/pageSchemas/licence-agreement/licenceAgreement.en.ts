@@ -201,7 +201,7 @@ const licenceAgreementEn: PageSchema = {
             bullets: [
                 "resell, redistribute, sublicense, rent, lease or share the Product;",
                 "provide the Product as a standalone download;",
-                "upload Product files to a public repository, file-sharing platform, marketplace or download directory;",
+                "upload Product files to a public repository, file-sharing platform, resale platform or download directory;",
                 "share Activation Credentials with another person or organisation;",
                 "use one Licence for multiple Production Websites or separate End Products;",
                 "use one Licence for multiple Clients;",

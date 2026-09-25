@@ -7,7 +7,7 @@ const faqSchema: PageSchema = {
         description: `Frequently asked questions about buying website themes and templates on ${COMPANY_NAME} — Account Balance, prices and VAT, delivery, licences, refunds and support.`,
         keywords: [
             "website template FAQ",
-            "wordpress theme marketplace",
+            "wordpress theme store",
             "buy website template",
             "digital product delivery",
             "template licence",
@@ -29,7 +29,7 @@ const faqSchema: PageSchema = {
             items: [
                 {
                     question: `What is ${COMPANY_NAME}?`,
-                    answer: `${COMPANY_NAME} is an online marketplace for website themes, templates and related digital content. You buy a licence to use a template on your own project and receive the files by email.`,
+                    answer: `${COMPANY_NAME} is an online store for website themes, templates and related digital content. You buy a licence to use a template on your own project and receive the files by email.`,
                 },
                 {
                     question: "How does buying work?",
