@@ -46,8 +46,8 @@ interface PurchasedTemplatesResponse {
 const EMPTY_STATE_FEATURES = [
     {
         icon: <Download size={18} />,
-        title: "Instant download",
-        description: "Launch faster with assets ready the moment you purchase.",
+        title: "Email delivery",
+        description: "Files are sent to your account email once the order has been processed.",
     },
     {
         icon: <BadgeCheck size={18} />,
@@ -311,7 +311,11 @@ export default function TemplateCartPage() {
             await loadPurchasedTemplates();
 
             if (data.purchased.length > 0) {
-                showAlert("Purchase completed", `"${item.title}" is now yours.`, "success");
+                showAlert(
+                    "Purchase completed",
+                    `"${item.title}" is recorded in your account. We aim to email the files within 24 hours of payment confirmation.`,
+                    "success"
+                );
             } else if (data.skippedOwnedTemplateIds.includes(item.templateId)) {
                 showAlert("Already purchased", `"${item.title}" was already owned and removed from your cart.`, "info");
             } else {

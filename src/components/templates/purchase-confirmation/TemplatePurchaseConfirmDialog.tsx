@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import styles from "./TemplatePurchaseConfirmDialog.module.scss";
-import { WITHDRAWAL_WAIVER_TEXT } from "@/resources/constants";
+import { DELIVERY_NOTICE, WITHDRAWAL_WAIVER_TEXT } from "@/resources/constants";
 import {
     LICENCE_ACKNOWLEDGEMENT_TEXT,
     LICENCE_AGREEMENT_HREF,
@@ -128,6 +128,11 @@ export default function TemplatePurchaseConfirmDialog({
                 <div className={styles.totalRow}>
                     <span>Total</span>
                     <strong>{totalLabel}</strong>
+                </div>
+
+                <div className={styles.deliveryPanel}>
+                    <h3>Delivery</h3>
+                    <p>{DELIVERY_NOTICE}</p>
                 </div>
 
                 <div className={styles.licencePanel}>

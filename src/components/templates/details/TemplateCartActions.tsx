@@ -183,7 +183,11 @@ export default function TemplateCartActions({ template }: TemplateCartActionsPro
 
             setPurchased(true);
             removeItem(template.id);
-            showAlert("Purchase completed", `"${template.title}" is now yours.`, "success");
+            showAlert(
+                "Purchase completed",
+                `"${template.title}" is recorded in your account. We aim to email the files within 24 hours of payment confirmation.`,
+                "success"
+            );
             router.refresh();
         } catch (error) {
             const message = error instanceof Error ? error.message : "Unable to complete purchase";

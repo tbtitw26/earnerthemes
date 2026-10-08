@@ -145,7 +145,7 @@ export default function HomePage() {
                     {
                         icon: "wallet",
                         title: "Purchase with Confidence",
-                        description: "Complete your order securely and unlock instant access to your selected product.",
+                        description: "Complete your order securely. Your product is delivered by email once the order has been processed — normally within 24 hours of payment confirmation.",
                     },
                     {
                         icon: "zap",

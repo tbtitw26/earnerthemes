@@ -19,7 +19,7 @@ export default function GetStartedPage() {
                         Start Fast with Premium <span>Website Templates</span>
                     </>
                 }
-                description="Create your account, top up your balance, choose the right template, complete your purchase, and start using it right away. The process is simple, fast, and built for quick launches."
+                description="Create your account, top up your balance, choose the right template and complete your purchase. We aim to email your product within 24 hours of payment confirmation."
                 primaryCta={{ text: "Get Started", link: "/sign-up" }}
                 secondaryCta={{ text: "Browse Templates", link: "/templates" }}
                 image="image6"
@@ -68,8 +68,8 @@ export default function GetStartedPage() {
                         description: "Top up once and use your balance whenever you want to buy templates.",
                     },
                     {
-                        title: "Instant access after purchase",
-                        description: "Your purchased templates stay available inside your account.",
+                        title: "Email delivery after purchase",
+                        description: "We aim to send your files by email within 24 hours of payment confirmation, and every order stays listed in your account.",
                     },
                 ]}
                 steps={[
@@ -99,15 +99,15 @@ export default function GetStartedPage() {
                     },
                     {
                         icon: "settings",
-                        title: "Use Your Template",
+                        title: "Receive and Use Your Template",
                         description:
-                            "Access the purchased template in your account and start building or customizing your website.",
+                            "Your order appears in your account straight away, and we send the files and any activation details to your email address once the order has been processed.",
                     },
                 ]}
                 note={
                     <>
-                        After purchase, templates remain available in your account,
-                        so you can return to them anytime and continue working on your project.
+                        Your orders remain listed in your account, so you can always see what you
+                        have purchased and ask us to resend a delivery email if you need it again.
                     </>
                 }
             />

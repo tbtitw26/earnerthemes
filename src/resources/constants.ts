@@ -23,6 +23,15 @@ export const PAYMENT_TEST_MODE =
 export const CURRENCY_CONVERSION_NOTICE =
     "MAKE SURE YOU UNDERSTAND THE COSTS OF CURRENCY CONVERSION AS THEY MAY BE DIFFERENT DEPENDING ON WHETHER YOU SELECT YOUR HOME CURRENCY OR THE TRANSACTION CURRENCY";
 
+/**
+ * Delivery expectation shown before and after a purchase. Must stay consistent
+ * with section 6 of `src/pageSchemas/delivery-policy/deliveryPolicy.en.ts`
+ * ("We aim to complete Delivery within 24 hours") — the site must not promise
+ * instant access when the contract promises email delivery within 24 hours.
+ */
+export const DELIVERY_NOTICE =
+    "Your files and any activation details are sent to the email address on your account. We aim to complete delivery within 24 hours of payment confirmation.";
+
 /** Verbatim EU/UK digital-content withdrawal waiver acknowledgement. */
 export const WITHDRAWAL_WAIVER_TEXT =
     "I understand that by purchasing digital goods and requesting immediate delivery, I waive my statutory right of withdrawal once delivery begins.";
