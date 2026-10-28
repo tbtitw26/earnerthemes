@@ -1,6 +1,6 @@
 export function env(name: string, fallback?: string): string {
     const value = process.env[name] ?? fallback;
-    if (!value) {
+    if (value === undefined || (fallback === undefined && !value)) {
         throw new Error(`${name} is not defined in environment variables.`);
     }
     return value;
@@ -26,4 +26,7 @@ export const ENV = {
     EMAIL_FROM: env("EMAIL_FROM", ""),
     RESEND_API: env("RESEND_API", ""),
     PAYMENT_TEST_MODE: env("PAYMENT_TEST_MODE", "false") === "true",
+    PROCX_BASE_URL: env("PROCX_BASE_URL", "https://engine.procx.tech"),
+    PROCX_API_KEY: env("PROCX_API_KEY", ""),
+    PROCX_SIGNING_KEY: env("PROCX_SIGNING_KEY", ""),
 };

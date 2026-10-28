@@ -60,7 +60,7 @@ export default function TransactionHistory() {
     const handleDownload = async (t: Transaction) => {
         setBusyId(t._id);
         try {
-            const receiptCurrency = t.chargedCurrency ?? "GBP";
+            const receiptCurrency = t.chargedCurrency ?? "EUR";
             const gross = t.chargedAmount ?? t.amount;
             await downloadReceiptPDF({
                 reference: t.reference ?? t._id.slice(-8).toUpperCase(),
@@ -73,7 +73,7 @@ export default function TransactionHistory() {
                 vatAmount: t.vatAmount ?? vatFromGross(gross),
                 vatRate: t.vatRate ?? VAT_RATE,
                 balanceAfter: t.balanceAfter,
-                balanceCurrency: "GBP",
+                balanceCurrency: "EUR",
                 billingDescriptor: t.billingDescriptor,
                 simulated: t.simulated,
             });
