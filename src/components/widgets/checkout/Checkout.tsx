@@ -1,9 +1,13 @@
 "use client";
 
 import React, {useEffect, useMemo, useState} from "react";
+import Image from "next/image";
 import styles from "./Checkout.module.scss";
 import {useCurrency} from "@/context/CurrencyContext";
 import {CheckoutPlan, useCheckoutStore} from "@/utils/store";
+import visa from "@/assets/cards/visa.png";
+import mastercard from "@/assets/cards/mastercard.png";
+import pciDss from "@/assets/cards/pci-dss-compliant-logo-vector.svg";
 import {
     BILLING_DESCRIPTOR,
     CURRENCY_CONVERSION_NOTICE,
@@ -53,7 +57,7 @@ const Checkout = ({testMode = false}: CheckoutProps) => {
                     basePrice: typeof parsed.basePrice === "number" ? parsed.basePrice : parsed.price ?? 0,
                     displayPrice:
                         typeof parsed.displayPrice === "number" ? parsed.displayPrice : undefined,
-                    currency: isSupportedCurrency(parsed.currency) ? parsed.currency : "GBP",
+                    currency: "EUR",
                     variant: typeof parsed.variant === "string" ? parsed.variant : "starter",
                     title: typeof parsed.title === "string" ? parsed.title : "Wallet Top-Up",
                     amount: typeof parsed.amount === "number" ? parsed.amount : 0,
@@ -143,7 +147,11 @@ const Checkout = ({testMode = false}: CheckoutProps) => {
                 }),
             });
 
-            const data = (await res.json().catch(() => ({}))) as { message?: string };
+            const data = (await res.json().catch(() => ({}))) as {
+                message?: string;
+                redirectUrl?: string;
+                simulated?: boolean;
+            };
 
             if (!res.ok) {
                 throw new Error(data?.message ?? "Payment failed");
@@ -151,6 +159,12 @@ const Checkout = ({testMode = false}: CheckoutProps) => {
 
             localStorage.removeItem("selectedPlan");
             clearPlan();
+
+            if (data.redirectUrl) {
+                window.location.href = data.redirectUrl;
+                return;
+            }
+
             window.location.href = "/profile";
         } catch (err: unknown) {
             setAmountError(err instanceof Error ? err.message : "Payment failed");
@@ -297,15 +311,20 @@ const Checkout = ({testMode = false}: CheckoutProps) => {
                                 </p>
                             </div>
                         ) : (
-                            <>
-                                <input type="text" placeholder="Card number" autoComplete="off"/>
-                                <div className={styles.row}>
-                                    <input type="text" placeholder="MM/YY" autoComplete="off"/>
-                                    <input type="text" placeholder="CVV" autoComplete="off"/>
+                            <div className={styles.hostedNotice}>
+                                <div className={styles.cardsRow}>
+                                    <Image src={visa} alt="Visa" className={styles.cardIcon} />
+                                    <Image src={mastercard} alt="Mastercard" className={styles.cardIcon} />
+                                    <Image src={pciDss} alt="PCI DSS" className={styles.cardIcon} />
                                 </div>
-                                <input type="text" placeholder="Cardholder name" autoComplete="off"/>
-                                <input type="text" placeholder="Billing address" autoComplete="off"/>
-                            </>
+                                <div className={styles.securityBadge}>
+                                    🔒 256-bit SSL Encrypted &amp; PCI-DSS Compliant
+                                </div>
+                                <p>
+                                    You will be redirected to the secure payment provider to complete your
+                                    transaction with 3D Secure verification. Your card details are never entered on or stored by this website.
+                                </p>
+                            </div>
                         )}
 
                         <div className={styles.descriptorNotice}>

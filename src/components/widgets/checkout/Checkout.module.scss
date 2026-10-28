@@ -284,6 +284,48 @@
   }
 }
 
+.hostedNotice {
+  padding: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--surface-color);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .cardsRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .cardIcon {
+    height: 24px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  .securityBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #16a34a;
+    background: rgba(22, 163, 74, 0.08);
+    padding: 4px 8px;
+    border-radius: 4px;
+    width: fit-content;
+  }
+}
+
 .testModeNotice {
   padding: 12px 14px;
   border: 1px solid #f59e0b;

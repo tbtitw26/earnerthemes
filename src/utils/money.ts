@@ -1,20 +1,20 @@
-export const BASE_CURRENCY = "GBP" as const;
+export const BASE_CURRENCY = "EUR" as const;
 export const LEGACY_TOKENS_PER_BALANCE_UNIT = 100;
 
-export const SUPPORTED_CURRENCIES = ["GBP", "EUR", "USD"] as const;
+export const SUPPORTED_CURRENCIES = ["EUR"] as const;
 export type SupportedCurrency = (typeof SUPPORTED_CURRENCIES)[number];
 
-export const CURRENCY_SIGNS: Record<SupportedCurrency, string> = {
-    GBP: "£",
+export const CURRENCY_SIGNS: Record<string, string> = {
     EUR: "€",
+    GBP: "£",
     USD: "$",
 };
 
-// Display conversion rates from the base currency (GBP).
-export const CURRENCY_RATES_FROM_GBP: Record<SupportedCurrency, number> = {
+// Rates from the base currency (EUR is 1)
+export const CURRENCY_RATES_FROM_GBP: Record<string, number> = {
+    EUR: 1,
     GBP: 1,
-    EUR: 1.190476,
-    USD: 1.297619,
+    USD: 1,
 };
 
 /**
@@ -54,43 +54,37 @@ export function parseMoneyAmount(value: unknown): number | null {
 }
 
 export function isSupportedCurrency(value: unknown): value is SupportedCurrency {
-    return typeof value === "string" && SUPPORTED_CURRENCIES.includes(value as SupportedCurrency);
+    return value === "EUR";
 }
 
-export function convertToBaseCurrency(amount: number, currency: SupportedCurrency): number {
-    return roundMoney(amount / CURRENCY_RATES_FROM_GBP[currency]);
+export function convertToBaseCurrency(amount: number, currency?: string): number {
+    return roundMoney(amount);
 }
 
-export function convertFromBaseCurrency(amount: number, currency: SupportedCurrency): number {
-    return roundMoney(amount * CURRENCY_RATES_FROM_GBP[currency]);
+export function convertFromBaseCurrency(amount: number, currency?: string): number {
+    return roundMoney(amount);
 }
 
 /**
- * Converts an amount denominated in one supported currency into another one.
- * Unknown source currencies are treated as the base currency, so catalog data
- * with an unexpected currency code still renders instead of blowing up.
+ * Single currency system: returns the amount rounded to 2 decimals.
  */
 export function convertCurrency(
     amount: number,
-    from: string | undefined,
-    to: SupportedCurrency
+    from?: string,
+    to?: string
 ): number {
     if (!Number.isFinite(amount)) return 0;
-
-    const source = isSupportedCurrency(from) ? from : BASE_CURRENCY;
-    if (source === to) return roundMoney(amount);
-
-    return roundMoney((amount / CURRENCY_RATES_FROM_GBP[source]) * CURRENCY_RATES_FROM_GBP[to]);
+    return roundMoney(amount);
 }
 
 export function legacyTokensToBalance(tokens: number): number {
     return roundMoney(tokens / LEGACY_TOKENS_PER_BALANCE_UNIT);
 }
 
-export function formatMoney(amount: number, currency: SupportedCurrency = BASE_CURRENCY): string {
-    return new Intl.NumberFormat("en-GB", {
+export function formatMoney(amount: number, currency: string = BASE_CURRENCY): string {
+    return new Intl.NumberFormat("en-IE", {
         style: "currency",
-        currency,
+        currency: "EUR",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     }).format(roundMoney(amount));

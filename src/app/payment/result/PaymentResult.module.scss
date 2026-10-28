@@ -1,0 +1,137 @@
+.container {
+  max-width: 650px;
+  margin: 60px auto;
+  padding: 40px 32px;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 4px 14px var(--shadow-color);
+  text-align: center;
+}
+
+.iconWrapper {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  &.success {
+    background: rgba(22, 163, 74, 0.12);
+    color: #16a34a;
+  }
+
+  &.error {
+    background: rgba(220, 38, 38, 0.12);
+    color: #dc2626;
+  }
+
+  &.pending {
+    background: rgba(37, 99, 235, 0.12);
+    color: #2563eb;
+  }
+}
+
+.spinner {
+  border: 4px solid rgba(37, 99, 235, 0.15);
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0 0 10px;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0 0 24px;
+}
+
+.detailsCard {
+  background: var(--surface-muted);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  text-align: left;
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 0.92rem;
+    border-bottom: 1px solid var(--border-color);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    span:first-child {
+      color: var(--text-secondary);
+    }
+
+    span:last-child {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  a, button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .primaryBtn {
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+
+    &:hover {
+      background: #1d4ed8;
+    }
+  }
+
+  .secondaryBtn {
+    background: var(--surface-color);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+
+    &:hover {
+      background: var(--surface-muted);
+    }
+  }
+}
