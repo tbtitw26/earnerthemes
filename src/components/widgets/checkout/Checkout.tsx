@@ -144,6 +144,7 @@ const Checkout = ({testMode = false}: CheckoutProps) => {
                     amount: total,
                     acceptedTerms: agreed,
                     acceptedWithdrawalWaiver: waiverAccepted,
+                    returnUrl: typeof window !== "undefined" ? `${window.location.origin}/payment/result` : undefined,
                 }),
             });
 
