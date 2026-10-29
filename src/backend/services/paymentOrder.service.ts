@@ -161,8 +161,10 @@ export const paymentOrderService = {
         // 1. If Procx Gateway is configured, initiate hosted checkout
         if (procxService.isConfigured()) {
             const appUrl = (ENV.APP_URL || "http://localhost:2000").replace(/\/+$/, "");
-            const returnUrl =
-                input.returnUrl || `${appUrl}/payment/result?referenceId=${referenceId}`;
+            const returnBase = input.returnUrl || `${appUrl}/payment/result`;
+            const returnUrl = returnBase.includes("?")
+                ? `${returnBase}&referenceId=${referenceId}`
+                : `${returnBase}?referenceId=${referenceId}`;
             const webhookUrl = `${appUrl}/api/payments/webhook`;
 
             try {
