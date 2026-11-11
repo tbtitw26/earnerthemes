@@ -20,7 +20,7 @@ import {
     useTemplateCartStore,
 } from "@/utils/store";
 import { getValidTemplateImageUrl } from "@/utils/templateImage";
-import { netFromGross, VAT_RATE, vatFromGross } from "@/utils/money";
+import { BASE_CURRENCY, netFromGross, VAT_RATE, vatFromGross } from "@/utils/money";
 import TemplatePurchaseConfirmDialog from "@/components/templates/purchase-confirmation/TemplatePurchaseConfirmDialog";
 import TemplateCard from "@/components/templates/catalog/TemplateCard";
 import { themeforestTemplates } from "@/data/themeforestTemplates";
@@ -201,9 +201,9 @@ export default function TemplateCartPage() {
     }, [loadPurchasedTemplates]);
 
     const itemCount = useMemo(() => getTemplateCartItemCount(items), [items]);
+    // getTemplateCartTotal returns the base currency, so a cart mixing catalog
+     // currencies still adds up; formatPrice converts it to the selected one.
     const total = useMemo(() => getTemplateCartTotal(items), [items]);
-    // Catalog currency the cart amounts are stored in; formatPrice converts it to the selected one.
-    const sourceCurrency = items[0]?.currency || "USD";
     const purchasedItemsInCart = useMemo(
         () => items.filter((item) => purchasedIds.includes(item.templateId)).length,
         [items, purchasedIds]
@@ -220,7 +220,6 @@ export default function TemplateCartPage() {
         return [];
     }, [confirmItem, confirmMode, items, purchasedIds]);
     const confirmTotal = useMemo(() => getTemplateCartTotal(confirmItems), [confirmItems]);
-    const confirmCurrency = confirmItems[0]?.currency || sourceCurrency;
     const popularTemplates = useMemo<ThemeTemplate[]>(() => {
         return [...themeforestTemplates.templates]
             .sort((left, right) => {
@@ -507,15 +506,15 @@ export default function TemplateCartPage() {
                     </div>
                     <div className={styles.summaryBlock}>
                         <span className={styles.summaryLabel}>Net amount</span>
-                        <strong>{formatPrice(netFromGross(total), sourceCurrency)}</strong>
+                        <strong>{formatPrice(netFromGross(total), BASE_CURRENCY)}</strong>
                     </div>
                     <div className={styles.summaryBlock}>
                         <span className={styles.summaryLabel}>VAT ({Math.round(VAT_RATE * 100)}%), included</span>
-                        <strong>{formatPrice(vatFromGross(total), sourceCurrency)}</strong>
+                        <strong>{formatPrice(vatFromGross(total), BASE_CURRENCY)}</strong>
                     </div>
                     <div className={styles.summaryBlock}>
                         <span className={styles.summaryLabel}>Total (incl. VAT)</span>
-                        <strong className={styles.summaryTotal}>{formatPrice(total, sourceCurrency)}</strong>
+                        <strong className={styles.summaryTotal}>{formatPrice(total, BASE_CURRENCY)}</strong>
                     </div>
 
                     <div className={styles.licenceNotice}>
@@ -575,7 +574,7 @@ export default function TemplateCartPage() {
                         productTerms: catalogTemplate ? getProductTerms(catalogTemplate) : undefined,
                     };
                 })}
-                totalLabel={`${formatPrice(confirmTotal, confirmCurrency)} incl. VAT`}
+                totalLabel={`${formatPrice(confirmTotal, BASE_CURRENCY)} incl. VAT`}
                 processing={buyingAll || buyingTemplateId !== null}
                 onCancel={() => {
                     if (buyingAll || buyingTemplateId !== null) return;

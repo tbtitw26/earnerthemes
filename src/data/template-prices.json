@@ -1,0 +1,23 @@
+{
+  "_readme": "Hand-maintained price overrides, keyed by template id. Prices are set in EUR so the entry-level tiers land on exact €5/€10/€15/€20/€25 for customers browsing in EUR; the backend converts to the base currency (GBP) when charging, so no other code needs to know. Shape: { \"<id>\": { \"price\": number, \"currency\": \"GBP\"|\"EUR\"|\"USD\" } }. Only lower a price here — raising one above the imported catalog price would misprice a product the importer will overwrite on the next run.",
+
+  "59694548": { "price": 5, "currency": "EUR" },
+  "58591022": { "price": 5, "currency": "EUR" },
+  "52743076": { "price": 5, "currency": "EUR" },
+
+  "20607681": { "price": 10, "currency": "EUR" },
+  "23822308": { "price": 10, "currency": "EUR" },
+  "58577215": { "price": 10, "currency": "EUR" },
+
+  "23272956": { "price": 15, "currency": "EUR" },
+  "51407267": { "price": 15, "currency": "EUR" },
+  "61829280": { "price": 15, "currency": "EUR" },
+
+  "11733602": { "price": 20, "currency": "EUR" },
+  "47850377": { "price": 20, "currency": "EUR" },
+  "24140087": { "price": 20, "currency": "EUR" },
+
+  "62482740": { "price": 25, "currency": "EUR" },
+  "62494416": { "price": 25, "currency": "EUR" },
+  "62014700": { "price": 25, "currency": "EUR" }
+}

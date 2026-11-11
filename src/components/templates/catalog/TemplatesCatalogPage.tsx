@@ -213,11 +213,12 @@ export default function TemplatesCatalogPage({ templates }: TemplatesCatalogPage
             }
 
             if (sortBy === "price-asc") {
-                return left.price - right.price;
+                // Raw prices are in each template's own currency, so compare the converted ones.
+                return toDisplayPrice(left) - toDisplayPrice(right);
             }
 
             if (sortBy === "price-desc") {
-                return right.price - left.price;
+                return toDisplayPrice(right) - toDisplayPrice(left);
             }
 
             if (sortBy === "sales-desc") {

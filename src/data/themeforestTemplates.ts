@@ -1,6 +1,7 @@
 import importedTemplates from "@/data/themeforest-templates.json";
 import descriptionOverrides from "@/data/template-descriptions.json";
 import licenceOverrides from "@/data/template-licences.json";
+import priceOverrides from "@/data/template-prices.json";
 import {
     buildFallbackDescription,
     buildShortDescription,
@@ -8,18 +9,45 @@ import {
     sanitizeBuilder,
 } from "@/data/templateContent";
 import { ThemeTemplate, ThemeTemplateCollection, ThemeTemplateLicence } from "@/types/theme-template";
+import { isSupportedCurrency } from "@/utils/money";
 
 interface DescriptionOverride {
     description: string;
     shortDescription?: string;
 }
 
+interface PriceOverride {
+    price: number;
+    currency: string;
+}
+
 const descriptions = descriptionOverrides as Record<string, DescriptionOverride>;
 const licences = licenceOverrides as Record<string, ThemeTemplateLicence | string>;
+const prices = priceOverrides as Record<string, PriceOverride | string>;
 
 function resolveLicence(id: string): ThemeTemplateLicence | undefined {
     const entry = licences[id];
     return entry && typeof entry === "object" ? entry : undefined;
+}
+
+/**
+ * Entry-level price tiers are maintained by hand in template-prices.json, because
+ * the importer can only report the Author's catalog price. A malformed entry is
+ * ignored rather than applied, so a typo cannot mis-charge a customer: the
+ * backend charges from this same resolved record.
+ */
+function resolvePrice(template: ThemeTemplate): Pick<ThemeTemplate, "price" | "currency"> {
+    const entry = prices[template.id];
+
+    if (!entry || typeof entry !== "object") {
+        return { price: template.price, currency: template.currency };
+    }
+
+    if (!Number.isFinite(entry.price) || entry.price <= 0 || !isSupportedCurrency(entry.currency)) {
+        return { price: template.price, currency: template.currency };
+    }
+
+    return { price: entry.price, currency: entry.currency };
 }
 
 /**
@@ -34,9 +62,12 @@ function resolveTemplate(template: ThemeTemplate): ThemeTemplate {
     const description = override?.description?.trim() || importedDescription || buildFallbackDescription(template);
 
     const builder = sanitizeBuilder(template.platform, template.tech.builder, `${template.title} ${description}`);
+    const { price, currency } = resolvePrice(template);
 
     return {
         ...template,
+        price,
+        currency,
         description,
         shortDescription:
             override?.shortDescription?.trim() ||

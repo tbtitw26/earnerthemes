@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 import { ThemeTemplate } from "@/types/theme-template";
+import { convertToBaseCurrency, isSupportedCurrency, roundMoney, BASE_CURRENCY } from "@/utils/money";
 
 export interface CheckoutPlan {
     title: string;
@@ -74,8 +75,21 @@ export function getTemplateCartItemCount(items: TemplateCartItem[]) {
     return items.length;
 }
 
+/**
+ * Cart total in the base currency (GBP).
+ *
+ * Catalog prices are per-template — an entry-level tier is priced in EUR while
+ * the imported items are in USD — so the amounts must be converted before they
+ * are added up. This matches what the backend charges
+ * (`convertToBaseCurrency(template.price, template.currency)`).
+ */
 export function getTemplateCartTotal(items: TemplateCartItem[]) {
-    return items.reduce((sum, item) => sum + item.price, 0);
+    return roundMoney(
+        items.reduce((sum, item) => {
+            const currency = isSupportedCurrency(item.currency) ? item.currency : BASE_CURRENCY;
+            return sum + convertToBaseCurrency(item.price, currency);
+        }, 0)
+    );
 }
 
 export function isTemplateInCart(items: TemplateCartItem[], templateId: string) {

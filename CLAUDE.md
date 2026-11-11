@@ -46,6 +46,9 @@ Locale state is client-only via `src/context/i18nContext.tsx` (`"en" | "sv"`, pe
 `src/data/themeforestTemplates.ts` resolves each imported record before the UI sees it (`src/data/templateContent.ts`): descriptions fall back **curated override → cleaned imported copy → generated factual copy**, and an inferred page builder is dropped unless the template's own title or description names it. Hand-maintained sources (edit these, not the generated JSON):
 - `src/data/template-descriptions.json` — per-id product descriptions, used where the import produced empty or scraper-polluted copy.
 - `src/data/template-licences.json` — per-id licence overrides and Product-Specific Terms.
+- `src/data/template-prices.json` — per-id price overrides (the entry-level €5/€10/€15/€20/€25 tiers). Entries are in EUR; a malformed entry is ignored rather than applied, because the backend charges from this same resolved record (`templateCatalog.service.ts` → `convertToBaseCurrency`). Only lower a price here.
+
+Catalog prices are therefore **per-template currency**, not one currency: anything that adds up or compares prices must convert first (`getTemplateCartTotal` returns the base currency; the catalog's price sort and filter use the converted display price).
 
 ### Pre-purchase licence disclosure
 `src/resources/licence.ts` holds the licence wording shown before payment and **must stay in sync with section 5 of `src/pageSchemas/licence-agreement/licenceAgreement.en.ts`**. It is rendered by `TemplateLicenceSummary` (product page buy card + "Licence & usage" panel), on the cart summary, and inside `TemplatePurchaseConfirmDialog`, where the customer must tick both the licence acknowledgement and the withdrawal waiver before a purchase can be confirmed.
