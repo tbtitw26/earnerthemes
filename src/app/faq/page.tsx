@@ -116,7 +116,7 @@ const faqItems: FAQItem[] = [
         category: "Templates",
         question: "What types of templates are available?",
         answer:
-            "You can find WordPress themes, Shopify templates, eCommerce designs, landing pages, portfolios, and business website layouts.",
+            "You can find WordPress themes, Shopify templates, static HTML templates, admin dashboards, eCommerce designs, landing pages, portfolios, and business website layouts.",
     },
     {
         category: "Templates",

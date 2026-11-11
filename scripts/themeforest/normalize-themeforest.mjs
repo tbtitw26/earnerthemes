@@ -75,7 +75,41 @@ function getFirstDefined(...values) {
     return values.find((value) => value !== undefined && value !== null && value !== "");
 }
 
-function inferPlatform({ sourceUrl, taxonomy = [], title = "", description = "" }) {
+/**
+ * Envato's own classification is authoritative about what a product IS, so it is
+ * read before any keyword guessing: an HTML site template whose copy happens to
+ * mention WordPress is still an HTML template, and claiming otherwise would put a
+ * false platform and a false language on the product page.
+ */
+function platformFromClassification(classification) {
+    const value = String(classification || "").toLowerCase();
+
+    if (value.startsWith("site-templates")) {
+        return "HTML";
+    }
+
+    if (value.startsWith("ui-templates")) {
+        return "UI Kit";
+    }
+
+    if (value.includes("wordpress") || value.includes("woocommerce")) {
+        return "WordPress";
+    }
+
+    if (value.includes("shopify")) {
+        return "Shopify";
+    }
+
+    return "";
+}
+
+function inferPlatform({ sourceUrl, taxonomy = [], title = "", description = "", classification = "" }) {
+    const fromClassification = platformFromClassification(classification);
+
+    if (fromClassification) {
+        return fromClassification;
+    }
+
     const haystack = [sourceUrl, ...taxonomy, title, description].join(" ").toLowerCase();
 
     if (haystack.includes("wordpress")) {
@@ -95,6 +129,12 @@ function inferPlatform({ sourceUrl, taxonomy = [], title = "", description = "" 
 
 function normalizeCategory(category, sourceUrl, title) {
     const haystack = `${category || ""} ${sourceUrl} ${title}`.toLowerCase();
+
+    // Checked first: an admin template that ships e-commerce screens is still an
+    // admin template, not a shop theme.
+    if (haystack.includes("admin-templates") || haystack.includes("admin dashboard") || haystack.includes("admin &")) {
+        return "Dashboard";
+    }
 
     if (haystack.includes("woocommerce") || haystack.includes("ecommerce") || haystack.includes("shop")) {
         return "Ecommerce";
@@ -118,6 +158,10 @@ function normalizeCategory(category, sourceUrl, title) {
 function inferLanguage(platform) {
     if (platform === "Shopify") {
         return "Liquid";
+    }
+
+    if (platform === "HTML" || platform === "UI Kit") {
+        return "HTML, CSS, JavaScript";
     }
 
     return "PHP";
@@ -197,7 +241,7 @@ function stripMirrorPreamble(value) {
  * cut as long as a usable description is left in front of it.
  */
 const CHANGELOG_MARKER =
-    /(?:\bchange\s?log\b|\bversion\s+\d+(?:\.\d+)*\s+(?:is out|available|released)\b|\bupdated on\s+\d{1,2}\s+\w+\s+\d{4}\b)/i;
+    /(?:\bchange\s?log\b|\bversion\s+\d+(?:\.\d+)*\s+(?:is out|available|released)\b|\bupdated on\s+\d{1,2}\s+\w+\s+\d{4}\b|\bv\d+\.\d+(?:\.\d+)?\s*[-\u2013\u2014]\s)/i;
 
 const MIN_DESCRIPTION_BEFORE_CHANGELOG = 200;
 
@@ -293,6 +337,7 @@ export function normalizeThemeForestItem(rawItem, sourceUrl, fallbackCategory = 
         taxonomy,
         title,
         description: getFirstDefined(source.description, source.summary, ""),
+        classification: getFirstDefined(source.classification, source.category, ""),
     });
     const category = normalizeCategory(
         getFirstDefined(source.classification, source.category, fallbackCategory),

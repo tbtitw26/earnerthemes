@@ -2,6 +2,7 @@
 
 import { useCallback, useDeferredValue, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight, Funnel, Search, SlidersHorizontal, X } from "lucide-react";
 
 import { useCurrency } from "@/context/CurrencyContext";
@@ -25,6 +26,31 @@ interface TemplatesCatalogPageProps {
 }
 
 const PER_PAGE_OPTIONS = [12, 24, 48, 96];
+
+/**
+ * Links such as /templates?category=html come from the home page's platform
+ * tiles, which pre-select a facet. The value is matched case-insensitively
+ * against the facet values the catalog actually holds, so a stale or unknown
+ * value simply selects nothing instead of emptying the catalog.
+ */
+function resolveFacetFromParam(templates: ThemeTemplate[], raw: string | null, pick: (template: ThemeTemplate) => string) {
+    if (!raw) {
+        return [];
+    }
+
+    const wanted = raw
+        .split(",")
+        .map((value) => value.trim().toLowerCase())
+        .filter(Boolean);
+
+    if (!wanted.length) {
+        return [];
+    }
+
+    const available = Array.from(new Set(templates.map(pick).filter(Boolean)));
+
+    return available.filter((value) => wanted.includes(value.toLowerCase()));
+}
 
 const SALES_FILTERS = [
     { value: "all", label: "All popularity" },
@@ -133,8 +159,18 @@ export default function TemplatesCatalogPage({ templates }: TemplatesCatalogPage
     );
     const [search, setSearch] = useState("");
     const [sortBy, setSortBy] = useState<SortOption>("recommended");
-    const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const searchParams = useSearchParams();
+    // One URL parameter can name either a platform (html, shopify) or a category
+    // (ecommerce, dashboard); whichever it matches is the facet that gets selected.
+    const requestedFacet = searchParams.get("platform") || searchParams.get("category");
+    const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(() =>
+        resolveFacetFromParam(templates, requestedFacet, (template) => template.platform),
+    );
+    const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {
+        const platformMatch = resolveFacetFromParam(templates, requestedFacet, (template) => template.platform);
+
+        return platformMatch.length ? [] : resolveFacetFromParam(templates, requestedFacet, (template) => template.category);
+    });
     const [selectedBuilders, setSelectedBuilders] = useState<string[]>([]);
     const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
     const [salesThreshold, setSalesThreshold] = useState("all");
@@ -376,7 +412,7 @@ export default function TemplatesCatalogPage({ templates }: TemplatesCatalogPage
                 <div className={styles.heroTop}>
                     <div className={styles.heroCopy}>
                         <p className={styles.kicker}>Digital Assets Store</p>
-                        <h1>Browse premium Shopify and WordPress templates in one catalog.</h1>
+                        <h1>Browse premium Shopify, WordPress and HTML templates in one catalog.</h1>
                         <p className={styles.subtitle}>
                             Imported ThemeForest inventory, normalized for quick comparison, fast filtering,
                             and catalogue-style browsing.

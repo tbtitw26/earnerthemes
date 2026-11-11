@@ -1,23 +1,4 @@
 {
   "_readme": "Hand-maintained price overrides, keyed by template id. Prices are set in EUR, the site currency, so the entry-level tiers land on exactly 5/10/15/20/25; the backend converts to the base currency when charging (templateCatalog.service.ts), so no other code needs to know. Shape: { \"<id>\": { \"price\": number, \"currency\": \"EUR\" } } — a currency that isSupportedCurrency() rejects is ignored and the imported price is kept. Only lower a price here: raising one above the imported catalog price would misprice a product.",
-
-  "59694548": { "price": 5, "currency": "EUR" },
-  "58591022": { "price": 5, "currency": "EUR" },
-  "52743076": { "price": 5, "currency": "EUR" },
-
-  "20607681": { "price": 10, "currency": "EUR" },
-  "23822308": { "price": 10, "currency": "EUR" },
-  "58577215": { "price": 10, "currency": "EUR" },
-
-  "23272956": { "price": 15, "currency": "EUR" },
-  "51407267": { "price": 15, "currency": "EUR" },
-  "61829280": { "price": 15, "currency": "EUR" },
-
-  "11733602": { "price": 20, "currency": "EUR" },
-  "47850377": { "price": 20, "currency": "EUR" },
-  "24140087": { "price": 20, "currency": "EUR" },
-
-  "62482740": { "price": 25, "currency": "EUR" },
-  "62494416": { "price": 25, "currency": "EUR" },
-  "62014700": { "price": 25, "currency": "EUR" }
+  "_note": "No overrides are active. The entry-level price range is now covered by real HTML site templates the supplier itself sells at $6-$25, so no product is listed below what it costs us. Re-add an entry here only to LOWER a price deliberately, never to raise one."
 }

@@ -19,7 +19,7 @@ import {topUpPlans} from "@/data/topUpPlans";
 export const metadata: Metadata = {
     title: `${COMPANY_NAME} — Website Templates Store`,
     description:
-        "Browse premium website templates for WordPress, Shopify, eCommerce, business, portfolio, and landing pages. Discover top-rated designs, new arrivals, and launch-ready digital products.",
+        "Browse premium website templates for WordPress, Shopify, HTML, eCommerce, business, portfolio, and landing pages. Discover top-rated designs, new arrivals, and launch-ready digital products.",
     alternates: {canonical: "/"},
 };
 
@@ -40,7 +40,7 @@ export default function HomePage() {
                         Premium Website <span>Templates</span> for Every Project
                     </>
                 }
-                description="Discover a curated store of high-quality website templates for WordPress, Shopify, eCommerce, portfolios, landing pages, and business sites. Browse top-rated designs, launch faster, and find the perfect template for your next project."
+                description="Discover a curated store of high-quality website templates for WordPress, Shopify, static HTML, eCommerce, portfolios, landing pages, and business sites. Browse top-rated designs, launch faster, and find the perfect template for your next project."
                 primaryCta={{text: "Browse Templates", link: "/templates"}}
                 secondaryCta={{text: "Explore Categories", link: "/templates"}}
                 image="image1"
@@ -57,7 +57,7 @@ export default function HomePage() {
             />
 
             {/* PLATFORM HIGHLIGHTS */}
-            <Grid columns={2} gap="2rem">
+            <Grid columns={3} gap="2rem">
                 <InfoBlock
                     badge="featured"
                     variant="light"
@@ -77,6 +77,16 @@ export default function HomePage() {
                     description="Launch modern eCommerce stores faster with conversion-focused Shopify templates built for product sales and clean shopping experiences."
                     buttonText="Browse Shopify"
                     buttonLink="/templates?category=shopify"
+                />
+                <InfoBlock
+                    badge="from €6"
+                    variant="light"
+                    color="orange"
+                    title="HTML Templates"
+                    icon="code"
+                    description="Static HTML, CSS and JavaScript templates for sites that do not run a CMS: business pages, portfolios, landing pages and admin dashboards, starting at €6."
+                    buttonText="Browse HTML"
+                    buttonLink="/templates?category=html"
                 />
             </Grid>
 
@@ -173,6 +183,15 @@ export default function HomePage() {
                 showFilterBar={false}
             />
 
+            <ThemeForestShowcase
+                templates={themeforestTemplates.templates}
+                title={<>HTML <span>Templates</span></>}
+                subtitle="Entry-level HTML, CSS and JavaScript templates from €6"
+                category="html"
+                limit={4}
+                showFilterBar={false}
+            />
+
             {/* PRICING */}
             <Grid
                 title="Top Up Your Balance"
@@ -188,7 +207,7 @@ export default function HomePage() {
             {/* FINAL CTA */}
             <CenteredCtaSection
                 title="Ready to find your next template?"
-                description="Explore a store of premium website templates for WordPress, Shopify, eCommerce, portfolios, and more."
+                description="Explore a store of premium website templates for WordPress, Shopify, static HTML, eCommerce, portfolios, and more."
                 primaryCta={{text: "Browse Templates", link: "/templates"}}
                 secondaryCta={{text: "View Categories", link: "/templates"}}
             />
@@ -199,7 +218,7 @@ export default function HomePage() {
                     {
                         question: "What kind of templates can I find here?",
                         answer:
-                            "You can browse templates for WordPress, Shopify, eCommerce, business websites, portfolios, landing pages, blogs, and other popular website types.",
+                            "You can browse templates for WordPress, Shopify, static HTML, eCommerce, business websites, portfolios, landing pages, blogs, admin dashboards, and other popular website types.",
                     },
                     {
                         question: "Are the templates suitable for commercial projects?",
@@ -209,7 +228,7 @@ export default function HomePage() {
                     {
                         question: "Can I explore templates by category?",
                         answer:
-                            "Yes. The catalogue is structured around categories so visitors can quickly find WordPress, Shopify, portfolio, business, and other template types.",
+                            "Yes. The catalogue is structured around categories so visitors can quickly find WordPress, Shopify, HTML, portfolio, business, and other template types.",
                     },
                     {
                         question: "Why use a ready-made template instead of building from scratch?",

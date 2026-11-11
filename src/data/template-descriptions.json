@@ -134,5 +134,13 @@
   "5556590": {
     "description": "The7 Classic is the legacy release of The7, a multipurpose WordPress and WooCommerce theme. It offers Elementor, WPBakery and custom editing modes, prebuilt website demos, and theme options for headers, footers, colours, typography and layout, with WooCommerce templates for shop, category, product and checkout pages. Sites built with it remain fully functional and editable, and the author continues to issue security and essential maintenance updates. It is no longer tested against new major versions of WordPress, PHP, Elementor, WPBakery or WooCommerce, so please read the product-specific terms below before buying.",
     "shortDescription": "Legacy release of the multipurpose The7 WordPress and WooCommerce theme, with security and maintenance updates only."
+  },
+  "4106987": {
+    "description": "Porto is a multipurpose HTML website template for business, corporate, agency and shop-style sites. It ships with a large set of prebuilt home pages and inner pages — about, services, team, pricing, blog, contact and portfolio layouts — built on Bootstrap and arranged as reusable sections, so pages are assembled by combining blocks rather than coding them from scratch. Headers, footers, menus, colours and typography are controlled from stylesheet variables. The download contains the HTML, CSS, JavaScript and image source files along with the documentation. Demo photographs and videos are used for illustration only and are not included in the download.",
+    "shortDescription": "Multipurpose Bootstrap HTML template with a large library of prebuilt home pages and inner pages."
+  },
+  "8539472": {
+    "description": "Porto Admin is an HTML admin and dashboard template for web applications and back-office tools. It provides dashboard layouts, data tables, charts, form components, modals, alerts, authentication screens and error pages, built on Bootstrap with a responsive sidebar navigation that collapses on smaller screens. Several colour schemes and layout variants are included. The download contains the HTML, CSS, JavaScript and image source files along with the documentation. Demo photographs and videos are used for illustration only and are not included in the download.",
+    "shortDescription": "Bootstrap HTML admin and dashboard template with charts, data tables, forms and authentication screens."
   }
 }

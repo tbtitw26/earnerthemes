@@ -19,6 +19,7 @@ import {FaCalendarTimes} from "react-icons/fa";
 import {GoZap} from "react-icons/go";
 import {TbLayoutGridAdd} from "react-icons/tb";
 import { FaShopify } from "react-icons/fa";
+import { FaCode } from "react-icons/fa6";
 
 export const ICONS = {
     globe: HiOutlineGlobeAlt,
@@ -48,6 +49,7 @@ export const ICONS = {
     store: FaStore,
     wordpress: FaWordpressSimple,
     shopify: FaShopify,
+    code: FaCode,
     dashboard: MdOutlineDashboardCustomize,
     layout: TbLayoutGridAdd,
 } as const;

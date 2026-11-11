@@ -24,7 +24,7 @@ export default function AboutPage() {
                         A Store for <span>Premium Templates</span>
                     </>
                 }
-                description="We build a curated ecosystem of high-quality website templates for WordPress, Shopify, eCommerce, and modern web projects. Our goal is simple — help you launch faster with designs that already work."
+                description="We build a curated ecosystem of high-quality website templates for WordPress, Shopify, static HTML, eCommerce, and modern web projects. Our goal is simple — help you launch faster with designs that already work."
                 primaryCta={{text: "Browse Templates", link: "/templates"}}
                 secondaryCta={{text: "Explore Categories", link: "/templates"}}
                 image="image5"

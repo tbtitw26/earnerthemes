@@ -84,7 +84,7 @@ const faqSchema: PageSchema = {
                 {
                     question: "Do I need anything else to use a template?",
                     answer:
-                        "Usually yes. A template may require separately purchased hosting, a domain name, and software such as WordPress, Shopify or specific plugins. These are not included unless the Product description says so, so please check the requirements before buying.",
+                        "Usually yes. A template may require separately purchased hosting, a domain name, and software such as WordPress, Shopify or specific plugins. Static HTML templates need only web hosting. These are not included unless the Product description says so, so please check the requirements before buying.",
                 },
                 {
                     question: "Is my payment secure?",
