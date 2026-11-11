@@ -19,7 +19,7 @@ import {topUpPlans} from "@/data/topUpPlans";
 export const metadata: Metadata = {
     title: `${COMPANY_NAME} — Website Templates Store`,
     description:
-        "Browse premium website templates for WordPress, Shopify, HTML, eCommerce, business, portfolio, and landing pages. Discover top-rated designs, new arrivals, and launch-ready digital products.",
+        "Browse premium website templates for WordPress, Shopify, HTML, eCommerce, business, portfolio, landing page and email campaigns. Discover top-rated designs, new arrivals, and launch-ready digital products.",
     alternates: {canonical: "/"},
 };
 
@@ -79,14 +79,14 @@ export default function HomePage() {
                     buttonLink="/templates?category=shopify"
                 />
                 <InfoBlock
-                    badge="from €6"
+                    badge="from €5"
                     variant="light"
                     color="orange"
-                    title="HTML Templates"
+                    title="HTML, Landing & Email"
                     icon="code"
-                    description="Static HTML, CSS and JavaScript templates for sites that do not run a CMS: business pages, portfolios, landing pages and admin dashboards, starting at €6."
-                    buttonText="Browse HTML"
-                    buttonLink="/templates?category=html"
+                    description="Static HTML and CSS templates for projects that do not run a CMS: landing pages, email campaigns, business pages, portfolios and admin dashboards, starting at €5."
+                    buttonText="Browse from €5"
+                    buttonLink="/templates?category=html,landing-page,email"
                 />
             </Grid>
 
@@ -185,6 +185,24 @@ export default function HomePage() {
 
             <ThemeForestShowcase
                 templates={themeforestTemplates.templates}
+                title={<>Landing <span>Pages</span></>}
+                subtitle="One-page templates for campaigns, apps and events, from €5"
+                category="landing-page"
+                limit={4}
+                showFilterBar={false}
+            />
+
+            <ThemeForestShowcase
+                templates={themeforestTemplates.templates}
+                title={<>Email <span>Templates</span></>}
+                subtitle="Responsive newsletter and campaign templates from €9"
+                category="email"
+                limit={4}
+                showFilterBar={false}
+            />
+
+            <ThemeForestShowcase
+                templates={themeforestTemplates.templates}
                 title={<>HTML <span>Templates</span></>}
                 subtitle="Entry-level HTML, CSS and JavaScript templates from €6"
                 category="html"
@@ -218,7 +236,7 @@ export default function HomePage() {
                     {
                         question: "What kind of templates can I find here?",
                         answer:
-                            "You can browse templates for WordPress, Shopify, static HTML, eCommerce, business websites, portfolios, landing pages, blogs, admin dashboards, and other popular website types.",
+                            "You can browse templates for WordPress, Shopify, static HTML, eCommerce, business websites, portfolios, landing pages, email newsletters, blogs, admin dashboards, and other popular website types.",
                     },
                     {
                         question: "Are the templates suitable for commercial projects?",

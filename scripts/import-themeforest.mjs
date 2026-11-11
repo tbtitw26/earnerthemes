@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import { EnvatoApiClient, EnvatoApiError, extractCatalogItems } from "./themeforest/envato-api.mjs";
-import { normalizeThemeForestItem } from "./themeforest/normalize-themeforest.mjs";
+import { collectPreviewImages, normalizeThemeForestItem } from "./themeforest/normalize-themeforest.mjs";
 import {
     fetchFallbackCategoryItems,
     fetchFallbackItem,
@@ -55,6 +55,16 @@ function rejectReason(template) {
 
     if (!template.coverImage || !String(template.coverImage).trim()) {
         return "missing cover image";
+    }
+
+    return "";
+}
+
+async function firstReachableImage(urls) {
+    for (const url of urls) {
+        if (await isValidTemplateImage(url)) {
+            return url;
+        }
     }
 
     return "";
@@ -169,10 +179,11 @@ async function importThemeForestUrls() {
             try {
                 if (parsed.kind === "item") {
                     let normalized;
+                    let apiPayload = null;
 
                     try {
-                        const payload = await client.getCatalogItem(parsed.itemId);
-                        normalized = normalizeThemeForestItem(payload, sourceUrl);
+                        apiPayload = await client.getCatalogItem(parsed.itemId);
+                        normalized = normalizeThemeForestItem(apiPayload, sourceUrl);
                     } catch (error) {
                         if (!(error instanceof EnvatoApiError)) {
                             throw error;
@@ -183,8 +194,16 @@ async function importThemeForestUrls() {
                     }
 
                     if (!normalized.coverImage || !(await isValidTemplateImage(normalized.coverImage))) {
-                        const fallbackRawItem = await fetchFallbackItem(sourceUrl, sourceUrl);
-                        normalized = normalizeThemeForestItem(fallbackRawItem, sourceUrl);
+                        // The supplier's chosen preview is sometimes gone from their CDN while
+                        // the record itself is good; the other preview sizes usually still work.
+                        const recovered = await firstReachableImage(collectPreviewImages(apiPayload));
+
+                        if (recovered) {
+                            normalized = { ...normalized, coverImage: recovered };
+                        } else {
+                            const fallbackRawItem = await fetchFallbackItem(sourceUrl, sourceUrl);
+                            normalized = normalizeThemeForestItem(fallbackRawItem, sourceUrl);
+                        }
                     }
 
                     accept(normalized);

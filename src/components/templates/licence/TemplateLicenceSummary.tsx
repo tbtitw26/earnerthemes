@@ -34,20 +34,33 @@ export function getProductTerms(template: ThemeTemplate) {
     return template.licence?.productTerms ?? [];
 }
 
+/**
+ * Not every product is a website: an email template's End Product is a campaign,
+ * so quoting a "Production Website" allowance for one would state a licence term
+ * that does not apply to what the customer is buying.
+ */
+function isWebsiteProduct(template: ThemeTemplate) {
+    return template.platform !== "Email";
+}
+
 /** One-line scope statement, e.g. "1 End Product · 1 Production Website". */
 export function getLicenceScopeLabel(template: ThemeTemplate) {
     const endProducts = getEndProducts(template);
     const productionWebsites = getProductionWebsites(template);
+    const endProductsLabel = `${endProducts} End Product${endProducts === 1 ? "" : "s"}`;
 
-    return `${endProducts} End Product${endProducts === 1 ? "" : "s"} · ${productionWebsites} Production Website${
-        productionWebsites === 1 ? "" : "s"
-    }`;
+    if (!isWebsiteProduct(template)) {
+        return endProductsLabel;
+    }
+
+    return `${endProductsLabel} · ${productionWebsites} Production Website${productionWebsites === 1 ? "" : "s"}`;
 }
 
 export default function TemplateLicenceSummary({ template, variant = "panel" }: TemplateLicenceSummaryProps) {
     const licenceName = getLicenceName(template);
     const productTerms = getProductTerms(template);
-    const isCustomScope = getEndProducts(template) !== 1 || getProductionWebsites(template) !== 1;
+    const isCustomScope =
+        getEndProducts(template) !== 1 || (isWebsiteProduct(template) && getProductionWebsites(template) !== 1);
 
     if (variant === "compact") {
         return (
@@ -59,7 +72,9 @@ export default function TemplateLicenceSummary({ template, variant = "panel" }: 
 
                 <p className={styles.compactText}>
                     {isCustomScope
-                        ? `This purchase covers ${getLicenceScopeLabel(template)}. Each additional website or End Product requires a separate licence.`
+                        ? `This purchase covers ${getLicenceScopeLabel(template)}. Each additional ${
+                              isWebsiteProduct(template) ? "website or End Product" : "End Product"
+                          } requires a separate licence.`
                         : STANDARD_LICENCE_HEADLINE}
                 </p>
 

@@ -6,7 +6,7 @@ import { themeforestTemplates } from "@/data/themeforestTemplates";
 
 export const metadata: Metadata = {
     title: "Templates Catalog",
-    description: "Browse imported WordPress, Shopify and HTML templates with fast search, filters, and sorting.",
+    description: "Browse imported WordPress, Shopify, HTML, landing page and email templates with fast search, filters, and sorting.",
     alternates: { canonical: "/templates" },
 };
 

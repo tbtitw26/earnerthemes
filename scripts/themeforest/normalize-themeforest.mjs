@@ -84,7 +84,11 @@ function getFirstDefined(...values) {
 function platformFromClassification(classification) {
     const value = String(classification || "").toLowerCase();
 
-    if (value.startsWith("site-templates")) {
+    if (value.startsWith("marketing/email-templates")) {
+        return "Email";
+    }
+
+    if (value.startsWith("site-templates") || value.startsWith("marketing/landing-pages")) {
         return "HTML";
     }
 
@@ -130,8 +134,16 @@ function inferPlatform({ sourceUrl, taxonomy = [], title = "", description = "",
 function normalizeCategory(category, sourceUrl, title) {
     const haystack = `${category || ""} ${sourceUrl} ${title}`.toLowerCase();
 
-    // Checked first: an admin template that ships e-commerce screens is still an
-    // admin template, not a shop theme.
+    // Checked first: a landing page for a shop is a landing page, and an admin
+    // template that ships e-commerce screens is still an admin template.
+    if (haystack.includes("email-templates")) {
+        return "Email";
+    }
+
+    if (haystack.includes("landing-pages")) {
+        return "Landing Page";
+    }
+
     if (haystack.includes("admin-templates") || haystack.includes("admin dashboard") || haystack.includes("admin &")) {
         return "Dashboard";
     }
@@ -162,6 +174,11 @@ function inferLanguage(platform) {
 
     if (platform === "HTML" || platform === "UI Kit") {
         return "HTML, CSS, JavaScript";
+    }
+
+    // Email clients strip scripts, so an email template is markup and inline styles only.
+    if (platform === "Email") {
+        return "HTML, CSS";
     }
 
     return "PHP";
@@ -319,6 +336,31 @@ function toStringList(value) {
     }
 
     return value ? [String(value)] : [];
+}
+
+/**
+ * Every preview image the supplier offers for an item, best first. A supplier
+ * record sometimes points at a preview that has been deleted from their CDN;
+ * trying the other sizes recovers the product instead of losing it to the HTML
+ * fallback, which bot protection usually turns into an unusable record.
+ */
+export function collectPreviewImages(rawItem) {
+    const source = resolveSource(rawItem);
+    const previews = source.previews || {};
+
+    const candidates = [
+        previews.landscape_preview?.landscape_url,
+        previews.icon_with_landscape_preview?.landscape_url,
+        previews.icon_with_video_preview?.landscape_url,
+        previews.icon_preview?.icon_url,
+        previews.icon_with_landscape_preview?.icon_url,
+        previews.thumbnail_preview?.large_url,
+        previews.thumbnail_preview?.small_url,
+        source.thumbnail,
+        source.cover,
+    ];
+
+    return [...new Set(candidates.filter((url) => typeof url === "string" && url))];
 }
 
 export function normalizeThemeForestItem(rawItem, sourceUrl, fallbackCategory = "") {

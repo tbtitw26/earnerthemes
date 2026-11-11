@@ -38,10 +38,16 @@ function resolveFacetFromParam(templates: ThemeTemplate[], raw: string | null, p
         return [];
     }
 
-    const wanted = raw
-        .split(",")
-        .map((value) => value.trim().toLowerCase())
-        .filter(Boolean);
+    // Facet names have spaces ("Landing Page"), links do not, so both sides are
+    // reduced to a slug before comparing.
+    const toSlug = (value: string) =>
+        value
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "");
+
+    const wanted = raw.split(",").map(toSlug).filter(Boolean);
 
     if (!wanted.length) {
         return [];
@@ -49,7 +55,7 @@ function resolveFacetFromParam(templates: ThemeTemplate[], raw: string | null, p
 
     const available = Array.from(new Set(templates.map(pick).filter(Boolean)));
 
-    return available.filter((value) => wanted.includes(value.toLowerCase()));
+    return available.filter((value) => wanted.includes(toSlug(value)));
 }
 
 const SALES_FILTERS = [
@@ -412,7 +418,7 @@ export default function TemplatesCatalogPage({ templates }: TemplatesCatalogPage
                 <div className={styles.heroTop}>
                     <div className={styles.heroCopy}>
                         <p className={styles.kicker}>Digital Assets Store</p>
-                        <h1>Browse premium Shopify, WordPress and HTML templates in one catalog.</h1>
+                        <h1>Browse premium Shopify, WordPress, HTML, landing page and email templates in one catalog.</h1>
                         <p className={styles.subtitle}>
                             Imported ThemeForest inventory, normalized for quick comparison, fast filtering,
                             and catalogue-style browsing.
