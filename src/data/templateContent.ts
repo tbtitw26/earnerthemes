@@ -11,6 +11,35 @@ const MIRROR_PREAMBLE =
 /** A description shorter than this cannot describe a product in any useful way. */
 const MIN_USABLE_DESCRIPTION = 120;
 
+/**
+ * Wording the storefront must not use about itself or its products: the site is a
+ * catalogue and distribution platform operated by the seller named in the Terms, not a
+ * marketplace of third-party sellers. Imported supplier copy regularly contains the
+ * term, so it is rewritten here — the single point every record passes through —
+ * rather than patched per product after each import.
+ */
+const PROHIBITED_TERMS: ReadonlyArray<readonly [RegExp, string]> = [
+    [/\bmarket[\s-]?places\b/gi, "multi-vendor stores"],
+    [/\bmarket[\s-]?place\b/gi, "multi-vendor store"],
+];
+
+function removeProhibitedTerms(value: string) {
+    return PROHIBITED_TERMS.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), value);
+}
+
+/**
+ * Supplier copy sometimes carries the author's own links and demo sign-in details.
+ * Neither belongs on our product page: the links point customers away from the
+ * purchase, and the credentials are not ours to publish. Stripped before the
+ * prohibited-term pass, so a term hidden inside a domain name goes with them.
+ */
+const EXTERNAL_LINK = /\b(?:https?:\/\/|www\.)\S+/gi;
+const CREDENTIALS_TAIL = /\s*(?:\b\w+\s+)?login details\b[\s\S]*$/i;
+
+function removeAuthorContactDetails(value: string) {
+    return value.replace(CREDENTIALS_TAIL, "").replace(EXTERNAL_LINK, "").replace(/\s+/g, " ").trim();
+}
+
 /** WordPress-only page builders must never be reported for a Shopify theme. */
 const WORDPRESS_ONLY_BUILDERS = ["elementor", "wpbakery", "visual composer", "gutenberg", "avada", "bebuilder"];
 
@@ -45,6 +74,8 @@ export function cleanImportedDescription(raw?: string) {
     if (lastSentenceEnd > MIN_USABLE_DESCRIPTION) {
         text = text.slice(0, lastSentenceEnd + 1);
     }
+
+    text = removeProhibitedTerms(removeAuthorContactDetails(text));
 
     return text.length >= MIN_USABLE_DESCRIPTION ? text : "";
 }

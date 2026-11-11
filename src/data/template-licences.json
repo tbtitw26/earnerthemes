@@ -1,3 +1,10 @@
 {
-  "_readme": "Product-Specific Terms, keyed by template id. Anything listed here is shown on the product page and inside the purchase confirmation, on top of the Standard Licence. Shape: { \"<id>\": { \"name\"?: string, \"productionWebsites\"?: number, \"endProducts\"?: number, \"productTerms\"?: string[] } }."
+  "_readme": "Product-Specific Terms, keyed by template id. Anything listed here is shown on the product page and inside the purchase confirmation, on top of the Standard Licence. Shape: { \"<id>\": { \"name\"?: string, \"productionWebsites\"?: number, \"endProducts\"?: number, \"productTerms\"?: string[] } }.",
+  "5556590": {
+    "productTerms": [
+      "This is The7 Classic, the legacy release of the theme. It is not the current product generation.",
+      "The author provides security and essential maintenance updates only. The7 Classic is no longer tested against new major versions of WordPress, PHP, Elementor, WPBakery or WooCommerce.",
+      "Any upgrade path to a newer product generation is offered by the theme author on their own terms and is not part of this purchase."
+    ]
+  }
 }

@@ -1,10 +1,46 @@
-function stripHtml(value) {
+const NAMED_ENTITIES = {
+    amp: "&",
+    lt: "<",
+    gt: ">",
+    quot: '"',
+    apos: "'",
+    nbsp: " ",
+    hellip: "\u2026",
+    mdash: "\u2014",
+    ndash: "\u2013",
+    rsquo: "\u2019",
+    lsquo: "\u2018",
+    rdquo: "\u201d",
+    ldquo: "\u201c",
+    reg: "\u00ae",
+    copy: "\u00a9",
+    trade: "\u2122",
+    deg: "\u00b0",
+    eacute: "\u00e9",
+};
+
+/**
+ * Supplier descriptions are HTML, so they carry character references
+ * (&#8217;, &#38;, &hellip;). Left encoded they render literally on the product
+ * page, which is exactly the "incomplete description" the payment review flagged.
+ */
+function decodeEntities(value) {
     return String(value || "")
-        .replace(/<style[\s\S]*?<\/style>/gi, " ")
-        .replace(/<script[\s\S]*?<\/script>/gi, " ")
-        .replace(/<[^>]+>/g, " ")
-        .replace(/&nbsp;/gi, " ")
-        .replace(/&amp;/gi, "&")
+        .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(Number.parseInt(hex, 16)))
+        .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(Number(dec)))
+        .replace(/&([a-z][a-z0-9]*);/gi, (match, name) => {
+            const decoded = NAMED_ENTITIES[String(name).toLowerCase()];
+            return decoded === undefined ? match : decoded;
+        });
+}
+
+function stripHtml(value) {
+    return decodeEntities(
+        String(value || "")
+            .replace(/<style[\s\S]*?<\/style>/gi, " ")
+            .replace(/<script[\s\S]*?<\/script>/gi, " ")
+            .replace(/<[^>]+>/g, " "),
+    )
         .replace(/\s+/g, " ")
         .trim();
 }
@@ -154,8 +190,32 @@ function stripMirrorPreamble(value) {
  * Product pages must show a complete description, so a description is only ever
  * cut at a sentence boundary — never mid-word with an ellipsis.
  */
+/**
+ * Supplier descriptions often end with a release log ("Changelog", "Version 2.1 is
+ * out — ...", "Updated on 22 Oct 2026"). That is maintenance history, not a product
+ * description, and it reads as truncated noise on the product page, so the tail is
+ * cut as long as a usable description is left in front of it.
+ */
+const CHANGELOG_MARKER =
+    /(?:\bchange\s?log\b|\bversion\s+\d+(?:\.\d+)*\s+(?:is out|available|released)\b|\bupdated on\s+\d{1,2}\s+\w+\s+\d{4}\b)/i;
+
+const MIN_DESCRIPTION_BEFORE_CHANGELOG = 200;
+
+function stripChangelogTail(text) {
+    const match = CHANGELOG_MARKER.exec(text);
+
+    if (!match || match.index < MIN_DESCRIPTION_BEFORE_CHANGELOG) {
+        return text;
+    }
+
+    const head = text.slice(0, match.index);
+    const lastSentenceEnd = Math.max(head.lastIndexOf("."), head.lastIndexOf("!"), head.lastIndexOf("?"));
+
+    return (lastSentenceEnd > MIN_DESCRIPTION_BEFORE_CHANGELOG ? head.slice(0, lastSentenceEnd + 1) : head).trim();
+}
+
 function truncateDescription(value, maxLength = 220) {
-    const clean = stripHtml(stripMirrorPreamble(value));
+    const clean = stripChangelogTail(stripHtml(stripMirrorPreamble(value)));
 
     if (clean.length <= maxLength) {
         return clean;
@@ -172,8 +232,54 @@ function truncateDescription(value, maxLength = 220) {
     return `${window.slice(0, lastSpace > 0 ? lastSpace : maxLength).trimEnd()}...`;
 }
 
+/**
+ * The Envato catalog API returns `attributes` as an ARRAY of
+ * `{ name, value, label }` entries, while some search payloads nest the item's own
+ * fields under an `attributes` OBJECT. Only the object form is the item itself —
+ * treating the array as the item silently loses id, price and previews and pushes
+ * every record onto the HTML fallback scraper.
+ */
+function resolveSource(rawItem) {
+    const attributes = rawItem?.attributes;
+
+    if (attributes && !Array.isArray(attributes) && typeof attributes === "object") {
+        return attributes;
+    }
+
+    return rawItem || {};
+}
+
+/**
+ * Flattens the `attributes` array into `{ [name]: value }` so declared software
+ * compatibility and the demo URL can be read from it.
+ */
+function resolveAttributeMap(rawItem) {
+    const attributes = rawItem?.attributes;
+
+    if (!Array.isArray(attributes)) {
+        return {};
+    }
+
+    return attributes.reduce((map, entry) => {
+        if (entry?.name) {
+            map[String(entry.name)] = entry.value;
+        }
+
+        return map;
+    }, {});
+}
+
+function toStringList(value) {
+    if (Array.isArray(value)) {
+        return value.map((entry) => String(entry)).filter(Boolean);
+    }
+
+    return value ? [String(value)] : [];
+}
+
 export function normalizeThemeForestItem(rawItem, sourceUrl, fallbackCategory = "") {
-    const source = rawItem?.attributes || rawItem || {};
+    const source = resolveSource(rawItem);
+    const attributeMap = resolveAttributeMap(rawItem);
     const taxonomy = [
         source.classification,
         source.category,
@@ -198,7 +304,9 @@ export function normalizeThemeForestItem(rawItem, sourceUrl, fallbackCategory = 
         2000,
     );
     const shortDescription = truncateDescription(description, 160);
-    const compatibility = Array.isArray(source.compatible_with) ? source.compatible_with : [];
+    const compatibility = Array.isArray(source.compatible_with)
+        ? source.compatible_with
+        : [...toStringList(attributeMap["compatible-with"]), ...toStringList(attributeMap["compatible-software"])];
     const tags = Array.isArray(source.tags) ? source.tags : [];
 
     return {
@@ -230,6 +338,11 @@ export function normalizeThemeForestItem(rawItem, sourceUrl, fallbackCategory = 
         updatedAt: toDateOnly(getFirstDefined(source.updated_at, source.updatedAt, source.last_update)),
         coverImage: String(
             getFirstDefined(
+                source.previews?.landscape_preview?.landscape_url,
+                source.previews?.icon_with_landscape_preview?.landscape_url,
+                source.previews?.icon_with_video_preview?.landscape_url,
+                source.previews?.icon_preview?.icon_url,
+                source.previews?.icon_with_landscape_preview?.icon_url,
                 source.previews?.icon_preview?.url,
                 source.previews?.icon_with_landscape_preview?.url,
                 source.thumbnail,
@@ -247,7 +360,13 @@ export function normalizeThemeForestItem(rawItem, sourceUrl, fallbackCategory = 
             builder: inferBuilder({ platform, title, description, compatibility, tags }),
         },
         livePreviewUrl: String(
-            getFirstDefined(source.live_preview_url, source.url && `${source.url}/full_screen_preview`, ""),
+            getFirstDefined(
+                source.live_preview_url,
+                source.previews?.live_site?.href,
+                attributeMap["demo-url"],
+                source.url && `${source.url}/full_screen_preview`,
+                "",
+            ),
         ),
         isFeatured: Boolean(getFirstDefined(source.is_featured, false)),
         sourceUrl,

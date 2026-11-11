@@ -126,5 +126,13 @@
   "58972123": {
     "description": "Cosmika is a WooCommerce WordPress theme for beauty, cosmetics, makeup and skincare stores. It includes shop home page presets, product listing pages with filtering, product layouts with variant swatches, ingredient and routine content blocks, and blog and contact templates. Pages are built with Elementor and the theme is compatible with the Dokan multi-vendor plugin for stores that sell on behalf of several sellers. It runs on the Avanam theme as its parent theme, and the download contains the theme files, demo content and the installation and setup documentation.",
     "shortDescription": "WooCommerce theme for beauty and cosmetics stores, built with Elementor on the Avanam parent theme."
+  },
+  "50243724": {
+    "description": "Ecomus is a Shopify OS 3.0 theme built with theme blocks, aimed at stores that need to rearrange sections and layouts from the theme editor rather than in code. It ships with more than twenty prebuilt demo storefronts covering fashion, electronics, outdoor and other retail niches, each responsive down to mobile widths. The mobile experience includes bottom navigation, a dedicated search menu and a streamlined cart and checkout flow. Product, collection, cart and checkout templates are included, along with the theme files, demo content and the setup documentation.",
+    "shortDescription": "Shopify OS 3.0 theme built on theme blocks, with 20+ prebuilt demo storefronts and a mobile-first checkout flow."
+  },
+  "5556590": {
+    "description": "The7 Classic is the legacy release of The7, a multipurpose WordPress and WooCommerce theme. It offers Elementor, WPBakery and custom editing modes, prebuilt website demos, and theme options for headers, footers, colours, typography and layout, with WooCommerce templates for shop, category, product and checkout pages. Sites built with it remain fully functional and editable, and the author continues to issue security and essential maintenance updates. It is no longer tested against new major versions of WordPress, PHP, Elementor, WPBakery or WooCommerce, so please read the product-specific terms below before buying.",
+    "shortDescription": "Legacy release of the multipurpose The7 WordPress and WooCommerce theme, with security and maintenance updates only."
   }
 }
