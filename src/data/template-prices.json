@@ -1,5 +1,5 @@
 {
-  "_readme": "Hand-maintained price overrides, keyed by template id. Prices are set in EUR so the entry-level tiers land on exact €5/€10/€15/€20/€25 for customers browsing in EUR; the backend converts to the base currency (GBP) when charging, so no other code needs to know. Shape: { \"<id>\": { \"price\": number, \"currency\": \"GBP\"|\"EUR\"|\"USD\" } }. Only lower a price here — raising one above the imported catalog price would misprice a product the importer will overwrite on the next run.",
+  "_readme": "Hand-maintained price overrides, keyed by template id. Prices are set in EUR, the site currency, so the entry-level tiers land on exactly 5/10/15/20/25; the backend converts to the base currency when charging (templateCatalog.service.ts), so no other code needs to know. Shape: { \"<id>\": { \"price\": number, \"currency\": \"EUR\" } } — a currency that isSupportedCurrency() rejects is ignored and the imported price is kept. Only lower a price here: raising one above the imported catalog price would misprice a product.",
 
   "59694548": { "price": 5, "currency": "EUR" },
   "58591022": { "price": 5, "currency": "EUR" },

@@ -76,12 +76,14 @@ export function getTemplateCartItemCount(items: TemplateCartItem[]) {
 }
 
 /**
- * Cart total in the base currency (GBP).
+ * Cart total in the base currency.
  *
- * Catalog prices are per-template — an entry-level tier is priced in EUR while
- * the imported items are in USD — so the amounts must be converted before they
- * are added up. This matches what the backend charges
- * (`convertToBaseCurrency(template.price, template.currency)`).
+ * Each item carries its own currency: the entry-level tiers are set in EUR,
+ * while the imported catalog records are still labelled USD. The amounts are
+ * therefore converted before they are added up, which also matches what the
+ * backend charges (`convertToBaseCurrency(template.price, template.currency)`).
+ * Conversion is currently an identity (single-currency EUR), so this is the
+ * guard that keeps the total correct if a second currency is ever reintroduced.
  */
 export function getTemplateCartTotal(items: TemplateCartItem[]) {
     return roundMoney(
